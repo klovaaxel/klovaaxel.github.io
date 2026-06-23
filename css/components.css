@@ -442,6 +442,7 @@
     background: var(--color-border);
     transform: translateX(-50%) scaleY(0);
     transform-origin: top;
+    transition: transform 0.45s var(--ease-smooth);
 }
 
 .timeline-company {

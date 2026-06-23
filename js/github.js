@@ -1,5 +1,5 @@
 import { config } from "./config.js";
-import { animateGitHubDashboard } from "./motion.js";
+import { setupGitHubDashboard } from "./motion.js";
 
 const CONTRIBUTIONS_API = "https://github-contributions-api.jogruber.de/v4";
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -30,7 +30,7 @@ export async function loadGitHubDashboard() {
 
         const streaks = computeStreaks(activity.contributions);
         container.innerHTML = renderDashboard(user, activity, streaks);
-        animateGitHubDashboard(container.querySelector(".github-dashboard"));
+        setupGitHubDashboard(container.querySelector(".github-dashboard"));
     } catch {
         container.innerHTML = `<p class="empty-state">Could not load GitHub dashboard. <a href="${config.github.url}">View profile on GitHub</a>.</p>`;
     }
