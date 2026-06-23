@@ -44,18 +44,15 @@
 
 .section-title {
     font-size: var(--text-3xl);
-    font-weight: var(--weight-extrabold);
-    letter-spacing: -0.04em;
-    text-transform: uppercase;
+    font-weight: var(--weight-bold);
+    letter-spacing: -0.01em;
 }
 
 .section-subtitle {
     margin-top: var(--space-2);
     font-size: var(--text-sm);
-    font-weight: var(--weight-semibold);
+    font-weight: var(--weight-normal);
     color: var(--color-text-muted);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
 }
 
 @media (min-width: 48rem) {
