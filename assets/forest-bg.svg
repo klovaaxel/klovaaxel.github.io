@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMax slice"
+    aria-hidden="true">
+    <defs>
+        <linearGradient id="forest-mist" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#6ecf8a" stop-opacity="0.14" />
+            <stop offset="45%" stop-color="#3d6b4f" stop-opacity="0.06" />
+            <stop offset="100%" stop-color="#0d1410" stop-opacity="0" />
+        </linearGradient>
+        <radialGradient id="forest-glow" cx="0.3" cy="0.15" r="0.55">
+            <stop offset="0%" stop-color="#8ade9e" stop-opacity="0.2" />
+            <stop offset="100%" stop-color="#0d1410" stop-opacity="0" />
+        </radialGradient>
+    </defs>
+    <rect width="1440" height="900" fill="url(#forest-mist)" />
+    <rect width="1440" height="900" fill="url(#forest-glow)" />
+    <g fill="#4a8f62" opacity="0.22">
+        <path d="M0 900 L0 520 L90 380 L180 520 L180 900 Z" />
+        <path d="M140 900 L140 560 L220 420 L300 560 L300 900 Z" />
+        <path d="M260 900 L260 500 L360 340 L460 500 L460 900 Z" />
+        <path d="M420 900 L420 540 L510 400 L600 540 L600 900 Z" />
+        <path d="M560 900 L560 480 L680 300 L800 480 L800 900 Z" />
+        <path d="M760 900 L760 530 L860 390 L960 530 L960 900 Z" />
+        <path d="M920 900 L920 510 L1020 360 L1120 510 L1120 900 Z" />
+        <path d="M1080 900 L1080 550 L1170 410 L1260 550 L1260 900 Z" />
+        <path d="M1220 900 L1220 500 L1320 350 L1440 490 L1440 900 Z" />
+    </g>
+    <g fill="#2d5a3d" opacity="0.35">
+        <path d="M0 900 L0 620 L70 500 L140 620 L140 900 Z" />
+        <path d="M110 900 L110 640 L190 520 L270 640 L270 900 Z" />
+        <path d="M350 900 L350 600 L450 460 L550 600 L550 900 Z" />
+        <path d="M700 900 L700 610 L810 470 L920 610 L920 900 Z" />
+        <path d="M1000 900 L1000 630 L1100 490 L1200 630 L1200 900 Z" />
+        <path d="M1280 900 L1280 590 L1380 450 L1440 530 L1440 900 Z" />
+    </g>
+    <path
+        d="M0 760 C180 700 320 780 480 720 S780 680 960 740 S1240 700 1440 760 L1440 900 L0 900 Z"
+        fill="#1a2820"
+        opacity="0.45"
+    />
+    <g fill="#6ecf8a" opacity="0.12">
+        <ellipse cx="220" cy="180" rx="48" ry="28" transform="rotate(-25 220 180)" />
+        <ellipse cx="520" cy="120" rx="62" ry="34" transform="rotate(18 520 120)" />
+        <ellipse cx="880" cy="200" rx="54" ry="30" transform="rotate(-12 880 200)" />
+        <ellipse cx="1180" cy="140" rx="40" ry="22" transform="rotate(30 1180 140)" />
+    </g>
+    <g fill="#b8f0c8" opacity="0.35">
+        <circle cx="180" cy="260" r="2.5" />
+        <circle cx="340" cy="320" r="2" />
+        <circle cx="610" cy="240" r="2.5" />
+        <circle cx="790" cy="290" r="2" />
+        <circle cx="1020" cy="250" r="2.5" />
+        <circle cx="1260" cy="310" r="2" />
+    </g>
+</svg>
