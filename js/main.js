@@ -81,7 +81,9 @@ function renderSkills() {
     const container = document.getElementById("skills-list");
     if (!container || !config.skills) return;
 
-    container.innerHTML = config.skills.map((skill) => `<li class="skill-tag" data-magnetic>${escapeHtml(skill)}</li>`).join("");
+    container.innerHTML = config.skills
+        .map((skill) => `<li class="skill-tag" data-magnetic>${escapeHtml(skill)}</li>`)
+        .join("");
 }
 
 function renderConnectSection() {

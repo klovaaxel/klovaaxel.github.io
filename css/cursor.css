@@ -57,11 +57,11 @@
     border: 1.5px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
     border-radius: 50%;
     transition:
-        width 0.25s var(--ease-spring),
-        height 0.25s var(--ease-spring),
-        margin 0.25s var(--ease-spring),
-        border-color 0.2s ease,
-        opacity 0.2s ease;
+        width 0.12s var(--ease-spring),
+        height 0.12s var(--ease-spring),
+        margin 0.12s var(--ease-spring),
+        border-color 0.1s ease,
+        opacity 0.1s ease;
 }
 
 .cursor-ring.is-hovering {
@@ -85,7 +85,7 @@
     border-radius: 50%;
     background: var(--color-accent);
     box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 80%, transparent);
-    transition: transform 0.15s var(--ease-spring);
+    transition: transform 0.08s var(--ease-spring);
 }
 
 .cursor-dot.is-pressed {
@@ -95,34 +95,22 @@
 /* Pointer parallax */
 
 .has-cursor-fx [data-reveal="hero"].is-in-view .hero-name {
-    transform: translate(
-        calc(var(--pointer-x) * 18px),
-        calc(var(--pointer-y) * 12px)
-    );
+    transform: translate(calc(var(--pointer-x) * 18px), calc(var(--pointer-y) * 12px));
     transition: transform 0.18s var(--ease-out);
 }
 
 .has-cursor-fx [data-reveal="hero"].is-in-view .hero-tagline {
-    transform: translate(
-        calc(var(--pointer-x) * -12px),
-        calc(var(--pointer-y) * 8px)
-    );
+    transform: translate(calc(var(--pointer-x) * -12px), calc(var(--pointer-y) * 8px));
     transition: transform 0.22s var(--ease-out);
 }
 
 .has-cursor-fx [data-reveal="hero"].is-in-view .social-links {
-    transform: translate(
-        calc(var(--pointer-x) * 8px),
-        calc(var(--pointer-y) * 10px)
-    );
+    transform: translate(calc(var(--pointer-x) * 8px), calc(var(--pointer-y) * 10px));
     transition: transform 0.2s var(--ease-out);
 }
 
 .has-cursor-fx .page-main {
-    transform: translate(
-        calc(var(--pointer-x) * -6px),
-        calc(var(--pointer-y) * -4px)
-    );
+    transform: translate(calc(var(--pointer-x) * -6px), calc(var(--pointer-y) * -4px));
     transition: transform 0.25s var(--ease-out);
 }
 
@@ -132,7 +120,7 @@
     --mx: 0px;
     --my: 0px;
     transform: translate(var(--mx), var(--my));
-    transition: transform 0.2s var(--ease-spring);
+    transition: transform 0.12s var(--ease-spring);
 }
 
 .has-cursor-fx .social-link {
@@ -152,28 +140,17 @@
     transform: translate(var(--mx, 0px), var(--my, 0px)) translateY(-4px) rotate(2deg) scale(1.05);
 }
 
+.has-cursor-fx .github-dashboard-link:hover {
+    transform: translateY(-1px);
+}
+
 .has-cursor-fx #github.is-in-view .github-stat:hover {
     transform: translate(var(--mx, 0px), var(--my, 0px)) translateY(-4px) skewX(-2deg);
 }
 
 .has-cursor-fx .profile-card {
-    transform: translate(
-        calc(var(--pointer-x) * 6px + var(--mx, 0px)),
-        calc(var(--pointer-y) * 4px + var(--my, 0px))
-    );
+    transform: translate(calc(var(--pointer-x) * 6px + var(--mx, 0px)), calc(var(--pointer-y) * 4px + var(--my, 0px)));
     transition: transform 0.22s var(--ease-spring);
-}
-
-.has-cursor-fx .github-dashboard {
-    transform: translate(
-        calc(var(--pointer-x) * -8px),
-        calc(var(--pointer-y) * -5px)
-    );
-    transition: transform 0.28s var(--ease-out);
-}
-
-.has-cursor-fx #github.is-in-view .contrib-cell:hover {
-    transform: translate(var(--mx, 0px), var(--my, 0px)) scale(1.5) rotate(8deg);
 }
 
 @media (pointer: coarse), (prefers-reduced-motion: reduce) {
@@ -194,8 +171,7 @@
     .has-cursor-fx [data-reveal="hero"].is-in-view .hero-name,
     .has-cursor-fx [data-reveal="hero"].is-in-view .hero-tagline,
     .has-cursor-fx [data-reveal="hero"].is-in-view .social-links,
-    .has-cursor-fx .profile-card,
-    .has-cursor-fx .github-dashboard {
+    .has-cursor-fx .profile-card {
         transform: none;
     }
 }

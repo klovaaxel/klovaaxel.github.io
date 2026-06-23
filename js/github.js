@@ -91,6 +91,9 @@ function buildWeeks(contributions) {
     const byDate = new Map(contributions.map((day) => [day.date, day]));
     const first = parseDate(contributions[0].date);
     const last = parseDate(contributions[contributions.length - 1].date);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const end = today > last ? today : last;
 
     const start = new Date(first);
     start.setDate(start.getDate() - start.getDay());
@@ -98,11 +101,18 @@ function buildWeeks(contributions) {
     const weeks = [];
     const cursor = new Date(start);
 
-    while (cursor <= last) {
+    while (cursor <= end) {
         const week = [];
         for (let day = 0; day < 7; day += 1) {
             const dateStr = toDateKey(cursor);
-            week.push(byDate.get(dateStr) ?? { date: dateStr, count: 0, level: 0 });
+            const entry = byDate.get(dateStr);
+            if (entry) {
+                week.push(entry);
+            } else if (cursor > today) {
+                week.push({ date: dateStr, count: 0, level: 0, hidden: true });
+            } else {
+                week.push({ date: dateStr, count: 0, level: 0 });
+            }
             cursor.setDate(cursor.getDate() + 1);
         }
         weeks.push(week);
@@ -116,7 +126,10 @@ function monthLabels(weeks) {
     let lastMonth = -1;
 
     weeks.forEach((week, index) => {
-        const month = parseDate(week[0].date).getMonth();
+        const anchor = week.find((day) => !day.hidden && day.date);
+        if (!anchor) return;
+
+        const month = parseDate(anchor.date).getMonth();
         if (month !== lastMonth) {
             labels.push({ index, label: MONTHS[month] });
             lastMonth = month;
@@ -162,7 +175,7 @@ function renderDashboard(user, activity, streaks) {
           />
           <span class="github-dashboard-handle">@${escapeHtml(user.login)}</span>
         </a>
-        <a class="github-dashboard-link" href="${profileUrl}" target="_blank" rel="noopener noreferrer" data-magnetic>
+        <a class="github-dashboard-link" href="${profileUrl}" target="_blank" rel="noopener noreferrer">
           View on GitHub →
         </a>
       </div>
@@ -213,6 +226,9 @@ function renderDashboard(user, activity, streaks) {
                   <div class="contrib-week">
                     ${week
                         .map((day) => {
+                            if (day.hidden) {
+                                return `<span class="contrib-cell contrib-cell--empty" aria-hidden="true"></span>`;
+                            }
                             const label =
                                 day.count === 0
                                     ? `No contributions on ${formatDisplayDate(day.date)}`

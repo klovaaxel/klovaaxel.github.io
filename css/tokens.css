@@ -53,6 +53,11 @@
     --radius-lg: 1rem;
     --radius-full: 9999px;
 
+    /* Contribution graph */
+    --contrib-cell-size: 12px;
+    --contrib-gap: 3px;
+    --contrib-day-label-width: 1.25rem;
+
     /* Motion */
     --duration-fast: 120ms;
     --duration-normal: 220ms;

@@ -129,14 +129,6 @@ export function setupGitHubDashboard(root) {
         stat.style.setProperty("--stat-index", String(index));
     });
 
-    root.querySelectorAll(".contrib-week").forEach((week, weekIndex) => {
-        let cellIndex = 0;
-        week.querySelectorAll(".contrib-cell").forEach((cell) => {
-            cell.style.setProperty("--cell-index", String(weekIndex * 7 + cellIndex));
-            cellIndex += 1;
-        });
-    });
-
     refreshScrollMotion();
 }
 

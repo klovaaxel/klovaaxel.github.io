@@ -80,7 +80,7 @@ function bindPointer() {
     document.addEventListener(
         "mouseover",
         (event) => {
-            const interactive = event.target.closest("a, button, [data-magnetic], .contrib-cell");
+            const interactive = event.target.closest("a, button, [data-magnetic]");
             ringEl?.classList.toggle("is-hovering", Boolean(interactive));
         },
         { passive: true },
@@ -131,12 +131,12 @@ function onMagneticLeave(element) {
 function tick() {
     if (!enabled) return;
 
-    glowX += (mouseX - glowX) * 0.14;
-    glowY += (mouseY - glowY) * 0.14;
-    ringX += (mouseX - ringX) * 0.2;
-    ringY += (mouseY - ringY) * 0.2;
-    dotX += (mouseX - dotX) * 0.35;
-    dotY += (mouseY - dotY) * 0.35;
+    glowX += (mouseX - glowX) * 0.28;
+    glowY += (mouseY - glowY) * 0.28;
+    ringX += (mouseX - ringX) * 0.68;
+    ringY += (mouseY - ringY) * 0.68;
+    dotX += (mouseX - dotX) * 0.85;
+    dotY += (mouseY - dotY) * 0.85;
 
     glowEl.style.transform = `translate(${glowX}px, ${glowY}px)`;
     ringEl.style.transform = `translate(${ringX}px, ${ringY}px)`;
