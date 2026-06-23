@@ -1,7 +1,6 @@
 import { config } from "./config.js";
 import { initTheme } from "./theme.js";
 import { loadGitHubDashboard } from "./github.js";
-import { initMotion, staggerSocialLinks } from "./motion.js";
 import { initCursor, refreshCursorTargets } from "./cursor.js";
 
 const socialIcons = {
@@ -28,8 +27,6 @@ function renderSocialLinks(containerId) {
   `,
         )
         .join("");
-
-    staggerSocialLinks(container);
 }
 
 function populateStaticContent() {
@@ -105,6 +102,5 @@ document.addEventListener("DOMContentLoaded", () => {
     initTheme();
     initCursor();
     refreshCursorTargets();
-    initMotion();
     loadGitHubDashboard();
 });

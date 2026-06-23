@@ -271,14 +271,19 @@
     }
 }
 
-/* ── Theme transition curtain ── */
+/* ── Theme transition curtain (class toggled from theme.js, animations run in CSS) ── */
 
-.theme-sweep-layer {
+.theme-sweep {
     position: fixed;
     inset: 0;
     z-index: 200;
     pointer-events: none;
     overflow: hidden;
+    visibility: hidden;
+}
+
+html.theme-sweeping .theme-sweep {
+    visibility: visible;
 }
 
 .theme-sweep-beam {
@@ -296,6 +301,9 @@
         transparent 100%
     );
     filter: blur(2px);
+}
+
+html.theme-sweeping .theme-sweep-beam {
     animation: theme-sweep-beam 0.85s var(--ease-snap) forwards;
 }
 
@@ -307,6 +315,9 @@
     height: 4rem;
     border: 3px solid color-mix(in srgb, var(--color-accent) 70%, transparent);
     border-radius: 50%;
+}
+
+html.theme-sweeping .theme-sweep-ring {
     animation: theme-ring-expand 0.9s var(--ease-smooth) forwards;
 }
 
@@ -340,143 +351,191 @@ html.theme-transitioning *::after {
 
 .hero .social-link {
     animation: hero-links-cascade 0.7s var(--ease-spring) both;
-    animation-delay: calc(0.72s + var(--link-index, 0) * 90ms);
+}
+
+.hero .social-link:nth-child(1) {
+    animation-delay: 0.72s;
+}
+
+.hero .social-link:nth-child(2) {
+    animation-delay: 0.81s;
+}
+
+.hero .social-link:nth-child(3) {
+    animation-delay: 0.9s;
+}
+
+.hero .social-link:nth-child(4) {
+    animation-delay: 0.99s;
 }
 
 .page-header {
     animation: header-drop-swing 0.9s var(--ease-spring) 0s both;
 }
 
-@keyframes reveal-exit-left {
-    to {
+@keyframes scroll-slide-left {
+    entry 0% {
         opacity: 0;
-        transform: translateX(-3.5rem) skewX(-3deg);
+        transform: translateX(-4.5rem);
+        clip-path: inset(0 100% 0 0);
+    }
+
+    entry 100%,
+    exit 0% {
+        opacity: 1;
+        transform: translateX(0);
+        clip-path: inset(0 0 0 0);
+    }
+
+    exit 100% {
+        opacity: 0;
+        transform: translateX(-3.5rem);
         clip-path: inset(0 100% 0 0);
     }
 }
 
-@keyframes reveal-exit-right {
-    to {
+@keyframes scroll-slide-right {
+    entry 0% {
         opacity: 0;
-        transform: translateX(3.5rem) skewX(3deg);
+        transform: translateX(4.5rem);
+        clip-path: inset(0 0 0 100%);
+    }
+
+    entry 100%,
+    exit 0% {
+        opacity: 1;
+        transform: translateX(0);
+        clip-path: inset(0 0 0 0);
+    }
+
+    exit 100% {
+        opacity: 0;
+        transform: translateX(3.5rem);
         clip-path: inset(0 0 0 100%);
     }
 }
 
-@keyframes reveal-exit-up {
-    to {
+@keyframes scroll-sweep-up {
+    entry 0% {
+        opacity: 0;
+        transform: translateY(4rem);
+        clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+    }
+
+    entry 100%,
+    exit 0% {
+        opacity: 1;
+        transform: translateY(0);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    }
+
+    exit 100% {
         opacity: 0;
         transform: translateY(3rem);
         clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
     }
 }
 
-@keyframes reveal-exit-flip {
-    to {
+@keyframes scroll-flip {
+    entry 0% {
+        opacity: 0;
+        transform: perspective(900px) rotateX(18deg) translateY(3rem);
+    }
+
+    entry 100%,
+    exit 0% {
+        opacity: 1;
+        transform: perspective(900px) rotateX(0) translateY(0);
+    }
+
+    exit 100% {
         opacity: 0;
         transform: perspective(900px) rotateX(-14deg) translateY(2rem);
     }
 }
 
-@keyframes hero-exit {
-    to {
+@keyframes scroll-skill-in {
+    entry 0% {
         opacity: 0;
-        transform: translateY(-5rem) scale(0.9);
-        clip-path: inset(0 0 100% 0);
+        transform: translateX(-2rem) rotate(-5deg) scale(0.8);
+    }
+
+    entry 100% {
+        opacity: 1;
+        transform: translateX(0) rotate(0) scale(1);
     }
 }
 
-@keyframes stagger-skill-out {
-    to {
+@keyframes scroll-skill-in-alt {
+    entry 0% {
         opacity: 0;
-        transform: translateY(1rem) scale(0.85);
+        transform: translateX(2rem) rotate(5deg) scale(0.8);
+    }
+
+    entry 100% {
+        opacity: 1;
+        transform: translateX(0) rotate(0) scale(1);
     }
 }
 
-@keyframes stagger-timeline-out {
-    to {
+@keyframes scroll-timeline-in {
+    entry 0% {
         opacity: 0;
-        transform: translateX(-2rem);
+        transform: translateX(-3rem);
+    }
+
+    entry 100% {
+        opacity: 1;
+        transform: translateX(0);
     }
 }
 
-/* ── Scroll reveals: bold enter keyframes, scroll-linked exit ── */
+@keyframes scroll-title-underline {
+    entry 0% {
+        transform: scaleX(0) skewX(-12deg);
+    }
 
-[data-reveal]:not(.has-entered) {
-    opacity: 0;
-    pointer-events: none;
+    entry 100% {
+        transform: scaleX(1) skewX(0);
+    }
 }
 
-[data-reveal="slide-left"]:not(.has-entered) {
-    transform: translateX(-4.5rem);
-    clip-path: inset(0 100% 0 0);
+@keyframes scroll-dashboard {
+    entry 0% {
+        opacity: 0;
+        transform: translateX(5rem) skewX(3deg);
+        clip-path: inset(0 0 0 100%);
+    }
+
+    entry 100% {
+        opacity: 1;
+        transform: translateX(0) skewX(0);
+        clip-path: inset(0 0 0 0);
+    }
 }
 
-[data-reveal="slide-right"]:not(.has-entered) {
-    transform: translateX(4.5rem);
-    clip-path: inset(0 0 0 100%);
+@keyframes scroll-stat {
+    entry 0% {
+        opacity: 0;
+        transform: translateY(2.5rem) rotate(-3deg) scale(0.88);
+    }
+
+    entry 100% {
+        opacity: 1;
+        transform: translateY(0) rotate(0) scale(1);
+    }
 }
 
-[data-reveal="sweep-up"]:not(.has-entered) {
-    transform: translateY(4rem);
-    clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
-}
+@keyframes scroll-graph {
+    entry 0% {
+        clip-path: inset(0 100% 0 0);
+        opacity: 0.4;
+    }
 
-[data-reveal="flip"]:not(.has-entered) {
-    transform: perspective(900px) rotateX(16deg) translateY(3rem);
-}
-
-[data-reveal="slide-left"].is-in-view {
-    animation: reveal-slide-left 0.8s var(--ease-snap) both;
-    pointer-events: auto;
-}
-
-[data-reveal="slide-left"].has-entered:not(.is-in-view) {
-    animation: reveal-exit-left 0.5s var(--ease-snap) forwards;
-    pointer-events: none;
-}
-
-[data-reveal="slide-right"].is-in-view {
-    animation: reveal-slide-right 0.8s var(--ease-snap) both;
-    pointer-events: auto;
-}
-
-[data-reveal="slide-right"].has-entered:not(.is-in-view) {
-    animation: reveal-exit-right 0.5s var(--ease-snap) forwards;
-    pointer-events: none;
-}
-
-[data-reveal="sweep-up"].is-in-view {
-    animation: reveal-sweep-up 0.85s var(--ease-snap) both;
-    pointer-events: auto;
-}
-
-[data-reveal="sweep-up"].has-entered:not(.is-in-view) {
-    animation: reveal-exit-up 0.5s var(--ease-snap) forwards;
-    pointer-events: none;
-}
-
-[data-reveal="flip"].is-in-view {
-    animation: reveal-flip-in 0.85s var(--ease-spring) both;
-    pointer-events: auto;
-}
-
-[data-reveal="flip"].has-entered:not(.is-in-view) {
-    animation: reveal-exit-flip 0.5s var(--ease-snap) forwards;
-    pointer-events: none;
-}
-
-[data-reveal="hero"].is-in-view {
-    animation: none;
-    opacity: 1;
-    transform: none;
-    clip-path: none;
-    pointer-events: auto;
-}
-
-[data-reveal="hero"].has-entered:not(.is-in-view) {
-    animation: hero-exit 0.55s var(--ease-snap) forwards;
-    pointer-events: none;
+    entry 100% {
+        clip-path: inset(0 0 0 0);
+        opacity: 1;
+    }
 }
 
 .section-header::after {
@@ -490,95 +549,110 @@ html.theme-transitioning *::after {
     transform-origin: left;
 }
 
-[data-reveal].is-in-view .section-header::after {
-    animation: title-underline-sweep 0.65s var(--ease-snap) 0.15s forwards;
+/* ── Scroll reveals: CSS scroll-driven animations (no JS) ── */
+
+@supports (animation-timeline: view()) {
+    [data-reveal] {
+        overflow-x: clip;
+    }
+
+    [data-reveal="slide-left"] {
+        animation: scroll-slide-left linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+    }
+
+    [data-reveal="slide-right"] {
+        animation: scroll-slide-right linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+    }
+
+    [data-reveal="sweep-up"] {
+        animation: scroll-sweep-up linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+    }
+
+    [data-reveal="flip"] {
+        animation: scroll-flip linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+    }
+
+    .section-header::after {
+        animation: scroll-title-underline linear both;
+        animation-timeline: view();
+        animation-range: entry 5% cover 35%;
+    }
+
+    [data-stagger="skills"] > * {
+        animation: scroll-skill-in linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 32%;
+    }
+
+    [data-stagger="skills"] > *:nth-child(even) {
+        animation-name: scroll-skill-in-alt;
+    }
+
+    .timeline-item {
+        animation: scroll-timeline-in linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 30%;
+    }
+
+    .timeline-item .timeline-marker::after {
+        animation: timeline-line-grow linear both;
+        animation-timeline: view();
+        animation-range: entry 10% cover 38%;
+    }
+
+    .github-dashboard {
+        animation: scroll-dashboard linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 38%;
+    }
+
+    .github-stat {
+        animation: scroll-stat linear both;
+        animation-timeline: view();
+        animation-range: entry 0% cover 28%;
+    }
+
+    .contrib-graph-scroll {
+        animation: scroll-graph linear both;
+        animation-timeline: view();
+        animation-range: entry 5% cover 40%;
+    }
+
+    #connect .profile-card {
+        animation: scroll-flip linear both;
+        animation-timeline: view();
+        animation-range: entry 0% exit 100%;
+    }
 }
 
-/* ── Staggered children (driven by parent section scroll) ── */
+@supports not (animation-timeline: view()) {
+    [data-reveal]:not([data-reveal="hero"]) {
+        opacity: 1;
+        transform: none;
+        clip-path: none;
+    }
 
-[data-stagger] > * {
-    opacity: 0;
-    pointer-events: none;
-}
+    [data-stagger] > *,
+    .github-dashboard,
+    .github-stat,
+    .contrib-graph-scroll,
+    #connect .profile-card {
+        opacity: 1;
+        transform: none;
+        clip-path: none;
+    }
 
-[data-reveal].is-in-view [data-stagger="skills"] > * {
-    animation: stagger-skill-in 0.6s var(--ease-spring) both;
-    animation-delay: calc(var(--stagger-index, 0) * 60ms + 120ms);
-    pointer-events: auto;
-}
-
-[data-reveal].has-entered:not(.is-in-view) [data-stagger="skills"] > * {
-    animation: stagger-skill-out 0.4s var(--ease-snap) both;
-    pointer-events: none;
-}
-
-[data-stagger="skills"] > *:nth-child(even) {
-    --slide-from: 2rem;
-    --tilt: 5deg;
-}
-
-[data-reveal].is-in-view [data-stagger="timeline"] > * {
-    animation: stagger-timeline-in 0.65s var(--ease-snap) both;
-    animation-delay: calc(var(--stagger-index, 0) * 75ms + 150ms);
-    pointer-events: auto;
-}
-
-[data-reveal].has-entered:not(.is-in-view) [data-stagger="timeline"] > * {
-    animation: stagger-timeline-out 0.4s var(--ease-snap) both;
-    pointer-events: none;
-}
-
-[data-reveal].is-in-view [data-stagger="timeline"] > * .timeline-marker::after {
-    animation: timeline-line-grow 0.5s var(--ease-smooth) both;
-    animation-delay: calc(var(--stagger-index, 0) * 75ms + 280ms);
-}
-
-[data-reveal].has-entered:not(.is-in-view) [data-stagger="timeline"] > * .timeline-marker::after {
-    transform: translateX(-50%) scaleY(0);
-    transition: transform 0.3s var(--ease-smooth);
-}
-
-/* ── GitHub dashboard ── */
-
-.github-dashboard {
-    opacity: 0;
-    pointer-events: none;
-}
-
-#github.is-in-view .github-dashboard {
-    animation: dashboard-panel-slide 0.85s var(--ease-snap) 0.05s both;
-    pointer-events: auto;
-}
-
-#github.has-entered:not(.is-in-view) .github-dashboard {
-    animation: reveal-exit-right 0.5s var(--ease-snap) forwards;
-    pointer-events: none;
-}
-
-#github.is-in-view .github-stat {
-    animation: stat-slam 0.55s var(--ease-spring) both;
-    animation-delay: calc(var(--stat-index, 0) * 55ms + 200ms);
-}
-
-#github.is-in-view .contrib-graph-scroll {
-    animation: graph-sweep-reveal 0.75s var(--ease-snap) 0.25s both;
-}
-
-/* ── Connect card ── */
-
-#connect .profile-card {
-    opacity: 0;
-    pointer-events: none;
-}
-
-#connect.is-in-view .profile-card {
-    animation: reveal-flip-in 0.85s var(--ease-spring) 0.12s both;
-    pointer-events: auto;
-}
-
-#connect.has-entered:not(.is-in-view) .profile-card {
-    animation: reveal-exit-flip 0.45s var(--ease-snap) forwards;
-    pointer-events: none;
+    .section-header::after {
+        transform: scaleX(1);
+    }
 }
 
 /* ── Interactive ── */
@@ -606,11 +680,11 @@ html.theme-transitioning *::after {
 }
 
 .skill-tag:hover,
-[data-reveal].is-in-view [data-stagger="skills"] > *:hover {
+[data-stagger="skills"] > *:hover {
     transform: translateY(-4px) rotate(2deg) scale(1.05);
 }
 
-#github.is-in-view .github-stat:hover {
+.github-stat:hover {
     transform: translateY(-4px) skewX(-2deg);
 }
 
@@ -630,7 +704,7 @@ html.theme-transitioning *::after {
         scroll-behavior: auto;
     }
 
-    .theme-sweep-layer {
+    .theme-sweep {
         display: none;
     }
 

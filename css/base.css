@@ -3,6 +3,7 @@
 @import url("themes/light.css");
 @import url("themes/forest.css");
 @import url("themes/ocean.css");
+@import url("themes/sketch.css");
 
 *,
 *::before,
@@ -13,15 +14,18 @@
 html {
     color-scheme: dark;
     scroll-behavior: smooth;
+    overflow-x: clip;
 }
 
-html[data-theme="light"] {
+html[data-theme="light"],
+html[data-theme="sketch"] {
     color-scheme: light;
 }
 
 body {
     margin: 0;
     min-height: 100dvh;
+    overflow-x: clip;
     font-family: var(--font-body);
     font-size: var(--text-base);
     font-weight: var(--weight-normal);

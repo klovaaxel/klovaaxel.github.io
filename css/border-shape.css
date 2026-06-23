@@ -1,0 +1,203 @@
+/**
+ * border-shape — sketch theme only.
+ * Hand-drawn wobbly perimeters (no straight edges).
+ */
+
+.theme-btn[data-theme="sketch"] {
+    display: none;
+}
+
+@supports (border-shape: circle(50%)) {
+    .theme-btn[data-theme="sketch"] {
+        display: flex;
+    }
+
+    [data-theme="sketch"] .hero-tagline,
+    [data-theme="sketch"] .social-link,
+    [data-theme="sketch"] .skill-tag,
+    [data-theme="sketch"] .theme-switcher,
+    [data-theme="sketch"] .github-dashboard,
+    [data-theme="sketch"] .github-stat,
+    [data-theme="sketch"] .github-dashboard-link,
+    [data-theme="sketch"] #connect .profile-card {
+        border-radius: 0;
+    }
+
+    [data-theme="sketch"] .hero-tagline {
+        width: fit-content;
+        max-width: 100%;
+        margin-inline: auto;
+        rotate: -0.7deg;
+        border-shape: var(--drawn-chip);
+        background-color: var(--color-surface);
+        background-image: linear-gradient(
+            transparent 36%,
+            var(--color-marker) 36%,
+            var(--color-marker) 90%,
+            transparent 90%
+        );
+    }
+
+    [data-theme="sketch"] .social-link,
+    [data-theme="sketch"] .skill-tag,
+    [data-theme="sketch"] .github-dashboard-link {
+        border-shape: var(--drawn-chip);
+    }
+
+    [data-theme="sketch"] .theme-switcher {
+        border-shape: var(--drawn-frame);
+    }
+
+    [data-theme="sketch"] .github-dashboard {
+        box-shadow: var(--shadow-md);
+        border-shape: shape(
+            from 1% 2.5%,
+            line to 5% 0.8%,
+            line to 9% 3.2%,
+            line to 13% 1%,
+            line to 17% 3.5%,
+            line to 21% 0.6%,
+            line to 25% 2.8%,
+            line to 29% 1.2%,
+            line to 33% 3.6%,
+            line to 37% 0.5%,
+            line to 41% 2.4%,
+            line to 45% 1.1%,
+            line to 49% 3.3%,
+            line to 53% 0.7%,
+            line to 57% 2.6%,
+            line to 61% 1.3%,
+            line to 65% 3.5%,
+            line to 69% 0.4%,
+            line to 73% 2.2%,
+            line to 77% 1.5%,
+            line to 81% 3.4%,
+            line to 85% 0.9%,
+            line to 89% 2.7%,
+            line to 93% 1.2%,
+            line to 97% 3.1%,
+            line to 99.2% 6.5%,
+            line to 98% 12%,
+            line to 99.5% 18%,
+            line to 97.8% 24%,
+            line to 99.2% 30%,
+            line to 98.1% 36%,
+            line to 99.6% 42%,
+            line to 97.5% 48%,
+            line to 99.3% 54%,
+            line to 98% 60%,
+            line to 99.7% 66%,
+            line to 97.6% 72%,
+            line to 99.1% 78%,
+            line to 98.3% 84%,
+            line to 99.6% 90%,
+            line to 97% 95.5%,
+            line to 91% 98.5%,
+            line to 85% 97.2%,
+            line to 79% 99.4%,
+            line to 73% 98%,
+            line to 67% 99.6%,
+            line to 61% 97.5%,
+            line to 55% 99.2%,
+            line to 49% 98.1%,
+            line to 43% 99.7%,
+            line to 37% 97.4%,
+            line to 31% 99.1%,
+            line to 25% 98.2%,
+            line to 19% 99.6%,
+            line to 13% 97.3%,
+            line to 7% 98.8%,
+            line to 2% 95.5%,
+            line to 0.6% 89%,
+            line to 2.3% 83%,
+            line to 0.9% 77%,
+            line to 2.6% 71%,
+            line to 1.1% 65%,
+            line to 3.3% 59%,
+            line to 0.7% 53%,
+            line to 2.5% 47%,
+            line to 1.2% 41%,
+            line to 3.4% 35%,
+            line to 0.8% 29%,
+            line to 2.7% 23%,
+            line to 1.3% 17%,
+            line to 3.5% 11%,
+            line to 0.9% 5%,
+            close
+        );
+    }
+
+    [data-theme="sketch"] .github-stat {
+        border-shape: var(--drawn-chip);
+    }
+
+    [data-theme="sketch"] #connect .profile-card {
+        margin-top: 1rem;
+        box-shadow: var(--shadow-lg);
+        border-shape: shape(
+            from 3% 11%,
+            line to 11% 9.5%,
+            line to 19% 10.8%,
+            line to 27% 9%,
+            line to 35% 11%,
+            line to 41% 9.5%,
+            line to 44% 7%,
+            line to 47% 4%,
+            line to 49.5% 1%,
+            line to 52% 4%,
+            line to 55% 7%,
+            line to 58% 9.5%,
+            line to 66% 10.5%,
+            line to 74% 9%,
+            line to 82% 11%,
+            line to 90% 9.5%,
+            line to 97% 12%,
+            line to 99% 19%,
+            line to 97.5% 27%,
+            line to 99.2% 35%,
+            line to 96.8% 43%,
+            line to 98.5% 51%,
+            line to 97.2% 59%,
+            line to 99% 67%,
+            line to 96.5% 75%,
+            line to 98.2% 83%,
+            line to 95.8% 91%,
+            line to 97.5% 96.5%,
+            line to 89% 98.8%,
+            line to 81% 97.2%,
+            line to 73% 99.2%,
+            line to 65% 96.8%,
+            line to 57% 98.5%,
+            line to 49% 97%,
+            line to 41% 99.2%,
+            line to 33% 96.5%,
+            line to 25% 98%,
+            line to 17% 96.2%,
+            line to 9% 98.5%,
+            line to 2.5% 93%,
+            line to 1.2% 85%,
+            line to 3.5% 77%,
+            line to 1% 69%,
+            line to 2.8% 61%,
+            line to 1.5% 53%,
+            line to 3.2% 45%,
+            line to 1.2% 37%,
+            line to 2.9% 29%,
+            line to 1.4% 21%,
+            line to 3% 13%,
+            close
+        );
+    }
+
+    [data-theme="sketch"] .github-dashboard-profile .profile-avatar {
+        border-shape: circle(48% at 50% 50%);
+    }
+
+    [data-theme="sketch"] #about .about-text,
+    [data-theme="sketch"] #experience .timeline {
+        border-shape: var(--drawn-frame);
+        border: var(--sketch-stroke) solid var(--color-border-strong);
+        box-shadow: var(--shadow-sm), var(--shadow-ink);
+        background: rgb(255 253 248 / 0.72);
+    }
+}

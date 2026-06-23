@@ -1,5 +1,4 @@
 import { config } from "./config.js";
-import { setupGitHubDashboard } from "./motion.js";
 import { refreshCursorTargets } from "./cursor.js";
 
 const CONTRIBUTIONS_API = "https://github-contributions-api.jogruber.de/v4";
@@ -31,7 +30,6 @@ export async function loadGitHubDashboard() {
 
         const streaks = computeStreaks(activity.contributions);
         container.innerHTML = renderDashboard(user, activity, streaks);
-        setupGitHubDashboard(container.querySelector(".github-dashboard"));
         refreshCursorTargets();
     } catch {
         container.innerHTML = `<p class="empty-state">Could not load GitHub dashboard. <a href="${config.github.url}">View profile on GitHub</a>.</p>`;

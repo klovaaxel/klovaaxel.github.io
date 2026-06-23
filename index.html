@@ -4,25 +4,53 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta name="description" content="Axel Karlsson — AI Engineer at Hogia" />
+        <meta name="color-scheme" content="dark light" />
+        <meta name="theme-color" content="#0c0c0e" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-title" content="Axel Karlsson" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <title>Axel Karlsson</title>
+
+        <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/icons/favicon.ico" sizes="any" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        <link rel="manifest" href="/site.webmanifest" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link
-            href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=Caveat:wght@500;700&family=Patrick+Hand&display=swap"
             rel="stylesheet"
         />
 
         <link rel="stylesheet" href="css/base.css" />
         <link rel="stylesheet" href="css/layout.css" />
         <link rel="stylesheet" href="css/components.css" />
+        <link rel="stylesheet" href="css/border-shape.css" />
+        <link rel="stylesheet" href="css/sketch.css" />
         <link rel="stylesheet" href="css/animations.css" />
         <link rel="stylesheet" href="css/cursor.css" />
 
         <script>
             (function () {
-                var t = localStorage.getItem("axel-portfolio-theme");
-                if (t) document.documentElement.dataset.theme = t;
+                var themes = {
+                    dark: { color: "#0c0c0e", statusBar: "black-translucent" },
+                    light: { color: "#f7f5f0", statusBar: "default" },
+                    forest: { color: "#0d1410", statusBar: "black-translucent" },
+                    ocean: { color: "#080d14", statusBar: "black-translucent" },
+                    sketch: { color: "#f0e9dc", statusBar: "default" },
+                };
+                var supportsSketch =
+                    typeof CSS !== "undefined" && CSS.supports && CSS.supports("border-shape", "circle(50%)");
+                var saved = localStorage.getItem("axel-portfolio-theme") || "dark";
+                var theme = saved === "sketch" && !supportsSketch ? "dark" : saved;
+                document.documentElement.dataset.theme = theme;
+                var meta = themes[theme] || themes.dark;
+                var themeColor = document.querySelector('meta[name="theme-color"]');
+                if (themeColor) themeColor.setAttribute("content", meta.color);
+                var statusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+                if (statusBar) statusBar.setAttribute("content", meta.statusBar);
             })();
         </script>
     </head>
@@ -35,7 +63,7 @@
             </header>
 
             <main class="page-main">
-                <section class="hero section has-entered is-in-view" aria-labelledby="hero-name" data-reveal="hero">
+                <section class="hero section" aria-labelledby="hero-name" data-reveal="hero">
                     <h1 id="hero-name" class="hero-name">Axel Karlsson</h1>
                     <p id="hero-tagline" class="hero-tagline"></p>
                     <div id="hero-meta" class="hero-meta"></div>
@@ -89,6 +117,26 @@
                 <p class="footer-text">© <span id="footer-year"></span> Axel Karlsson</p>
             </footer>
         </div>
+
+        <div class="theme-sweep" aria-hidden="true">
+            <div class="theme-sweep-beam"></div>
+            <div class="theme-sweep-ring"></div>
+        </div>
+
+        <svg class="sketch-filters" aria-hidden="true" focusable="false">
+            <defs>
+                <filter id="sketch-ink-rough" x="-8%" y="-8%" width="116%" height="116%">
+                    <feTurbulence type="fractalNoise" baseFrequency="0.045" numOctaves="3" result="noise" />
+                    <feDisplacementMap
+                        in="SourceGraphic"
+                        in2="noise"
+                        scale="1.8"
+                        xChannelSelector="R"
+                        yChannelSelector="G"
+                    />
+                </filter>
+            </defs>
+        </svg>
 
         <script type="module" src="js/main.js"></script>
     </body>
