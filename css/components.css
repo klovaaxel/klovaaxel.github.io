@@ -369,13 +369,6 @@
     color: var(--color-text-muted);
     background: var(--color-bg-muted);
     border-radius: var(--radius-lg);
-    animation: fade-in 0.5s var(--ease-smooth) both;
-}
-
-.loading {
-    animation:
-        fade-in 0.5s var(--ease-smooth) both,
-        pulse-soft 1.4s ease-in-out infinite;
 }
 
 /* About */
