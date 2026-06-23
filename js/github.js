@@ -1,5 +1,6 @@
 import { config } from "./config.js";
 import { setupGitHubDashboard } from "./motion.js";
+import { refreshCursorTargets } from "./cursor.js";
 
 const CONTRIBUTIONS_API = "https://github-contributions-api.jogruber.de/v4";
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -31,6 +32,7 @@ export async function loadGitHubDashboard() {
         const streaks = computeStreaks(activity.contributions);
         container.innerHTML = renderDashboard(user, activity, streaks);
         setupGitHubDashboard(container.querySelector(".github-dashboard"));
+        refreshCursorTargets();
     } catch {
         container.innerHTML = `<p class="empty-state">Could not load GitHub dashboard. <a href="${config.github.url}">View profile on GitHub</a>.</p>`;
     }
@@ -160,7 +162,7 @@ function renderDashboard(user, activity, streaks) {
           />
           <span class="github-dashboard-handle">@${escapeHtml(user.login)}</span>
         </a>
-        <a class="github-dashboard-link" href="${profileUrl}" target="_blank" rel="noopener noreferrer">
+        <a class="github-dashboard-link" href="${profileUrl}" target="_blank" rel="noopener noreferrer" data-magnetic>
           View on GitHub →
         </a>
       </div>
@@ -169,7 +171,7 @@ function renderDashboard(user, activity, streaks) {
         ${stats
             .map(
                 (stat) => `
-          <div class="github-stat">
+          <div class="github-stat" data-magnetic>
             <dt class="github-stat-label">${escapeHtml(stat.label)}</dt>
             <dd class="github-stat-value">
               ${stat.value}

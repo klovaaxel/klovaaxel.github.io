@@ -1,6 +1,8 @@
 import { config } from "./config.js";
 import { playThemeSweep } from "./motion.js";
 
+import { refreshCursorTargets } from "./cursor.js";
+
 const STORAGE_KEY = "axel-portfolio-theme";
 const THEME_TRANSITION_MS = 750;
 
@@ -45,6 +47,7 @@ function renderThemeSwitcher() {
     <button
       type="button"
       class="theme-btn"
+      data-magnetic
       data-theme="${theme.id}"
       aria-label="${theme.label} theme"
       aria-pressed="false"
@@ -62,6 +65,7 @@ function renderThemeSwitcher() {
         setTheme(btn.dataset.theme, e);
     });
 
+    refreshCursorTargets();
     updateSwitcherState(document.documentElement.dataset.theme);
 }
 
