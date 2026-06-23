@@ -61,8 +61,7 @@ h2,
 h3,
 .profile-name,
 .repo-card-name,
-.timeline-role,
-.education-degree {
+.timeline-role {
     margin: 0;
     font-family: var(--font-display);
     font-weight: var(--weight-bold);

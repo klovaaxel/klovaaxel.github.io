@@ -189,10 +189,6 @@
     font-size: var(--text-base);
 }
 
-.education-degree {
-    font-size: var(--text-base);
-}
-
 .repo-card-stars {
     display: inline-flex;
     align-items: center;
@@ -376,25 +372,6 @@
     margin-top: var(--space-1);
     font-size: var(--text-xs);
     color: var(--color-text-subtle);
-}
-
-/* Education */
-
-.education-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-5);
-    max-width: var(--content-max);
-}
-
-.education-degree {
-    font-size: var(--text-base);
-}
-
-.education-school {
-    margin-top: var(--space-1);
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
 }
 
 .connect-social-links {
