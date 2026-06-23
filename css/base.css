@@ -58,11 +58,17 @@ a:hover {
 
 h1,
 h2,
-h3 {
+h3,
+.profile-name,
+.repo-card-name,
+.timeline-role,
+.education-degree {
     margin: 0;
     font-family: var(--font-display);
     font-weight: var(--weight-bold);
     line-height: var(--leading-tight);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
 p {

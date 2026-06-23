@@ -11,11 +11,9 @@
 }
 
 .hero-name {
-    font-family: var(--font-display);
     font-size: var(--text-5xl);
-    font-weight: var(--weight-bold);
-    letter-spacing: -0.02em;
-    line-height: var(--leading-tight);
+    letter-spacing: 0.02em;
+    line-height: 0.95;
     color: var(--color-text);
     text-wrap: balance;
 }
@@ -179,11 +177,20 @@
 }
 
 .repo-card-name {
-    font-family: var(--font-display);
     font-size: var(--text-base);
-    font-weight: var(--weight-bold);
     color: var(--color-text);
-    letter-spacing: -0.02em;
+}
+
+.profile-name {
+    font-size: var(--text-xl);
+}
+
+.timeline-role {
+    font-size: var(--text-base);
+}
+
+.education-degree {
+    font-size: var(--text-base);
 }
 
 .repo-card-stars {
@@ -256,13 +263,6 @@
     display: flex;
     flex-direction: column;
     gap: var(--space-1);
-}
-
-.profile-name {
-    font-family: var(--font-display);
-    font-size: var(--text-xl);
-    font-weight: var(--weight-bold);
-    letter-spacing: -0.01em;
 }
 
 .profile-bio {
@@ -363,10 +363,7 @@
 }
 
 .timeline-role {
-    font-family: var(--font-display);
     font-size: var(--text-base);
-    font-weight: var(--weight-bold);
-    letter-spacing: -0.02em;
 }
 
 .timeline-company {
@@ -391,10 +388,7 @@
 }
 
 .education-degree {
-    font-family: var(--font-display);
     font-size: var(--text-base);
-    font-weight: var(--weight-bold);
-    letter-spacing: -0.02em;
 }
 
 .education-school {

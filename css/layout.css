@@ -44,8 +44,6 @@
 
 .section-title {
     font-size: var(--text-3xl);
-    font-weight: var(--weight-bold);
-    letter-spacing: -0.01em;
 }
 
 .section-subtitle {
