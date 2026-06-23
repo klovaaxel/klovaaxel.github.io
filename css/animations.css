@@ -1,108 +1,326 @@
 /**
- * Motion tokens and keyframes for page entrance, scroll reveal, and theme transitions.
+ * Expressive motion — slides, sweeps, flips, and theme curtains.
  */
 
 :root {
-    --duration-slow: 420ms;
-    --duration-theme: 560ms;
-    --ease-spring: cubic-bezier(0.34, 1.2, 0.64, 1);
+    --duration-slow: 520ms;
+    --duration-theme: 720ms;
+    --ease-spring: cubic-bezier(0.34, 1.45, 0.64, 1);
     --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-snap: cubic-bezier(0.76, 0, 0.24, 1);
 }
 
-@keyframes fade-up {
+/* ── Keyframes ── */
+
+@keyframes hero-name-sweep {
     from {
         opacity: 0;
-        transform: translateY(1.5rem);
+        transform: translateX(-5rem) skewX(-6deg);
+        clip-path: inset(0 100% 0 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) skewX(0);
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes hero-tagline-sweep {
+    from {
+        opacity: 0;
+        transform: translateX(4rem) skewX(4deg);
+        clip-path: inset(0 0 0 100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) skewX(0);
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes hero-rise-spin {
+    from {
+        opacity: 0;
+        transform: translateY(2.5rem) rotate(-4deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) rotate(0);
+    }
+}
+
+@keyframes hero-links-cascade {
+    from {
+        opacity: 0;
+        transform: translateY(3rem) scale(0.85);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes header-drop-swing {
+    from {
+        opacity: 0;
+        transform: translateY(-120%) rotate(-8deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) rotate(0);
+    }
+}
+
+@keyframes reveal-slide-left {
+    from {
+        opacity: 0;
+        transform: translateX(-4.5rem);
+        clip-path: inset(0 100% 0 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes reveal-slide-right {
+    from {
+        opacity: 0;
+        transform: translateX(4.5rem);
+        clip-path: inset(0 0 0 100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes reveal-sweep-up {
+    from {
+        opacity: 0;
+        transform: translateY(4rem);
+        clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
     }
 
     to {
         opacity: 1;
         transform: translateY(0);
+        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
     }
 }
 
-@keyframes fade-in {
+@keyframes reveal-flip-in {
     from {
         opacity: 0;
+        transform: perspective(900px) rotateX(18deg) translateY(3rem);
     }
 
     to {
         opacity: 1;
+        transform: perspective(900px) rotateX(0) translateY(0);
     }
 }
 
-@keyframes scale-in {
+@keyframes title-underline-sweep {
+    from {
+        transform: scaleX(0) skewX(-12deg);
+    }
+
+    to {
+        transform: scaleX(1) skewX(0);
+    }
+}
+
+@keyframes stagger-skill-in {
     from {
         opacity: 0;
-        transform: scale(0.94);
+        transform: translateX(var(--slide-from, -2rem)) rotate(var(--tilt, -5deg)) scale(0.8);
     }
 
     to {
         opacity: 1;
-        transform: scale(1);
+        transform: translateX(0) rotate(0) scale(1);
     }
 }
 
-@keyframes slide-down {
+@keyframes stagger-timeline-in {
     from {
         opacity: 0;
-        transform: translateY(-0.75rem);
+        transform: translateX(-3rem);
     }
 
     to {
         opacity: 1;
-        transform: translateY(0);
+        transform: translateX(0);
     }
 }
 
-@keyframes contrib-pop {
+@keyframes timeline-line-grow {
+    from {
+        transform: translateX(-50%) scaleY(0);
+    }
+
+    to {
+        transform: translateX(-50%) scaleY(1);
+    }
+}
+
+@keyframes stat-slam {
     from {
         opacity: 0;
-        transform: scale(0.35);
+        transform: translateY(2.5rem) rotate(-3deg) scale(0.88);
     }
 
     to {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0) rotate(0) scale(1);
     }
 }
 
-@keyframes theme-pulse {
-    0% {
-        transform: scale(1);
-    }
-
-    45% {
-        transform: scale(1.08);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-@keyframes shimmer-line {
+@keyframes dashboard-panel-slide {
     from {
-        transform: scaleX(0);
+        opacity: 0;
+        transform: translateX(5rem) skewX(3deg);
+        clip-path: inset(0 0 0 100%);
     }
 
     to {
-        transform: scaleX(1);
+        opacity: 1;
+        transform: translateX(0) skewX(0);
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes graph-sweep-reveal {
+    from {
+        clip-path: inset(0 100% 0 0);
+        opacity: 0.4;
+    }
+
+    to {
+        clip-path: inset(0 0 0 0);
+        opacity: 1;
+    }
+}
+
+@keyframes contrib-wave {
+    from {
+        opacity: 0;
+        transform: scale(0) translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes theme-sweep-beam {
+    from {
+        transform: translateX(-120%) skewX(-16deg);
+        opacity: 0.85;
+    }
+
+    to {
+        transform: translateX(120%) skewX(-16deg);
+        opacity: 0;
+    }
+}
+
+@keyframes theme-ring-expand {
+    from {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0.55;
+    }
+
+    to {
+        transform: translate(-50%, -50%) scale(28);
+        opacity: 0;
+    }
+}
+
+@keyframes theme-btn-spin {
+    from {
+        transform: rotate(-180deg) scale(0.6);
+    }
+
+    to {
+        transform: rotate(0) scale(1);
     }
 }
 
 @keyframes pulse-soft {
     0%,
     100% {
-        opacity: 0.65;
+        opacity: 0.55;
+        transform: translateX(-0.5rem);
     }
 
     50% {
         opacity: 1;
+        transform: translateX(0.5rem);
     }
 }
 
-/* Theme transition — applied briefly when switching themes */
+@keyframes footer-slide-up {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ── Theme transition curtain ── */
+
+.theme-sweep-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.theme-sweep-beam {
+    position: absolute;
+    top: -20%;
+    left: 0;
+    width: 55%;
+    height: 140%;
+    background: linear-gradient(
+        105deg,
+        transparent 0%,
+        color-mix(in srgb, var(--color-accent) 35%, transparent) 42%,
+        color-mix(in srgb, var(--color-accent) 75%, white) 50%,
+        color-mix(in srgb, var(--color-accent) 35%, transparent) 58%,
+        transparent 100%
+    );
+    filter: blur(2px);
+    animation: theme-sweep-beam 0.85s var(--ease-snap) forwards;
+}
+
+.theme-sweep-ring {
+    position: absolute;
+    left: var(--sweep-x, 50%);
+    top: var(--sweep-y, 0%);
+    width: 4rem;
+    height: 4rem;
+    border: 3px solid color-mix(in srgb, var(--color-accent) 70%, transparent);
+    border-radius: 50%;
+    animation: theme-ring-expand 0.9s var(--ease-smooth) forwards;
+}
 
 html.theme-transitioning,
 html.theme-transitioning *,
@@ -121,69 +339,128 @@ html.theme-transitioning *::after {
         opacity !important;
 }
 
-/* Hero entrance on load */
+/* ── Hero entrance ── */
 
 .hero-name {
-    animation: fade-up 0.85s var(--ease-spring) 0.05s both;
+    animation: hero-name-sweep 1s var(--ease-snap) 0.08s both;
 }
 
 .hero-tagline {
-    animation: fade-up 0.85s var(--ease-spring) 0.18s both;
+    animation: hero-tagline-sweep 1s var(--ease-snap) 0.28s both;
 }
 
 .hero-meta {
-    animation: fade-up 0.85s var(--ease-spring) 0.3s both;
+    animation: hero-rise-spin 0.9s var(--ease-spring) 0.48s both;
 }
 
 .hero .social-links {
-    animation: fade-up 0.85s var(--ease-spring) 0.42s both;
+    animation: hero-links-cascade 0.85s var(--ease-spring) 0.62s both;
+}
+
+.hero .social-link {
+    animation: hero-links-cascade 0.7s var(--ease-spring) both;
+    animation-delay: calc(0.72s + var(--link-index, 0) * 90ms);
 }
 
 .page-header {
-    animation: slide-down 0.7s var(--ease-spring) 0.1s both;
+    animation: header-drop-swing 0.9s var(--ease-spring) 0s both;
 }
 
-/* Scroll reveal */
+/* ── Scroll reveals ── */
 
 [data-reveal] {
     opacity: 0;
-    transform: translateY(1.25rem);
-    transition:
-        opacity 0.7s var(--ease-smooth),
-        transform 0.7s var(--ease-smooth);
-    transition-delay: var(--reveal-delay, 0ms);
 }
 
-[data-reveal].is-visible {
-    opacity: 1;
-    transform: translateY(0);
+[data-reveal="slide-left"].is-visible {
+    animation: reveal-slide-left 0.9s var(--ease-snap) var(--reveal-delay, 0ms) both;
 }
 
-[data-reveal="scale"] {
-    transform: scale(0.96);
+[data-reveal="slide-right"].is-visible {
+    animation: reveal-slide-right 0.9s var(--ease-snap) var(--reveal-delay, 0ms) both;
 }
 
-[data-reveal="scale"].is-visible {
-    transform: scale(1);
+[data-reveal="sweep-up"].is-visible {
+    animation: reveal-sweep-up 0.95s var(--ease-snap) var(--reveal-delay, 0ms) both;
 }
 
-/* Staggered children inside revealed containers */
+[data-reveal="flip"].is-visible {
+    animation: reveal-flip-in 0.95s var(--ease-spring) var(--reveal-delay, 0ms) both;
+}
 
-[data-stagger] > * {
+[data-reveal]:not([data-reveal="slide-left"]):not([data-reveal="slide-right"]):not(
+        [data-reveal="sweep-up"]
+    ):not([data-reveal="flip"]).is-visible {
+    animation: reveal-sweep-up 0.9s var(--ease-snap) var(--reveal-delay, 0ms) both;
+}
+
+.section-header::after {
+    content: "";
+    display: block;
+    width: min(12rem, 40%);
+    height: 3px;
+    margin-top: var(--space-3);
+    background: linear-gradient(90deg, var(--color-accent), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+[data-reveal].is-visible .section-header::after {
+    animation: title-underline-sweep 0.75s var(--ease-snap) forwards;
+    animation-delay: calc(var(--reveal-delay, 0ms) + 200ms);
+}
+
+/* ── Staggered children ── */
+
+[data-stagger="skills"] > * {
     opacity: 0;
-    transform: translateY(0.75rem);
-    transition:
-        opacity 0.55s var(--ease-smooth),
-        transform 0.55s var(--ease-smooth);
-    transition-delay: calc(var(--stagger-index, 0) * 55ms);
 }
 
-[data-stagger].is-visible > * {
-    opacity: 1;
-    transform: translateY(0);
+[data-stagger="skills"].is-visible > * {
+    animation: stagger-skill-in 0.65s var(--ease-spring) both;
+    animation-delay: calc(var(--stagger-index, 0) * 75ms + 180ms);
 }
 
-/* Interactive motion */
+[data-stagger="skills"] > *:nth-child(even) {
+    --slide-from: 2rem;
+    --tilt: 5deg;
+}
+
+[data-stagger="timeline"] > * {
+    opacity: 0;
+}
+
+[data-stagger="timeline"].is-visible > * {
+    animation: stagger-timeline-in 0.7s var(--ease-snap) both;
+    animation-delay: calc(var(--stagger-index, 0) * 90ms + 220ms);
+}
+
+[data-stagger="timeline"].is-visible .timeline-item .timeline-marker::after {
+    animation: timeline-line-grow 0.55s var(--ease-smooth) both;
+    animation-delay: calc(var(--stagger-index, 0) * 90ms + 380ms);
+}
+
+/* ── GitHub dashboard ── */
+
+.github-dashboard.is-loaded {
+    animation: dashboard-panel-slide 0.95s var(--ease-snap) 0.1s both;
+}
+
+.github-dashboard.is-loaded .github-stat {
+    animation: stat-slam 0.6s var(--ease-spring) both;
+    animation-delay: calc(var(--stat-index, 0) * 85ms + 350ms);
+}
+
+.github-dashboard.is-loaded .contrib-graph-scroll {
+    animation: graph-sweep-reveal 0.85s var(--ease-snap) 0.55s both;
+}
+
+.contrib-week.is-animated .contrib-cell {
+    animation: contrib-wave 0.4s var(--ease-spring) both;
+    animation-delay: calc(var(--cell-index, 0) * 5ms);
+}
+
+/* ── Interactive ── */
 
 .social-link,
 .github-dashboard-link,
@@ -196,80 +473,63 @@ html.theme-transitioning *::after {
         box-shadow var(--duration-normal) var(--ease-out);
 }
 
-.social-link:active,
-.theme-btn:active {
-    transform: scale(0.96);
+.theme-btn[aria-pressed="true"] svg {
+    animation: theme-btn-spin 0.55s var(--ease-spring);
 }
 
-.theme-btn[aria-pressed="true"] {
-    animation: theme-pulse 0.45s var(--ease-spring);
+.social-link:hover {
+    color: var(--color-text);
+    background: var(--color-bg-muted);
+    border-color: var(--color-border-strong);
+    transform: translateY(-3px) scale(1.04) rotate(-1deg);
 }
 
-.github-stat,
-.profile-card,
-.github-dashboard,
-.skill-tag,
-.timeline-item,
-.timeline-marker {
+.skill-tag:hover {
+    transform: translateY(-4px) rotate(2deg) scale(1.05);
+}
+
+.github-stat:hover {
+    transform: translateY(-4px) skewX(-2deg);
+}
+
+.profile-card {
     transition:
         background-color var(--duration-normal) var(--ease-out),
         border-color var(--duration-normal) var(--ease-out),
-        color var(--duration-normal) var(--ease-out),
-        box-shadow var(--duration-normal) var(--ease-out),
-        transform var(--duration-normal) var(--ease-spring);
+        transform var(--duration-slow) var(--ease-spring),
+        box-shadow var(--duration-slow) var(--ease-out);
 }
 
-.skill-tag:hover,
-.github-stat:hover {
-    transform: translateY(-2px);
+#connect.is-visible .profile-card {
+    animation: reveal-flip-in 0.85s var(--ease-spring) calc(var(--reveal-delay, 0ms) + 250ms) both;
 }
 
 .contrib-cell {
     transition:
         background-color var(--duration-normal) var(--ease-out),
-        transform var(--duration-fast) var(--ease-spring),
-        opacity var(--duration-fast) var(--ease-out);
+        transform var(--duration-fast) var(--ease-spring);
 }
 
 .contrib-cell:hover {
-    transform: scale(1.35);
+    transform: scale(1.5) rotate(8deg);
+    z-index: 1;
 }
 
-.contrib-week.is-animated .contrib-cell {
-    animation: contrib-pop 0.35s var(--ease-spring) both;
-    animation-delay: calc(var(--cell-index, 0) * 4ms);
+.loading {
+    animation: pulse-soft 1.2s ease-in-out infinite;
 }
 
-.github-dashboard.is-loaded .github-stat {
-    animation: scale-in 0.5s var(--ease-spring) both;
-    animation-delay: calc(var(--stat-index, 0) * 70ms);
-}
-
-.github-dashboard.is-loaded .contrib-graph {
-    animation: fade-in 0.6s var(--ease-smooth) 0.2s both;
-}
-
-.section-header::after {
-    content: "";
-    display: block;
-    width: 2.5rem;
-    height: 2px;
-    margin-top: var(--space-3);
-    background: var(--color-accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.6s var(--ease-spring);
-    transition-delay: var(--reveal-delay, 0ms);
-}
-
-[data-reveal].is-visible .section-header::after {
-    animation: shimmer-line 0.65s var(--ease-spring) forwards;
-    animation-delay: calc(var(--reveal-delay, 0ms) + 120ms);
+.page-footer {
+    animation: footer-slide-up 0.8s var(--ease-snap) 0.9s both;
 }
 
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
+    }
+
+    .theme-sweep-layer {
+        display: none;
     }
 
     html.theme-transitioning,
@@ -291,5 +551,6 @@ html.theme-transitioning *::after {
     [data-stagger] > * {
         opacity: 1;
         transform: none;
+        clip-path: none;
     }
 }

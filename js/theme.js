@@ -1,6 +1,8 @@
 import { config } from "./config.js";
+import { playThemeSweep } from "./motion.js";
 
 const STORAGE_KEY = "axel-portfolio-theme";
+const THEME_TRANSITION_MS = 750;
 
 export function initTheme() {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -9,11 +11,12 @@ export function initTheme() {
     renderThemeSwitcher();
 }
 
-export function setTheme(themeId) {
+export function setTheme(themeId, event) {
     const root = document.documentElement;
     const isThemeChange = root.dataset.theme && root.dataset.theme !== themeId;
 
     if (isThemeChange) {
+        playThemeSweep(event);
         root.classList.add("theme-transitioning");
     }
 
@@ -22,7 +25,7 @@ export function setTheme(themeId) {
     updateSwitcherState(themeId);
 
     if (isThemeChange) {
-        window.setTimeout(() => root.classList.remove("theme-transitioning"), 580);
+        window.setTimeout(() => root.classList.remove("theme-transitioning"), THEME_TRANSITION_MS);
     }
 }
 
@@ -56,7 +59,7 @@ function renderThemeSwitcher() {
     container.addEventListener("click", (e) => {
         const btn = e.target.closest(".theme-btn");
         if (!btn) return;
-        setTheme(btn.dataset.theme);
+        setTheme(btn.dataset.theme, e);
     });
 
     updateSwitcherState(document.documentElement.dataset.theme);
@@ -69,7 +72,6 @@ const themeIcons = {
     wave: `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 6c.6.5 1.2 1 2.5 1C7 7 7 5 9.5 5c2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 12c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/><path d="M2 18c.6.5 1.2 1 2.5 1 2.5 0 2.5-2 5-2 2.6 0 2.4 2 5 2 2.5 0 2.5-2 5-2 1.3 0 1.9.5 2.5 1"/></svg>`,
 };
 
-// Apply theme before paint to avoid flash
 (function applyEarlyTheme() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {

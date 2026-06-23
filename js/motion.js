@@ -11,6 +11,39 @@ export function initMotion() {
 
   initScrollReveal();
   initStaggerIndexes();
+  initHeroSocialStagger();
+}
+
+export function playThemeSweep(event) {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const layer = document.createElement("div");
+  layer.className = "theme-sweep-layer";
+  layer.setAttribute("aria-hidden", "true");
+
+  const x = event?.clientX ?? window.innerWidth * 0.85;
+  const y = event?.clientY ?? window.innerHeight * 0.08;
+  layer.style.setProperty("--sweep-x", `${x}px`);
+  layer.style.setProperty("--sweep-y", `${y}px`);
+
+  const beam = document.createElement("div");
+  beam.className = "theme-sweep-beam";
+
+  const ring = document.createElement("div");
+  ring.className = "theme-sweep-ring";
+
+  layer.append(beam, ring);
+  document.body.append(layer);
+
+  layer.addEventListener(
+    "animationend",
+    (e) => {
+      if (e.target === ring) layer.remove();
+    },
+    { once: true },
+  );
+
+  window.setTimeout(() => layer.remove(), 1200);
 }
 
 function revealElement(element) {
@@ -22,7 +55,6 @@ function revealElement(element) {
 
 function initScrollReveal() {
   const elements = document.querySelectorAll(REVEAL_SELECTOR);
-
   if (!elements.length) return;
 
   const observer = new IntersectionObserver(
@@ -33,7 +65,7 @@ function initScrollReveal() {
         observer.unobserve(entry.target);
       });
     },
-    { threshold: 0.14, rootMargin: "0px 0px -5% 0px" },
+    { threshold: 0.1, rootMargin: "0px 0px -8% 0px" },
   );
 
   elements.forEach((el) => observer.observe(el));
@@ -44,6 +76,12 @@ function initStaggerIndexes() {
     [...container.children].forEach((child, index) => {
       child.style.setProperty("--stagger-index", String(index));
     });
+  });
+}
+
+function initHeroSocialStagger() {
+  document.querySelectorAll(".hero .social-link").forEach((link, index) => {
+    link.style.setProperty("--link-index", String(index));
   });
 }
 
@@ -70,8 +108,16 @@ export function animateGitHubDashboard(root) {
       cellIndex += 1;
     });
 
-    window.setTimeout(() => {
-      week.classList.add("is-animated");
-    }, 280 + weekIndex * 18);
+    window.setTimeout(
+      () => week.classList.add("is-animated"),
+      700 + weekIndex * 22,
+    );
+  });
+}
+
+// Re-run social link stagger after dynamic render
+export function staggerSocialLinks(container) {
+  container?.querySelectorAll(".social-link").forEach((link, index) => {
+    link.style.setProperty("--link-index", String(index));
   });
 }
