@@ -358,10 +358,6 @@
     transform: translateX(-50%);
 }
 
-.timeline-role {
-    font-size: var(--text-base);
-}
-
 .timeline-company {
     margin-top: var(--space-1);
     font-size: var(--text-sm);
