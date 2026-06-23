@@ -85,36 +85,6 @@ export const config = {
         },
     ],
 
-    githubRepos: {
-        mode: "featured",
-        featured: [
-            "web-a11y-agent-skills",
-            "meeting-room-display",
-            "combobox-framework",
-            "light-sqlite-orm",
-            "git-auto",
-            "agent-software-design-skills",
-            "agent-testing-skills",
-            "cypress-html",
-            "editorjs-parser",
-        ],
-        exclude: [
-            "klovaaxel.github.io",
-            "test",
-            "fruit_test",
-            "post-test",
-            "SDD",
-            "obsidian-notes",
-            "Programering",
-            "ZitrusWebAppDist",
-            "ZitrusDevResources",
-            "swap-live-and-status-icons-discord-theme",
-        ],
-        excludeForks: true,
-        sort: "updated",
-        maxCount: 9,
-    },
-
     themes: [
         { id: "dark", label: "Dark", icon: "moon" },
         { id: "light", label: "Light", icon: "sun" },
