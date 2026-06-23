@@ -40,9 +40,21 @@ export async function loadGitHubRepos() {
             `/users/${config.github.username}/repos?sort=${config.githubRepos.sort}&per_page=100`,
         );
 
-        const filtered = repos
-            .filter((repo) => !config.githubRepos.excludeForks || !repo.fork)
-            .slice(0, config.githubRepos.maxCount);
+        const excludeSet = new Set(config.githubRepos.exclude ?? []);
+        const nonForks = repos.filter(
+            (repo) => (config.githubRepos.excludeForks ? !repo.fork : true) && !excludeSet.has(repo.name),
+        );
+
+        let filtered;
+        if (config.githubRepos.mode === "featured" && config.githubRepos.featured?.length) {
+            const byName = new Map(nonForks.map((repo) => [repo.name, repo]));
+            filtered = config.githubRepos.featured
+                .map((name) => byName.get(name))
+                .filter(Boolean)
+                .slice(0, config.githubRepos.maxCount);
+        } else {
+            filtered = nonForks.slice(0, config.githubRepos.maxCount);
+        }
 
         if (filtered.length === 0) {
             container.innerHTML = `<p class="empty-state">No public repositories found.</p>`;
@@ -76,7 +88,7 @@ function renderProfile(user) {
       />
       <div class="profile-info">
         <p class="profile-name">${escapeHtml(user.name ?? user.login)}</p>
-        <p class="profile-bio">${escapeHtml(user.bio ?? user.login + " on GitHub")}</p>
+        <p class="profile-bio">${escapeHtml(user.bio ?? config.linkedin.headline ?? config.tagline)}</p>
         <div class="profile-stats">
           <span>${user.public_repos} repos</span>
           <span>${user.followers} followers</span>
