@@ -3,13 +3,14 @@ const STAGGER_SELECTOR = "[data-stagger]";
 
 export function initMotion() {
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    document.querySelectorAll(`${REVEAL_SELECTOR}, ${STAGGER_SELECTOR}`).forEach((el) => {
+    document.querySelectorAll(`${REVEAL_SELECTOR}, ${STAGGER_SELECTOR}, ${STAGGER_SELECTOR} > *`).forEach((el) => {
       el.classList.add("is-visible");
     });
     return;
   }
 
   initScrollReveal();
+  initStaggerReveal();
   initStaggerIndexes();
   initHeroSocialStagger();
 }
@@ -48,9 +49,6 @@ export function playThemeSweep(event) {
 
 function revealElement(element) {
   element.classList.add("is-visible");
-  element.querySelectorAll(STAGGER_SELECTOR).forEach((stagger) => {
-    stagger.classList.add("is-visible");
-  });
 }
 
 function initScrollReveal() {
@@ -65,10 +63,51 @@ function initScrollReveal() {
         observer.unobserve(entry.target);
       });
     },
-    { threshold: 0.1, rootMargin: "0px 0px -8% 0px" },
+    {
+      threshold: 0,
+      // Fire while content is still below the fold — before the user scrolls to it
+      rootMargin: "0px 0px 35% 0px",
+    },
   );
 
-  elements.forEach((el) => observer.observe(el));
+  elements.forEach((el) => {
+    observer.observe(el);
+    if (isApproachingViewport(el)) {
+      revealElement(el);
+    }
+  });
+}
+
+function initStaggerReveal() {
+  const items = document.querySelectorAll(`${STAGGER_SELECTOR} > *`);
+  if (!items.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0,
+      rootMargin: "0px 0px 30% 0px",
+    },
+  );
+
+  items.forEach((item) => {
+    observer.observe(item);
+    if (isApproachingViewport(item)) {
+      item.classList.add("is-visible");
+    }
+  });
+}
+
+function isApproachingViewport(element) {
+  const rect = element.getBoundingClientRect();
+  const lead = window.innerHeight * 0.35;
+  return rect.top < window.innerHeight + lead;
 }
 
 function initStaggerIndexes() {
@@ -110,7 +149,7 @@ export function animateGitHubDashboard(root) {
 
     window.setTimeout(
       () => week.classList.add("is-animated"),
-      700 + weekIndex * 22,
+      200 + weekIndex * 12,
     );
   });
 }

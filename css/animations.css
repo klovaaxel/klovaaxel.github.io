@@ -329,14 +329,7 @@ html.theme-transitioning *::after {
     transition-duration: var(--duration-theme) !important;
     transition-timing-function: var(--ease-smooth) !important;
     transition-property:
-        background-color,
-        color,
-        border-color,
-        box-shadow,
-        fill,
-        stroke,
-        outline-color,
-        opacity !important;
+        background-color, color, border-color, box-shadow, fill, stroke, outline-color, opacity !important;
 }
 
 /* ── Hero entrance ── */
@@ -373,25 +366,25 @@ html.theme-transitioning *::after {
 }
 
 [data-reveal="slide-left"].is-visible {
-    animation: reveal-slide-left 0.9s var(--ease-snap) var(--reveal-delay, 0ms) both;
+    animation: reveal-slide-left 0.7s var(--ease-snap) var(--reveal-delay, 0ms) both;
 }
 
 [data-reveal="slide-right"].is-visible {
-    animation: reveal-slide-right 0.9s var(--ease-snap) var(--reveal-delay, 0ms) both;
+    animation: reveal-slide-right 0.7s var(--ease-snap) var(--reveal-delay, 0ms) both;
 }
 
 [data-reveal="sweep-up"].is-visible {
-    animation: reveal-sweep-up 0.95s var(--ease-snap) var(--reveal-delay, 0ms) both;
+    animation: reveal-sweep-up 0.75s var(--ease-snap) var(--reveal-delay, 0ms) both;
 }
 
 [data-reveal="flip"].is-visible {
-    animation: reveal-flip-in 0.95s var(--ease-spring) var(--reveal-delay, 0ms) both;
+    animation: reveal-flip-in 0.75s var(--ease-spring) var(--reveal-delay, 0ms) both;
 }
 
-[data-reveal]:not([data-reveal="slide-left"]):not([data-reveal="slide-right"]):not(
-        [data-reveal="sweep-up"]
-    ):not([data-reveal="flip"]).is-visible {
-    animation: reveal-sweep-up 0.9s var(--ease-snap) var(--reveal-delay, 0ms) both;
+[data-reveal]:not([data-reveal="slide-left"]):not([data-reveal="slide-right"]):not([data-reveal="sweep-up"]):not(
+        [data-reveal="flip"]
+    ).is-visible {
+    animation: reveal-sweep-up 0.7s var(--ease-snap) var(--reveal-delay, 0ms) both;
 }
 
 .section-header::after {
@@ -406,19 +399,18 @@ html.theme-transitioning *::after {
 }
 
 [data-reveal].is-visible .section-header::after {
-    animation: title-underline-sweep 0.75s var(--ease-snap) forwards;
-    animation-delay: calc(var(--reveal-delay, 0ms) + 200ms);
+    animation: title-underline-sweep 0.55s var(--ease-snap) forwards;
+    animation-delay: calc(var(--reveal-delay, 0ms) + 80ms);
 }
 
-/* ── Staggered children ── */
+/* ── Staggered children (each item reveals on its own scroll) ── */
 
 [data-stagger="skills"] > * {
     opacity: 0;
 }
 
-[data-stagger="skills"].is-visible > * {
-    animation: stagger-skill-in 0.65s var(--ease-spring) both;
-    animation-delay: calc(var(--stagger-index, 0) * 75ms + 180ms);
+[data-stagger="skills"] > *.is-visible {
+    animation: stagger-skill-in 0.5s var(--ease-spring) both;
 }
 
 [data-stagger="skills"] > *:nth-child(even) {
@@ -430,29 +422,27 @@ html.theme-transitioning *::after {
     opacity: 0;
 }
 
-[data-stagger="timeline"].is-visible > * {
-    animation: stagger-timeline-in 0.7s var(--ease-snap) both;
-    animation-delay: calc(var(--stagger-index, 0) * 90ms + 220ms);
+[data-stagger="timeline"] > *.is-visible {
+    animation: stagger-timeline-in 0.55s var(--ease-snap) both;
 }
 
-[data-stagger="timeline"].is-visible .timeline-item .timeline-marker::after {
-    animation: timeline-line-grow 0.55s var(--ease-smooth) both;
-    animation-delay: calc(var(--stagger-index, 0) * 90ms + 380ms);
+[data-stagger="timeline"] > *.is-visible .timeline-marker::after {
+    animation: timeline-line-grow 0.45s var(--ease-smooth) 0.12s both;
 }
 
 /* ── GitHub dashboard ── */
 
 .github-dashboard.is-loaded {
-    animation: dashboard-panel-slide 0.95s var(--ease-snap) 0.1s both;
+    animation: dashboard-panel-slide 0.7s var(--ease-snap) both;
 }
 
 .github-dashboard.is-loaded .github-stat {
-    animation: stat-slam 0.6s var(--ease-spring) both;
-    animation-delay: calc(var(--stat-index, 0) * 85ms + 350ms);
+    animation: stat-slam 0.5s var(--ease-spring) both;
+    animation-delay: calc(var(--stat-index, 0) * 50ms + 80ms);
 }
 
 .github-dashboard.is-loaded .contrib-graph-scroll {
-    animation: graph-sweep-reveal 0.85s var(--ease-snap) 0.55s both;
+    animation: graph-sweep-reveal 0.65s var(--ease-snap) 0.15s both;
 }
 
 .contrib-week.is-animated .contrib-cell {
@@ -501,7 +491,7 @@ html.theme-transitioning *::after {
 }
 
 #connect.is-visible .profile-card {
-    animation: reveal-flip-in 0.85s var(--ease-spring) calc(var(--reveal-delay, 0ms) + 250ms) both;
+    animation: reveal-flip-in 0.7s var(--ease-spring) calc(var(--reveal-delay, 0ms) + 100ms) both;
 }
 
 .contrib-cell {
