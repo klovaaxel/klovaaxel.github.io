@@ -24,6 +24,7 @@ body {
     min-height: 100dvh;
     font-family: var(--font-body);
     font-size: var(--text-base);
+    font-weight: var(--weight-medium);
     line-height: var(--leading-normal);
     color: var(--color-text);
     background-color: var(--color-bg);
@@ -59,7 +60,8 @@ h1,
 h2,
 h3 {
     margin: 0;
-    font-weight: var(--weight-normal);
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold);
     line-height: var(--leading-tight);
 }
 
