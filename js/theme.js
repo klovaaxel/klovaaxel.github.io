@@ -10,9 +10,20 @@ export function initTheme() {
 }
 
 export function setTheme(themeId) {
-    document.documentElement.dataset.theme = themeId;
+    const root = document.documentElement;
+    const isThemeChange = root.dataset.theme && root.dataset.theme !== themeId;
+
+    if (isThemeChange) {
+        root.classList.add("theme-transitioning");
+    }
+
+    root.dataset.theme = themeId;
     localStorage.setItem(STORAGE_KEY, themeId);
     updateSwitcherState(themeId);
+
+    if (isThemeChange) {
+        window.setTimeout(() => root.classList.remove("theme-transitioning"), 580);
+    }
 }
 
 function updateSwitcherState(activeId) {

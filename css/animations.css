@@ -1,0 +1,295 @@
+/**
+ * Motion tokens and keyframes for page entrance, scroll reveal, and theme transitions.
+ */
+
+:root {
+    --duration-slow: 420ms;
+    --duration-theme: 560ms;
+    --ease-spring: cubic-bezier(0.34, 1.2, 0.64, 1);
+    --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(1.5rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes scale-in {
+    from {
+        opacity: 0;
+        transform: scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slide-down {
+    from {
+        opacity: 0;
+        transform: translateY(-0.75rem);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes contrib-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.35);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes theme-pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    45% {
+        transform: scale(1.08);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes shimmer-line {
+    from {
+        transform: scaleX(0);
+    }
+
+    to {
+        transform: scaleX(1);
+    }
+}
+
+@keyframes pulse-soft {
+    0%,
+    100% {
+        opacity: 0.65;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+/* Theme transition — applied briefly when switching themes */
+
+html.theme-transitioning,
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+    transition-duration: var(--duration-theme) !important;
+    transition-timing-function: var(--ease-smooth) !important;
+    transition-property:
+        background-color,
+        color,
+        border-color,
+        box-shadow,
+        fill,
+        stroke,
+        outline-color,
+        opacity !important;
+}
+
+/* Hero entrance on load */
+
+.hero-name {
+    animation: fade-up 0.85s var(--ease-spring) 0.05s both;
+}
+
+.hero-tagline {
+    animation: fade-up 0.85s var(--ease-spring) 0.18s both;
+}
+
+.hero-meta {
+    animation: fade-up 0.85s var(--ease-spring) 0.3s both;
+}
+
+.hero .social-links {
+    animation: fade-up 0.85s var(--ease-spring) 0.42s both;
+}
+
+.page-header {
+    animation: slide-down 0.7s var(--ease-spring) 0.1s both;
+}
+
+/* Scroll reveal */
+
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(1.25rem);
+    transition:
+        opacity 0.7s var(--ease-smooth),
+        transform 0.7s var(--ease-smooth);
+    transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal].is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+[data-reveal="scale"] {
+    transform: scale(0.96);
+}
+
+[data-reveal="scale"].is-visible {
+    transform: scale(1);
+}
+
+/* Staggered children inside revealed containers */
+
+[data-stagger] > * {
+    opacity: 0;
+    transform: translateY(0.75rem);
+    transition:
+        opacity 0.55s var(--ease-smooth),
+        transform 0.55s var(--ease-smooth);
+    transition-delay: calc(var(--stagger-index, 0) * 55ms);
+}
+
+[data-stagger].is-visible > * {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Interactive motion */
+
+.social-link,
+.github-dashboard-link,
+.theme-btn {
+    transition:
+        background-color var(--duration-fast) var(--ease-out),
+        border-color var(--duration-fast) var(--ease-out),
+        color var(--duration-fast) var(--ease-out),
+        transform var(--duration-normal) var(--ease-spring),
+        box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.social-link:active,
+.theme-btn:active {
+    transform: scale(0.96);
+}
+
+.theme-btn[aria-pressed="true"] {
+    animation: theme-pulse 0.45s var(--ease-spring);
+}
+
+.github-stat,
+.profile-card,
+.github-dashboard,
+.skill-tag,
+.timeline-item,
+.timeline-marker {
+    transition:
+        background-color var(--duration-normal) var(--ease-out),
+        border-color var(--duration-normal) var(--ease-out),
+        color var(--duration-normal) var(--ease-out),
+        box-shadow var(--duration-normal) var(--ease-out),
+        transform var(--duration-normal) var(--ease-spring);
+}
+
+.skill-tag:hover,
+.github-stat:hover {
+    transform: translateY(-2px);
+}
+
+.contrib-cell {
+    transition:
+        background-color var(--duration-normal) var(--ease-out),
+        transform var(--duration-fast) var(--ease-spring),
+        opacity var(--duration-fast) var(--ease-out);
+}
+
+.contrib-cell:hover {
+    transform: scale(1.35);
+}
+
+.contrib-week.is-animated .contrib-cell {
+    animation: contrib-pop 0.35s var(--ease-spring) both;
+    animation-delay: calc(var(--cell-index, 0) * 4ms);
+}
+
+.github-dashboard.is-loaded .github-stat {
+    animation: scale-in 0.5s var(--ease-spring) both;
+    animation-delay: calc(var(--stat-index, 0) * 70ms);
+}
+
+.github-dashboard.is-loaded .contrib-graph {
+    animation: fade-in 0.6s var(--ease-smooth) 0.2s both;
+}
+
+.section-header::after {
+    content: "";
+    display: block;
+    width: 2.5rem;
+    height: 2px;
+    margin-top: var(--space-3);
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.6s var(--ease-spring);
+    transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal].is-visible .section-header::after {
+    animation: shimmer-line 0.65s var(--ease-spring) forwards;
+    animation-delay: calc(var(--reveal-delay, 0ms) + 120ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    html.theme-transitioning,
+    html.theme-transitioning *,
+    html.theme-transitioning *::before,
+    html.theme-transitioning *::after {
+        transition-duration: 0.01ms !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    [data-reveal],
+    [data-stagger] > * {
+        opacity: 1;
+        transform: none;
+    }
+}
