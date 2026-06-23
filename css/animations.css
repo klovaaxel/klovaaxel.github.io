@@ -359,70 +359,136 @@ html.theme-transitioning *::after {
     animation: header-drop-swing 0.9s var(--ease-spring) 0s both;
 }
 
-/* ── Scroll reveals (bidirectional — enter and exit with scroll) ── */
-
-[data-reveal] {
-    --scroll-transition: opacity 0.55s var(--ease-snap), transform 0.55s var(--ease-snap), clip-path 0.55s var(--ease-snap);
-    transition: var(--scroll-transition);
-    will-change: opacity, transform, clip-path;
+@keyframes reveal-exit-left {
+    to {
+        opacity: 0;
+        transform: translateX(-3.5rem) skewX(-3deg);
+        clip-path: inset(0 100% 0 0);
+    }
 }
 
-[data-reveal="slide-left"] {
+@keyframes reveal-exit-right {
+    to {
+        opacity: 0;
+        transform: translateX(3.5rem) skewX(3deg);
+        clip-path: inset(0 0 0 100%);
+    }
+}
+
+@keyframes reveal-exit-up {
+    to {
+        opacity: 0;
+        transform: translateY(3rem);
+        clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+    }
+}
+
+@keyframes reveal-exit-flip {
+    to {
+        opacity: 0;
+        transform: perspective(900px) rotateX(-14deg) translateY(2rem);
+    }
+}
+
+@keyframes hero-exit {
+    to {
+        opacity: 0;
+        transform: translateY(-5rem) scale(0.9);
+        clip-path: inset(0 0 100% 0);
+    }
+}
+
+@keyframes stagger-skill-out {
+    to {
+        opacity: 0;
+        transform: translateY(1rem) scale(0.85);
+    }
+}
+
+@keyframes stagger-timeline-out {
+    to {
+        opacity: 0;
+        transform: translateX(-2rem);
+    }
+}
+
+/* ── Scroll reveals: bold enter keyframes, scroll-linked exit ── */
+
+[data-reveal]:not(.has-entered) {
     opacity: 0;
+    pointer-events: none;
+}
+
+[data-reveal="slide-left"]:not(.has-entered) {
     transform: translateX(-4.5rem);
     clip-path: inset(0 100% 0 0);
 }
 
-[data-reveal="slide-left"].is-visible {
-    opacity: 1;
-    transform: translateX(0);
-    clip-path: inset(0 0 0 0);
-}
-
-[data-reveal="slide-right"] {
-    opacity: 0;
+[data-reveal="slide-right"]:not(.has-entered) {
     transform: translateX(4.5rem);
     clip-path: inset(0 0 0 100%);
 }
 
-[data-reveal="slide-right"].is-visible {
-    opacity: 1;
-    transform: translateX(0);
-    clip-path: inset(0 0 0 0);
-}
-
-[data-reveal="sweep-up"] {
-    opacity: 0;
+[data-reveal="sweep-up"]:not(.has-entered) {
     transform: translateY(4rem);
     clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
 }
 
-[data-reveal="sweep-up"].is-visible {
-    opacity: 1;
-    transform: translateY(0);
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-}
-
-[data-reveal="flip"] {
-    opacity: 0;
+[data-reveal="flip"]:not(.has-entered) {
     transform: perspective(900px) rotateX(16deg) translateY(3rem);
 }
 
-[data-reveal="flip"].is-visible {
-    opacity: 1;
-    transform: perspective(900px) rotateX(0) translateY(0);
+[data-reveal="slide-left"].is-in-view {
+    animation: reveal-slide-left 0.8s var(--ease-snap) both;
+    pointer-events: auto;
 }
 
-[data-reveal="hero"] {
+[data-reveal="slide-left"].has-entered:not(.is-in-view) {
+    animation: reveal-exit-left 0.5s var(--ease-snap) forwards;
+    pointer-events: none;
+}
+
+[data-reveal="slide-right"].is-in-view {
+    animation: reveal-slide-right 0.8s var(--ease-snap) both;
+    pointer-events: auto;
+}
+
+[data-reveal="slide-right"].has-entered:not(.is-in-view) {
+    animation: reveal-exit-right 0.5s var(--ease-snap) forwards;
+    pointer-events: none;
+}
+
+[data-reveal="sweep-up"].is-in-view {
+    animation: reveal-sweep-up 0.85s var(--ease-snap) both;
+    pointer-events: auto;
+}
+
+[data-reveal="sweep-up"].has-entered:not(.is-in-view) {
+    animation: reveal-exit-up 0.5s var(--ease-snap) forwards;
+    pointer-events: none;
+}
+
+[data-reveal="flip"].is-in-view {
+    animation: reveal-flip-in 0.85s var(--ease-spring) both;
+    pointer-events: auto;
+}
+
+[data-reveal="flip"].has-entered:not(.is-in-view) {
+    animation: reveal-exit-flip 0.5s var(--ease-snap) forwards;
+    pointer-events: none;
+}
+
+[data-reveal="hero"].is-in-view {
+    animation: none;
     opacity: 1;
     transform: none;
     clip-path: none;
+    pointer-events: auto;
 }
 
-[data-reveal="hero"]:not(.is-visible) {
-    opacity: 0;
-    transform: translateY(-5rem) scale(0.92);
-    clip-path: inset(0 0 100% 0);
+[data-reveal="hero"].has-entered:not(.is-in-view) {
+    animation: hero-exit 0.55s var(--ease-snap) forwards;
+    pointer-events: none;
 }
 
 .section-header::after {
@@ -434,25 +500,28 @@ html.theme-transitioning *::after {
     background: linear-gradient(90deg, var(--color-accent), transparent);
     transform: scaleX(0);
     transform-origin: left;
-    transition: transform 0.5s var(--ease-snap);
 }
 
-[data-reveal].is-visible .section-header::after {
-    transform: scaleX(1);
+[data-reveal].is-in-view .section-header::after {
+    animation: title-underline-sweep 0.65s var(--ease-snap) 0.15s forwards;
 }
 
-/* ── Staggered children (each item tracks its own scroll position) ── */
+/* ── Staggered children (driven by parent section scroll) ── */
 
-[data-stagger="skills"] > * {
-    --scroll-transition: opacity 0.45s var(--ease-spring), transform 0.45s var(--ease-spring);
+[data-stagger] > * {
     opacity: 0;
-    transform: translateX(var(--slide-from, -2rem)) rotate(var(--tilt, -5deg)) scale(0.82);
-    transition: var(--scroll-transition);
+    pointer-events: none;
 }
 
-[data-stagger="skills"] > *.is-visible {
-    opacity: 1;
-    transform: translateX(0) rotate(0) scale(1);
+[data-reveal].is-in-view [data-stagger="skills"] > * {
+    animation: stagger-skill-in 0.6s var(--ease-spring) both;
+    animation-delay: calc(var(--stagger-index, 0) * 60ms + 120ms);
+    pointer-events: auto;
+}
+
+[data-reveal].has-entered:not(.is-in-view) [data-stagger="skills"] > * {
+    animation: stagger-skill-out 0.4s var(--ease-snap) both;
+    pointer-events: none;
 }
 
 [data-stagger="skills"] > *:nth-child(even) {
@@ -460,86 +529,73 @@ html.theme-transitioning *::after {
     --tilt: 5deg;
 }
 
-[data-stagger="timeline"] > * {
-    opacity: 0;
-    transform: translateX(-3rem);
-    transition: opacity 0.5s var(--ease-snap), transform 0.5s var(--ease-snap);
+[data-reveal].is-in-view [data-stagger="timeline"] > * {
+    animation: stagger-timeline-in 0.65s var(--ease-snap) both;
+    animation-delay: calc(var(--stagger-index, 0) * 75ms + 150ms);
+    pointer-events: auto;
 }
 
-[data-stagger="timeline"] > *.is-visible {
-    opacity: 1;
-    transform: translateX(0);
+[data-reveal].has-entered:not(.is-in-view) [data-stagger="timeline"] > * {
+    animation: stagger-timeline-out 0.4s var(--ease-snap) both;
+    pointer-events: none;
 }
 
-[data-stagger="timeline"] > *.is-visible .timeline-marker::after {
-    transform: translateX(-50%) scaleY(1);
+[data-reveal].is-in-view [data-stagger="timeline"] > * .timeline-marker::after {
+    animation: timeline-line-grow 0.5s var(--ease-smooth) both;
+    animation-delay: calc(var(--stagger-index, 0) * 75ms + 280ms);
 }
 
-/* ── GitHub dashboard (scroll-linked via #github.is-visible) ── */
+[data-reveal].has-entered:not(.is-in-view) [data-stagger="timeline"] > * .timeline-marker::after {
+    transform: translateX(-50%) scaleY(0);
+    transition: transform 0.3s var(--ease-smooth);
+}
+
+/* ── GitHub dashboard ── */
 
 .github-dashboard {
     opacity: 0;
-    transform: translateX(5rem) skewX(3deg);
-    clip-path: inset(0 0 0 100%);
-    transition: opacity 0.6s var(--ease-snap), transform 0.6s var(--ease-snap), clip-path 0.6s var(--ease-snap);
+    pointer-events: none;
 }
 
-#github.is-visible .github-dashboard {
-    opacity: 1;
-    transform: translateX(0) skewX(0);
-    clip-path: inset(0 0 0 0);
+#github.is-in-view .github-dashboard {
+    animation: dashboard-panel-slide 0.85s var(--ease-snap) 0.05s both;
+    pointer-events: auto;
 }
 
-.github-stat {
-    opacity: 0;
-    transform: translateY(2.5rem) rotate(-3deg) scale(0.88);
-    transition: opacity 0.45s var(--ease-spring), transform 0.45s var(--ease-spring);
-    transition-delay: calc(var(--stat-index, 0) * 45ms);
+#github.has-entered:not(.is-in-view) .github-dashboard {
+    animation: reveal-exit-right 0.5s var(--ease-snap) forwards;
+    pointer-events: none;
 }
 
-#github.is-visible .github-stat {
-    opacity: 1;
-    transform: translateY(0) rotate(0) scale(1);
+#github.is-in-view .github-stat {
+    animation: stat-slam 0.55s var(--ease-spring) both;
+    animation-delay: calc(var(--stat-index, 0) * 55ms + 200ms);
 }
 
-.contrib-graph-scroll {
-    opacity: 0;
-    clip-path: inset(0 100% 0 0);
-    transition: opacity 0.55s var(--ease-snap), clip-path 0.55s var(--ease-snap);
-    transition-delay: 0.1s;
+#github.is-in-view .contrib-graph-scroll {
+    animation: graph-sweep-reveal 0.75s var(--ease-snap) 0.25s both;
 }
 
-#github.is-visible .contrib-graph-scroll {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-}
-
-.contrib-cell {
-    opacity: 0;
-    transform: scale(0.2);
-    transition:
-        background-color var(--duration-normal) var(--ease-out),
-        opacity 0.3s var(--ease-spring),
-        transform 0.3s var(--ease-spring);
-    transition-delay: calc(var(--cell-index, 0) * 3ms);
-}
-
-#github.is-visible .contrib-cell {
-    opacity: 1;
-    transform: scale(1);
+#github.is-in-view .contrib-cell {
+    animation: contrib-wave 0.35s var(--ease-spring) both;
+    animation-delay: calc(var(--cell-index, 0) * 4ms + 300ms);
 }
 
 /* ── Connect card ── */
 
 #connect .profile-card {
     opacity: 0;
-    transform: perspective(900px) rotateX(14deg) translateY(2.5rem);
-    transition: opacity 0.55s var(--ease-spring), transform 0.55s var(--ease-spring);
+    pointer-events: none;
 }
 
-#connect.is-visible .profile-card {
-    opacity: 1;
-    transform: perspective(900px) rotateX(0) translateY(0);
+#connect.is-in-view .profile-card {
+    animation: reveal-flip-in 0.85s var(--ease-spring) 0.12s both;
+    pointer-events: auto;
+}
+
+#connect.has-entered:not(.is-in-view) .profile-card {
+    animation: reveal-exit-flip 0.45s var(--ease-snap) forwards;
+    pointer-events: none;
 }
 
 /* ── Interactive ── */
@@ -566,11 +622,12 @@ html.theme-transitioning *::after {
     transform: translateY(-3px) scale(1.04) rotate(-1deg);
 }
 
-.skill-tag.is-visible:hover {
+.skill-tag:hover,
+[data-reveal].is-in-view [data-stagger="skills"] > *:hover {
     transform: translateY(-4px) rotate(2deg) scale(1.05);
 }
 
-#github.is-visible .github-stat:hover {
+#github.is-in-view .github-stat:hover {
     transform: translateY(-4px) skewX(-2deg);
 }
 
@@ -581,7 +638,7 @@ html.theme-transitioning *::after {
         box-shadow var(--duration-slow) var(--ease-out);
 }
 
-.contrib-cell.is-visible:hover {
+#github.is-in-view .contrib-cell:hover {
     transform: scale(1.5) rotate(8deg);
     z-index: 1;
 }
@@ -621,8 +678,10 @@ html.theme-transitioning *::after {
     .contrib-graph-scroll,
     .contrib-cell,
     #connect .profile-card {
-        opacity: 1;
-        transform: none;
-        clip-path: none;
+        opacity: 1 !important;
+        transform: none !important;
+        clip-path: none !important;
+        animation: none !important;
+        pointer-events: auto !important;
     }
 }

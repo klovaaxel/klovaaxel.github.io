@@ -1,19 +1,32 @@
 const REVEAL_SELECTOR = "[data-reveal]";
 const STAGGER_SELECTOR = "[data-stagger]";
-const SCROLL_ROOT_MARGIN = "12% 0px 38% 0px";
+const ENTER_ROOT_MARGIN = "20% 0px 55% 0px";
 
 export function initMotion() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         document.querySelectorAll(`${REVEAL_SELECTOR}, ${STAGGER_SELECTOR}, ${STAGGER_SELECTOR} > *`).forEach((el) => {
-            el.classList.add("is-visible");
+            el.classList.add("has-entered", "is-in-view");
         });
         return;
     }
 
     initScrollReveal();
-    initStaggerReveal();
     initStaggerIndexes();
     initHeroSocialStagger();
+    ensureApproachingVisible();
+
+    window.addEventListener("scroll", onScrollSafety, { passive: true });
+    window.addEventListener("resize", onScrollSafety, { passive: true });
+}
+
+export function refreshScrollMotion() {
+    ensureApproachingVisible();
+}
+
+let safetyFrame = 0;
+function onScrollSafety() {
+    cancelAnimationFrame(safetyFrame);
+    safetyFrame = requestAnimationFrame(ensureApproachingVisible);
 }
 
 export function playThemeSweep(event) {
@@ -48,34 +61,51 @@ export function playThemeSweep(event) {
     window.setTimeout(() => layer.remove(), 1200);
 }
 
-function createScrollObserver() {
-    return new IntersectionObserver(
-        (entries) => {
-            entries.forEach((entry) => {
-                entry.target.classList.toggle("is-visible", entry.isIntersecting);
-            });
-        },
-        {
-            threshold: 0,
-            rootMargin: SCROLL_ROOT_MARGIN,
-        },
-    );
+function markInView(element, inView) {
+    if (inView) {
+        element.classList.add("has-entered", "is-in-view");
+        return;
+    }
+    element.classList.remove("is-in-view");
 }
 
 function initScrollReveal() {
     const elements = document.querySelectorAll(REVEAL_SELECTOR);
     if (!elements.length) return;
 
-    const observer = createScrollObserver();
-    elements.forEach((el) => observer.observe(el));
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                markInView(entry.target, entry.isIntersecting);
+            });
+        },
+        {
+            threshold: 0,
+            rootMargin: ENTER_ROOT_MARGIN,
+        },
+    );
+
+    elements.forEach((el) => {
+        observer.observe(el);
+        if (isApproachingViewport(el)) {
+            markInView(el, true);
+        }
+    });
 }
 
-function initStaggerReveal() {
-    const items = document.querySelectorAll(`${STAGGER_SELECTOR} > *`);
-    if (!items.length) return;
+function isApproachingViewport(element) {
+    const rect = element.getBoundingClientRect();
+    const lead = window.innerHeight * 0.55;
+    const trail = window.innerHeight * 0.2;
+    return rect.top < window.innerHeight + lead && rect.bottom > -trail;
+}
 
-    const observer = createScrollObserver();
-    items.forEach((item) => observer.observe(item));
+function ensureApproachingVisible() {
+    document.querySelectorAll(REVEAL_SELECTOR).forEach((el) => {
+        if (isApproachingViewport(el)) {
+            markInView(el, true);
+        }
+    });
 }
 
 function initStaggerIndexes() {
@@ -106,6 +136,8 @@ export function setupGitHubDashboard(root) {
             cellIndex += 1;
         });
     });
+
+    refreshScrollMotion();
 }
 
 export function staggerSocialLinks(container) {
