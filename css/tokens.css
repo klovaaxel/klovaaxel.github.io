@@ -1,0 +1,64 @@
+/**
+ * Design tokens — theme-agnostic structural values.
+ * Color tokens are defined per-theme in css/themes/*.css
+ */
+
+:root {
+    /* Typography */
+    --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
+    --font-body: "DM Sans", system-ui, -apple-system, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.125rem;
+    --text-xl: 1.25rem;
+    --text-2xl: 1.5rem;
+    --text-3xl: 2rem;
+    --text-4xl: clamp(2.5rem, 6vw, 4.5rem);
+    --text-5xl: clamp(3.5rem, 10vw, 7rem);
+
+    --leading-tight: 1.1;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.65;
+
+    --weight-normal: 400;
+    --weight-medium: 500;
+    --weight-semibold: 600;
+
+    /* Spacing */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.25rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+    --space-10: 2.5rem;
+    --space-12: 3rem;
+    --space-16: 4rem;
+    --space-20: 5rem;
+    --space-24: 6rem;
+
+    /* Layout */
+    --content-max: 42rem;
+    --page-max: 72rem;
+    --section-gap: var(--space-20);
+
+    /* Shape */
+    --radius-sm: 0.375rem;
+    --radius-md: 0.625rem;
+    --radius-lg: 1rem;
+    --radius-full: 9999px;
+
+    /* Motion */
+    --duration-fast: 120ms;
+    --duration-normal: 220ms;
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+    /* Shadows — overridden per theme where needed */
+    --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.06);
+    --shadow-md: 0 4px 12px rgb(0 0 0 / 0.08);
+    --shadow-lg: 0 12px 32px rgb(0 0 0 / 0.12);
+}
