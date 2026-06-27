@@ -712,7 +712,7 @@
     animation: sketch-header-drift 620ms var(--ease-sketch) both;
 }
 
-[data-theme="sketch"] html.theme-sweeping .theme-sweep-beam {
+html[data-theme="sketch"].theme-sweeping .theme-sweep-beam {
     animation: sketch-theme-scribble 1s var(--ease-sketch) forwards;
     background: linear-gradient(
         100deg,
@@ -725,17 +725,19 @@
     filter: blur(1px);
 }
 
-[data-theme="sketch"] html.theme-sweeping .theme-sweep-ring {
+html[data-theme="sketch"].theme-sweeping .theme-sweep-ring {
     animation-duration: 1.1s;
     border-style: dashed;
     border-radius: 42% 58% 54% 46% / 52% 44% 56% 48%;
 }
 
 @supports (animation-timeline: view()) {
+    [data-theme="sketch"] [data-reveal="fade-up"],
     [data-theme="sketch"] [data-reveal="slide-left"],
     [data-theme="sketch"] [data-reveal="slide-right"],
     [data-theme="sketch"] [data-reveal="sweep-up"] {
         animation-name: sketch-scroll-settle;
+        animation-range: cover 0% cover 35%;
     }
 
     [data-theme="sketch"] [data-reveal="flip"],
@@ -753,16 +755,17 @@
 
     [data-theme="sketch"] .timeline-item {
         animation-name: sketch-scroll-settle;
-        animation-range: entry 0% cover 28%;
+        animation-range: cover 0% cover 28%;
     }
 
     [data-theme="sketch"] .github-dashboard {
-        animation-name: sketch-scroll-unfold;
+        animation-name: sketch-scroll-settle;
+        animation-range: cover 0% cover 30%;
     }
 
     [data-theme="sketch"] .github-stat {
-        animation-name: sketch-scroll-note;
-        animation-range: entry 0% cover 26%;
+        animation-name: sketch-scroll-settle;
+        animation-range: cover 0% cover 24%;
     }
 
     [data-theme="sketch"] .contrib-graph-scroll {

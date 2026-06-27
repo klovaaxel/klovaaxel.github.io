@@ -55,6 +55,9 @@
         </script>
     </head>
     <body>
+        <a class="skip-link" href="#main">Skip to main content</a>
+        <div id="live-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
         <div class="page">
             <header class="page-header">
                 <nav aria-label="Theme">
@@ -62,7 +65,7 @@
                 </nav>
             </header>
 
-            <main class="page-main">
+            <main id="main" class="page-main">
                 <section class="hero section" aria-labelledby="hero-name" data-reveal="hero">
                     <h1 id="hero-name" class="hero-name">Axel Karlsson</h1>
                     <p id="hero-tagline" class="hero-tagline"></p>
@@ -78,7 +81,7 @@
                     <ul id="skills-list" class="skills-list" aria-label="Skills" data-stagger="skills"></ul>
                 </section>
 
-                <section class="section" id="experience" aria-labelledby="experience-heading" data-reveal="slide-right">
+                <section class="section" id="experience" aria-labelledby="experience-heading" data-reveal="fade-up">
                     <header class="section-header">
                         <h2 id="experience-heading" class="section-title">Experience</h2>
                         <p class="section-subtitle">Work and education</p>
@@ -86,7 +89,7 @@
                     <ol id="experience-list" class="timeline" data-stagger="timeline"></ol>
                 </section>
 
-                <section class="section" id="github" aria-labelledby="github-heading" data-reveal="sweep-up">
+                <section class="section" id="github" aria-labelledby="github-heading" data-reveal="fade-up">
                     <header class="section-header">
                         <h2 id="github-heading" class="section-title">GitHub</h2>
                         <p class="section-subtitle">Activity and contributions</p>

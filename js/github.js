@@ -1,5 +1,6 @@
 import { config } from "./config.js";
 import { refreshCursorTargets } from "./cursor.js";
+import { announceStatus } from "./live-region.js";
 
 const CONTRIBUTIONS_API = "https://github-contributions-api.jogruber.de/v4";
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -21,6 +22,7 @@ export async function loadGitHubDashboard() {
     if (!container) return;
 
     container.innerHTML = `<p class="loading">Loading GitHub activity…</p>`;
+    announceStatus("Loading GitHub activity");
 
     try {
         const [user, activity] = await Promise.all([
@@ -31,8 +33,10 @@ export async function loadGitHubDashboard() {
         const streaks = computeStreaks(activity.contributions);
         container.innerHTML = renderDashboard(user, activity, streaks);
         refreshCursorTargets();
+        announceStatus("GitHub activity loaded");
     } catch {
         container.innerHTML = `<p class="empty-state">Could not load GitHub dashboard. <a href="${config.github.url}">View profile on GitHub</a>.</p>`;
+        announceStatus("Could not load GitHub activity");
     }
 }
 

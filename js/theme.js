@@ -1,5 +1,6 @@
 import { config } from "./config.js";
 import { refreshCursorTargets } from "./cursor.js";
+import { announceStatus } from "./live-region.js";
 
 const STORAGE_KEY = "axel-portfolio-theme";
 const THEME_TRANSITION_MS = 750;
@@ -46,6 +47,11 @@ export function setTheme(themeId, event) {
     localStorage.setItem(STORAGE_KEY, resolvedTheme);
     updateSwitcherState(resolvedTheme);
     updateBrowserChrome(resolvedTheme);
+
+    if (isThemeChange) {
+        const label = config.themes.find((theme) => theme.id === resolvedTheme)?.label ?? resolvedTheme;
+        announceStatus(`${label} theme applied`);
+    }
 
     if (isThemeChange) {
         window.setTimeout(() => root.classList.remove("theme-transitioning"), THEME_TRANSITION_MS);

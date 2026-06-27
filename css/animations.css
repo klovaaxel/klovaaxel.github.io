@@ -373,6 +373,28 @@ html.theme-transitioning *::after {
     animation: header-drop-swing 0.9s var(--ease-spring) 0s both;
 }
 
+@keyframes scroll-fade-up {
+    entry 0% {
+        opacity: 0;
+        transform: translateY(1.25rem);
+    }
+
+    entry 100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes scroll-fade-in {
+    entry 0% {
+        opacity: 0;
+    }
+
+    entry 100% {
+        opacity: 1;
+    }
+}
+
 @keyframes scroll-slide-left {
     entry 0% {
         opacity: 0;
@@ -481,12 +503,12 @@ html.theme-transitioning *::after {
 @keyframes scroll-timeline-in {
     entry 0% {
         opacity: 0;
-        transform: translateX(-3rem);
+        transform: translateY(0.75rem);
     }
 
     entry 100% {
         opacity: 1;
-        transform: translateX(0);
+        transform: translateY(0);
     }
 }
 
@@ -503,37 +525,33 @@ html.theme-transitioning *::after {
 @keyframes scroll-dashboard {
     entry 0% {
         opacity: 0;
-        transform: translateX(5rem) skewX(3deg);
-        clip-path: inset(0 0 0 100%);
+        transform: translateY(0.75rem);
     }
 
     entry 100% {
         opacity: 1;
-        transform: translateX(0) skewX(0);
-        clip-path: inset(0 0 0 0);
+        transform: translateY(0);
     }
 }
 
 @keyframes scroll-stat {
     entry 0% {
         opacity: 0;
-        transform: translateY(2.5rem) rotate(-3deg) scale(0.88);
+        transform: translateY(0.5rem);
     }
 
     entry 100% {
         opacity: 1;
-        transform: translateY(0) rotate(0) scale(1);
+        transform: translateY(0);
     }
 }
 
 @keyframes scroll-graph {
     entry 0% {
-        clip-path: inset(0 100% 0 0);
-        opacity: 0.4;
+        opacity: 0;
     }
 
     entry 100% {
-        clip-path: inset(0 0 0 0);
         opacity: 1;
     }
 }
@@ -554,6 +572,12 @@ html.theme-transitioning *::after {
 @supports (animation-timeline: view()) {
     [data-reveal] {
         overflow-x: clip;
+    }
+
+    [data-reveal="fade-up"] {
+        animation: scroll-fade-up linear both;
+        animation-timeline: view();
+        animation-range: cover 0% cover 35%;
     }
 
     [data-reveal="slide-left"] {
@@ -599,31 +623,31 @@ html.theme-transitioning *::after {
     .timeline-item {
         animation: scroll-timeline-in linear both;
         animation-timeline: view();
-        animation-range: entry 0% cover 30%;
+        animation-range: cover 0% cover 28%;
     }
 
     .timeline-item .timeline-marker::after {
         animation: timeline-line-grow linear both;
         animation-timeline: view();
-        animation-range: entry 10% cover 38%;
+        animation-range: cover 5% cover 32%;
     }
 
     .github-dashboard {
         animation: scroll-dashboard linear both;
         animation-timeline: view();
-        animation-range: entry 0% cover 38%;
+        animation-range: cover 0% cover 30%;
     }
 
     .github-stat {
         animation: scroll-stat linear both;
         animation-timeline: view();
-        animation-range: entry 0% cover 28%;
+        animation-range: cover 0% cover 24%;
     }
 
     .contrib-graph-scroll {
         animation: scroll-graph linear both;
         animation-timeline: view();
-        animation-range: entry 5% cover 40%;
+        animation-range: cover 5% cover 32%;
     }
 
     #connect .profile-card {
