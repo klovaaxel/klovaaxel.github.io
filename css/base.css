@@ -109,12 +109,16 @@ ul {
     background: var(--color-accent);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-md);
-    transform: translateY(calc(-100% - var(--space-4)));
-    transition: transform var(--duration-fast) var(--ease-out);
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
 }
 
-.skip-link:focus {
-    transform: translateY(0);
+.skip-link:focus-visible {
+    clip: auto;
+    clip-path: none;
+    overflow: visible;
     outline: 2px solid var(--color-text);
     outline-offset: 2px;
 }
