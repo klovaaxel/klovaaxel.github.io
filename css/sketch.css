@@ -238,6 +238,18 @@
     line-height: 1.45;
 }
 
+[data-theme="sketch"] .hero-contact {
+    padding: calc(var(--sketch-inset) + 0.1rem) var(--sketch-inset-lg);
+    color: var(--color-bg-elevated);
+    background: var(--color-accent);
+    border: var(--sketch-stroke) solid var(--color-border-strong);
+    border-radius: 0;
+    rotate: 0.5deg;
+    box-shadow:
+        var(--shadow-sm),
+        2px 3px 6px rgb(26 23 20 / 0.12);
+}
+
 [data-theme="sketch"] .connect-cta {
     padding: calc(var(--sketch-inset) + 0.15rem) var(--sketch-inset-xl);
     color: var(--color-bg-elevated);
@@ -255,7 +267,7 @@
     rotate: 0deg;
 }
 
-[data-theme="sketch"] .connect-social-links {
+[data-theme="sketch"] .connect-more {
     border-top-style: dashed;
 }
 
@@ -303,7 +315,6 @@
         0 0 2.5rem color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
-[data-theme="sketch"] .loading,
 [data-theme="sketch"] .empty-state {
     padding: var(--sketch-inset-xl);
 }
@@ -556,7 +567,6 @@
     box-shadow: 2px 2px 0 rgb(26 23 20 / 0.18);
 }
 
-[data-theme="sketch"] .loading,
 [data-theme="sketch"] .empty-state {
     font-family: var(--font-display);
     font-size: var(--text-xl);
@@ -735,10 +745,6 @@
     animation-delay: 0.82s;
 }
 
-[data-theme="sketch"] .hero .social-link:nth-child(4) {
-    animation-delay: 0.9s;
-}
-
 [data-theme="sketch"] .page-header {
     animation: sketch-header-drift 620ms var(--ease-sketch) both;
 }
@@ -820,6 +826,21 @@ html.theme-sweeping[data-sweep-from="sketch"] .theme-sweep-ring {
 
 [data-theme="sketch"] .theme-btn[aria-pressed="true"] svg {
     animation: none;
+}
+
+/* ── Focus rings on irregular sketch controls ── */
+
+[data-theme="sketch"] a:focus-visible,
+[data-theme="sketch"] button:focus-visible,
+[data-theme="sketch"] .theme-btn:focus-visible,
+[data-theme="sketch"] .skill-tag:focus-visible,
+[data-theme="sketch"] .contrib-cell[role="gridcell"]:focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 4px;
+    box-shadow:
+        0 0 0 5px color-mix(in srgb, var(--color-accent) 22%, transparent),
+        var(--shadow-sm);
+    z-index: 1;
 }
 
 /* Fallback when border-shape unavailable */

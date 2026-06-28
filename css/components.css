@@ -45,6 +45,46 @@
     color: var(--color-text-subtle);
 }
 
+.hero-contact {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-6);
+    padding: var(--space-3) var(--space-6);
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: var(--color-bg);
+    background: var(--color-accent);
+    border: 2px solid var(--color-accent);
+    border-radius: var(--radius-full);
+    transition:
+        background-color var(--duration-fast) var(--ease-out),
+        border-color var(--duration-fast) var(--ease-out),
+        transform var(--duration-normal) var(--ease-spring),
+        box-shadow var(--duration-normal) var(--ease-out);
+}
+
+.hero-contact svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+}
+
+.hero-contact:hover {
+    color: var(--color-bg);
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 20px color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+[data-theme="light"] .hero-contact {
+    color: var(--color-bg-elevated);
+}
+
 /* Social links */
 
 .social-links {
@@ -569,7 +609,6 @@
 
 /* Loading & empty states */
 
-.loading,
 .empty-state {
     padding: var(--space-8);
     text-align: center;
@@ -737,11 +776,18 @@
     color: var(--color-bg-elevated);
 }
 
-.connect-social-links {
+.connect-more {
     margin-top: var(--space-6);
     padding-top: var(--space-6);
     border-top: 1px solid var(--color-border);
-    justify-content: flex-start;
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
+    line-height: var(--leading-relaxed);
+}
+
+.connect-more a {
+    font-weight: var(--weight-bold);
+    text-decoration-thickness: 1px;
 }
 
 @media (min-width: 40rem) {

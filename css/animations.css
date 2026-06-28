@@ -227,10 +227,6 @@ html.theme-transitioning *::after {
     animation-delay: 0.9s;
 }
 
-.hero .social-link:nth-child(4) {
-    animation-delay: 0.99s;
-}
-
 .page-header {
     animation: header-drop-swing 0.9s var(--ease-spring) 0s both;
 }
@@ -501,13 +497,6 @@ html.theme-transitioning *::after {
         animation-timeline: view();
         animation-range: cover 5% cover 32%;
     }
-
-    #connect .profile-card,
-    #connect .connect-card {
-        animation: scroll-flip linear both;
-        animation-timeline: view();
-        animation-range: entry 0% exit 100%;
-    }
 }
 
 @supports not (animation-timeline: view()) {
@@ -581,10 +570,6 @@ html.theme-transitioning *::after {
         var(--shadow-lg),
         0 0 0 1px color-mix(in srgb, var(--color-accent) 18%, transparent),
         0 0 3.5rem color-mix(in srgb, var(--color-accent) 22%, transparent);
-}
-
-.loading {
-    animation: pulse-soft 1.2s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {

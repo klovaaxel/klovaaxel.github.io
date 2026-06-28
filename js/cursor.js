@@ -1,5 +1,3 @@
-import { config } from "./config.js";
-
 const MAGNETIC_SELECTOR = "[data-magnetic]";
 const MAGNETIC_STRENGTH = 0.32;
 const IDLE_PAUSE_MS = 2000;
@@ -16,6 +14,9 @@ let dotY = 0;
 let frameId = 0;
 let rafActive = false;
 let lastMoveTime = 0;
+let lastPointerX = 0;
+let lastPointerY = 0;
+let usingKeyboard = false;
 
 let glowEl;
 let ringEl;
@@ -34,6 +35,7 @@ export function initCursor() {
     createLayer();
     bindMagneticElements();
     bindPointer();
+    bindKeyboardMode();
 
     resumeRaf();
 }
@@ -66,9 +68,18 @@ function bindPointer() {
     document.addEventListener(
         "mousemove",
         (event) => {
+            if (usingKeyboard) {
+                if (event.clientX !== lastPointerX || event.clientY !== lastPointerY) {
+                    setUsingKeyboard(false);
+                }
+            }
+            lastPointerX = event.clientX;
+            lastPointerY = event.clientY;
+
             mouseX = event.clientX;
             mouseY = event.clientY;
             lastMoveTime = Date.now();
+            layerEl?.classList.remove("is-idle");
             resumeRaf();
 
             const nx = mouseX / window.innerWidth - 0.5;
@@ -104,6 +115,18 @@ function bindPointer() {
     });
 }
 
+function bindKeyboardMode() {
+    document.addEventListener("keydown", (event) => {
+        if (event.key !== "Tab" || usingKeyboard) return;
+        setUsingKeyboard(true);
+    });
+}
+
+function setUsingKeyboard(active) {
+    usingKeyboard = active;
+    document.documentElement.classList.toggle("using-keyboard", active);
+}
+
 function bindMagneticElements() {
     document.querySelectorAll(MAGNETIC_SELECTOR).forEach((element) => {
         if (boundMagnetic.has(element)) return;
@@ -112,14 +135,6 @@ function bindMagneticElements() {
         element.addEventListener("mousemove", (event) => onMagneticMove(element, event));
         element.addEventListener("mouseleave", () => onMagneticLeave(element));
     });
-}
-
-export function bindMagneticElement(element) {
-    if (!enabled || !element || boundMagnetic.has(element)) return;
-    element.setAttribute("data-magnetic", "");
-    boundMagnetic.add(element);
-    element.addEventListener("mousemove", (event) => onMagneticMove(element, event));
-    element.addEventListener("mouseleave", () => onMagneticLeave(element));
 }
 
 function onMagneticMove(element, event) {
@@ -149,6 +164,7 @@ function tick() {
     if (Date.now() - lastMoveTime > IDLE_PAUSE_MS) {
         rafActive = false;
         frameId = 0;
+        layerEl?.classList.add("is-idle");
         return;
     }
 
@@ -176,5 +192,6 @@ export function destroyCursor() {
     rafActive = false;
     cancelAnimationFrame(frameId);
     layerEl?.remove();
-    document.documentElement.classList.remove("has-cursor-fx");
+    document.documentElement.classList.remove("has-cursor-fx", "using-keyboard");
+    usingKeyboard = false;
 }

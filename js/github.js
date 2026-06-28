@@ -1,19 +1,83 @@
 /**
  * GitHub dashboard: API fetch, contribution graph, streak stats.
- *
- * innerHTML templating:
- * - Trusted (static markup, numeric counters, MONTHS labels, skeleton/error shells): no escape.
- * - Escaped via escapeHtml: API strings (login, avatar URL, profile URL, tooltips, stat labels).
+ * Static shells live in <template> elements in index.html; dynamic data via DOM APIs.
  */
 import { config } from "./config.js";
 import { refreshCursorTargets } from "./cursor.js";
-import { escapeHtml } from "./html.js";
 import { announceStatus } from "./live-region.js";
 
 const CONTRIBUTIONS_API = "https://github-contributions-api.jogruber.de/v4";
+export const GITHUB_CACHE_KEY = "axel-portfolio-github-v1";
+export const GITHUB_CACHE_TTL_MS = 5 * 60 * 1000;
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const NEW_TAB_SR_ONLY = '<span class="sr-only"> (opens in new tab)</span>';
-const STAT_LABELS = ["Contributions", "Public repos", "Followers", "Current streak", "Longest streak"];
+
+let loadGeneration = 0;
+
+export function readGitHubCache(now = Date.now()) {
+    if (typeof sessionStorage === "undefined") return null;
+
+    try {
+        const raw = sessionStorage.getItem(GITHUB_CACHE_KEY);
+        if (!raw) return null;
+
+        const parsed = JSON.parse(raw);
+        if (!parsed?.ts || now - parsed.ts > GITHUB_CACHE_TTL_MS) return null;
+        if (!parsed.user || !parsed.activity) return null;
+
+        return { user: parsed.user, activity: parsed.activity };
+    } catch {
+        return null;
+    }
+}
+
+export function writeGitHubCache(user, activity) {
+    if (typeof sessionStorage === "undefined") return;
+
+    try {
+        sessionStorage.setItem(
+            GITHUB_CACHE_KEY,
+            JSON.stringify({
+                ts: Date.now(),
+                user,
+                activity,
+            }),
+        );
+    } catch {
+        // Private browsing or quota exceeded — skip cache write.
+    }
+}
+
+function cloneTemplate(id) {
+    const template = document.getElementById(id);
+    if (!template) {
+        throw new Error(`Missing template: #${id}`);
+    }
+    return template.content.cloneNode(true);
+}
+
+function profileUrl(user) {
+    return user.html_url ?? config.github.url;
+}
+
+function renderDashboardInto(container, user, activity) {
+    const contributions = activity.contributions ?? [];
+    const streaks = computeStreaks(contributions);
+    container.replaceChildren(buildDashboard(user, { ...activity, contributions }, streaks));
+    wireContributionGridKeyboard(container);
+    refreshCursorTargets();
+}
+
+function mountSkeleton(container) {
+    container.replaceChildren(cloneTemplate("github-skeleton-template"));
+}
+
+function mountError(container) {
+    const root = cloneTemplate("github-error-template");
+    root.querySelectorAll("[data-github-profile-link]").forEach((link) => {
+        link.href = config.github.url;
+    });
+    container.replaceChildren(root);
+}
 
 function toDateKey(date) {
     const year = date.getFullYear();
@@ -27,11 +91,20 @@ function parseDate(dateStr) {
     return new Date(year, month - 1, day);
 }
 
-export async function loadGitHubDashboard() {
+export async function loadGitHubDashboard({ bypassCache = false } = {}) {
     const container = document.getElementById("github-dashboard");
     if (!container) return;
 
-    container.innerHTML = renderSkeleton();
+    const generation = ++loadGeneration;
+
+    const cached = bypassCache ? null : readGitHubCache();
+    if (cached) {
+        renderDashboardInto(container, cached.user, cached.activity);
+        announceStatus("GitHub activity loaded");
+        return;
+    }
+
+    mountSkeleton(container);
     announceStatus("Loading GitHub activity");
 
     try {
@@ -40,16 +113,19 @@ export async function loadGitHubDashboard() {
             fetchContributions(config.github.username),
         ]);
 
+        if (generation !== loadGeneration) return;
+
         const contributions = activity.contributions ?? [];
-        const streaks = computeStreaks(contributions);
-        container.innerHTML = renderDashboard(user, { ...activity, contributions }, streaks);
-        wireContributionGridKeyboard(container);
-        refreshCursorTargets();
+        writeGitHubCache(user, { ...activity, contributions });
+        renderDashboardInto(container, user, { ...activity, contributions });
         announceStatus("GitHub activity loaded");
     } catch {
-        container.innerHTML = renderError();
-        container.querySelector(".github-retry-btn")?.addEventListener("click", () => {
-            loadGitHubDashboard();
+        if (generation !== loadGeneration) return;
+
+        mountError(container);
+        container.querySelector(".github-retry-btn")?.addEventListener("click", (event) => {
+            event.currentTarget.disabled = true;
+            loadGitHubDashboard({ bypassCache: true });
         });
         announceStatus("Could not load GitHub activity");
     }
@@ -172,139 +248,90 @@ function formatDisplayDate(dateStr) {
     });
 }
 
-function renderSkeleton() {
-    return `
-    <div class="github-dashboard github-skeleton" aria-busy="true" aria-label="Loading GitHub activity">
-      <div class="github-dashboard-header">
-        <div class="github-skeleton-profile">
-          <span class="github-skeleton github-skeleton-avatar" aria-hidden="true"></span>
-          <span class="github-skeleton github-skeleton-handle" aria-hidden="true"></span>
-        </div>
-        <span class="github-skeleton github-skeleton-link" aria-hidden="true"></span>
-      </div>
-
-      <dl class="github-stats" aria-hidden="true">
-        ${STAT_LABELS.map(
-            () => `
-          <div class="github-skeleton-stat">
-            <span class="github-skeleton github-skeleton-stat-label"></span>
-            <span class="github-skeleton github-skeleton-stat-value"></span>
-          </div>
-        `,
-        ).join("")}
-      </dl>
-
-      <div class="github-skeleton-graph" aria-hidden="true">
-        <span class="github-skeleton github-skeleton-graph-caption"></span>
-        <div class="github-skeleton github-skeleton-graph-grid"></div>
-      </div>
-    </div>
-  `;
+function contributionCellLabel(day) {
+    if (day.count === 0) {
+        return `No contributions on ${formatDisplayDate(day.date)}`;
+    }
+    const plural = day.count === 1 ? "" : "s";
+    return `${day.count} contribution${plural} on ${formatDisplayDate(day.date)}`;
 }
 
-function renderError() {
-    const profileUrl = escapeHtml(config.github.url);
-    return `
-    <div class="github-dashboard-error empty-state">
-      <p>Could not load GitHub dashboard.</p>
-      <p>
-        <button type="button" class="github-retry-btn">Retry</button>
-        <a href="${profileUrl}" target="_blank" rel="noopener noreferrer">
-          View profile on GitHub
-          ${NEW_TAB_SR_ONLY}
-        </a>
-      </p>
-    </div>
-  `;
+function buildStatItem({ label, value, suffix }) {
+    const item = cloneTemplate("github-stat-template");
+    item.querySelector(".github-stat-label").textContent = label;
+    item.querySelector(".github-stat-number").textContent = String(value);
+    const suffixEl = item.querySelector(".github-stat-suffix");
+    if (suffix) {
+        suffixEl.textContent = suffix;
+        suffixEl.hidden = false;
+    }
+    return item;
 }
 
-function renderContributionGraph(weeks, labels, total) {
-    if (!weeks.length) {
-        return `
-      <figure class="contrib-graph">
-        <figcaption class="contrib-graph-caption">
-          <span class="contrib-graph-total">No contribution data available</span>
-        </figcaption>
-        <p class="empty-state">Contribution history is unavailable right now.</p>
-      </figure>
-    `;
+function buildContributionCell(day, weekIndex, dayIndex) {
+    if (day.hidden) {
+        return cloneTemplate("github-contrib-cell-empty-template");
     }
 
-    return `
-      <figure class="contrib-graph">
-        <figcaption class="contrib-graph-caption">
-          <span class="contrib-graph-total">${total} contributions in the last year</span>
-        </figcaption>
-        <div
-          class="contrib-graph-scroll"
-          tabindex="0"
-          aria-label="Contribution graph scroll region"
-        >
-          <div class="contrib-graph-layout" style="--week-count: ${weeks.length}">
-            <div class="contrib-months" aria-hidden="true">
-              ${labels
-                  .map(
-                      (item) => `
-                <span class="contrib-month" style="grid-column: ${item.index + 1}">${item.label}</span>
-              `,
-                  )
-                  .join("")}
-            </div>
-            <div class="contrib-body">
-              <div class="contrib-days" aria-hidden="true">
-                <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span><span></span>
-              </div>
-              <div
-                class="contrib-grid"
-                role="grid"
-                aria-label="${total} contributions in the last year on GitHub"
-              >
-                ${weeks
-                    .map(
-                        (week, weekIndex) => `
-                  <div class="contrib-week" role="row">
-                    ${week
-                        .map((day, dayIndex) => {
-                            if (day.hidden) {
-                                return `<span class="contrib-cell contrib-cell--empty" aria-hidden="true"></span>`;
-                            }
-                            const label =
-                                day.count === 0
-                                    ? `No contributions on ${formatDisplayDate(day.date)}`
-                                    : `${day.count} contribution${day.count === 1 ? "" : "s"} on ${formatDisplayDate(day.date)}`;
-                            const safeLabel = escapeHtml(label);
-                            return `<span class="contrib-cell" role="gridcell" data-level="${day.level}" data-week="${weekIndex}" data-day="${dayIndex}" tabindex="-1" aria-label="${safeLabel}" title="${safeLabel}"></span>`;
-                        })
-                        .join("")}
-                  </div>
-                `,
-                    )
-                    .join("")}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="contrib-legend" aria-hidden="true">
-          <span>Less</span>
-          <span class="contrib-cell" data-level="0"></span>
-          <span class="contrib-cell" data-level="1"></span>
-          <span class="contrib-cell" data-level="2"></span>
-          <span class="contrib-cell" data-level="3"></span>
-          <span class="contrib-cell" data-level="4"></span>
-          <span>More</span>
-        </div>
-      </figure>
-    `;
+    const cell = cloneTemplate("github-contrib-cell-template").firstElementChild;
+    const label = contributionCellLabel(day);
+    cell.dataset.level = String(day.level);
+    cell.dataset.week = String(weekIndex);
+    cell.dataset.day = String(dayIndex);
+    cell.setAttribute("aria-label", label);
+    cell.title = label;
+    return cell;
 }
 
-function renderDashboard(user, activity, streaks) {
+function buildContributionGraph(weeks, labels, total) {
+    if (!weeks.length) {
+        return cloneTemplate("github-contrib-empty-template");
+    }
+
+    const figure = cloneTemplate("github-contrib-graph-template");
+    const layout = figure.querySelector(".contrib-graph-layout");
+    const monthsContainer = figure.querySelector(".contrib-months");
+    const grid = figure.querySelector(".contrib-grid");
+
+    figure.querySelector(".contrib-graph-total").textContent = `${total} contributions in the last year`;
+    layout.style.setProperty("--week-count", String(weeks.length));
+    grid.setAttribute("aria-label", `${total} contributions in the last year on GitHub`);
+
+    for (const item of labels) {
+        const month = cloneTemplate("github-contrib-month-template").firstElementChild;
+        month.textContent = item.label;
+        month.style.gridColumn = String(item.index + 1);
+        monthsContainer.append(month);
+    }
+
+    for (let weekIndex = 0; weekIndex < weeks.length; weekIndex += 1) {
+        const weekEl = cloneTemplate("github-contrib-week-template").firstElementChild;
+        const week = weeks[weekIndex];
+        for (let dayIndex = 0; dayIndex < week.length; dayIndex += 1) {
+            weekEl.append(buildContributionCell(week[dayIndex], weekIndex, dayIndex));
+        }
+        grid.append(weekEl);
+    }
+
+    return figure;
+}
+
+function buildDashboard(user, activity, streaks) {
     const contributions = activity.contributions ?? [];
     const weeks = buildWeeks(contributions);
     const labels = monthLabels(weeks);
     const total = activity.total?.lastYear ?? 0;
-    const profileUrl = escapeHtml(user.html_url ?? config.github.url);
-    const avatarUrl = escapeHtml(user.avatar_url ?? "");
+    const url = profileUrl(user);
 
+    const dashboard = cloneTemplate("github-dashboard-template");
+    const avatar = dashboard.querySelector("[data-github-avatar]");
+    avatar.src = user.avatar_url ?? "";
+    dashboard.querySelector("[data-github-handle]").textContent = `@${user.login}`;
+    dashboard.querySelectorAll("[data-github-profile-link]").forEach((link) => {
+        link.href = url;
+    });
+
+    const statsContainer = dashboard.querySelector("[data-github-stats]");
     const stats = [
         { label: "Contributions", value: total, suffix: "last year" },
         { label: "Public repos", value: user.public_repos },
@@ -312,65 +339,77 @@ function renderDashboard(user, activity, streaks) {
         { label: "Current streak", value: streaks.current, suffix: "days" },
         { label: "Longest streak", value: streaks.longest, suffix: "days" },
     ];
+    for (const stat of stats) {
+        statsContainer.append(buildStatItem(stat));
+    }
 
-    return `
-    <div class="github-dashboard">
-      <div class="github-dashboard-header">
-        <a class="github-dashboard-profile" href="${profileUrl}" target="_blank" rel="noopener noreferrer">
-          <img
-            class="profile-avatar"
-            src="${avatarUrl}"
-            alt=""
-            width="48"
-            height="48"
-            loading="lazy"
-          />
-          <span class="github-dashboard-handle">@${escapeHtml(user.login)}</span>
-          ${NEW_TAB_SR_ONLY}
-        </a>
-        <a class="github-dashboard-link" href="${profileUrl}" target="_blank" rel="noopener noreferrer">
-          View on GitHub →
-          ${NEW_TAB_SR_ONLY}
-        </a>
-      </div>
+    dashboard.querySelector("[data-github-contrib-mount]").append(buildContributionGraph(weeks, labels, total));
 
-      <dl class="github-stats">
-        ${stats
-            .map(
-                (stat) => `
-          <div class="github-stat" data-magnetic>
-            <dt class="github-stat-label">${escapeHtml(stat.label)}</dt>
-            <dd class="github-stat-value">
-              ${stat.value}
-              ${stat.suffix ? `<span class="github-stat-suffix">${escapeHtml(stat.suffix)}</span>` : ""}
-            </dd>
-          </div>
-        `,
-            )
-            .join("")}
-      </dl>
-
-      ${renderContributionGraph(weeks, labels, total)}
-    </div>
-  `;
+    return dashboard;
 }
 
 function getContributionCells(grid) {
     return [...grid.querySelectorAll('.contrib-cell[role="gridcell"]')];
 }
 
-function cellCoords(cell) {
+export function cellCoords(cell) {
     return {
         week: Number(cell.dataset.week),
         day: Number(cell.dataset.day),
     };
 }
 
-function findCellByCoords(cells, week, day) {
+export function findCellByCoords(cells, week, day) {
     return cells.find((cell) => {
         const { week: w, day: d } = cellCoords(cell);
         return w === week && d === day;
     });
+}
+
+const GRID_DIRECTIONS = {
+    ArrowRight: { dWeek: 1, dDay: 0 },
+    ArrowLeft: { dWeek: -1, dDay: 0 },
+    ArrowDown: { dWeek: 0, dDay: 1 },
+    ArrowUp: { dWeek: 0, dDay: -1 },
+};
+
+export function findCellInDirection(cells, startCell, direction) {
+    const delta = GRID_DIRECTIONS[direction];
+    if (!delta) return null;
+
+    let { week, day } = cellCoords(startCell);
+    const maxWeek = Math.max(...cells.map((cell) => cellCoords(cell).week));
+    const maxDay = 6;
+
+    week += delta.dWeek;
+    day += delta.dDay;
+
+    while (week >= 0 && week <= maxWeek && day >= 0 && day <= maxDay) {
+        const cell = findCellByCoords(cells, week, day);
+        if (cell) return cell;
+        week += delta.dWeek;
+        day += delta.dDay;
+    }
+
+    return null;
+}
+
+export function findFirstCellInDayRow(cells, day) {
+    const maxWeek = Math.max(...cells.map((cell) => cellCoords(cell).week));
+    for (let week = 0; week <= maxWeek; week += 1) {
+        const cell = findCellByCoords(cells, week, day);
+        if (cell) return cell;
+    }
+    return null;
+}
+
+export function findLastCellInDayRow(cells, day) {
+    const maxWeek = Math.max(...cells.map((cell) => cellCoords(cell).week));
+    for (let week = maxWeek; week >= 0; week -= 1) {
+        const cell = findCellByCoords(cells, week, day);
+        if (cell) return cell;
+    }
+    return null;
 }
 
 function focusContributionCell(cells, cell) {
@@ -380,45 +419,35 @@ function focusContributionCell(cells, cell) {
     cell?.focus();
 }
 
-function wireContributionGridKeyboard(container) {
+export function wireContributionGridKeyboard(container) {
     const grid = container.querySelector(".contrib-grid[role='grid']");
     if (!grid) return;
 
     const cells = getContributionCells(grid);
     if (!cells.length) return;
 
-    const maxWeek = Math.max(...cells.map((cell) => cellCoords(cell).week));
-    const maxDay = 6;
-
-    const initial =
-        cells.find((cell) => Number(cell.dataset.level) > 0) ?? cells[0];
+    const initial = cells.find((cell) => Number(cell.dataset.level) > 0) ?? cells[0];
     focusContributionCell(cells, initial);
 
     grid.addEventListener("keydown", (event) => {
         const active = document.activeElement;
         if (!active?.classList.contains("contrib-cell")) return;
 
-        const { week, day } = cellCoords(active);
+        const { day } = cellCoords(active);
         let next = null;
 
         switch (event.key) {
             case "ArrowRight":
-                next = findCellByCoords(cells, Math.min(week + 1, maxWeek), day);
-                break;
             case "ArrowLeft":
-                next = findCellByCoords(cells, Math.max(week - 1, 0), day);
-                break;
             case "ArrowDown":
-                next = findCellByCoords(cells, week, Math.min(day + 1, maxDay));
-                break;
             case "ArrowUp":
-                next = findCellByCoords(cells, week, Math.max(day - 1, 0));
+                next = findCellInDirection(cells, active, event.key);
                 break;
             case "Home":
-                next = findCellByCoords(cells, 0, day);
+                next = findFirstCellInDayRow(cells, day);
                 break;
             case "End":
-                next = findCellByCoords(cells, maxWeek, day);
+                next = findLastCellInDayRow(cells, day);
                 break;
             case "Enter":
             case " ":

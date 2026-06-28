@@ -1,6 +1,7 @@
 /**
- * Site configuration — runtime data for GitHub dashboard and theme system.
- * Theme chrome (colors, default) loads from #portfolio-theme-data in index.html.
+ * Site configuration — GitHub dashboard settings and theme metadata.
+ * Theme bootstrap (default, PWA colors) loads from #portfolio-theme-data in index.html.
+ * Profile content (name, role, experience, etc.) lives in index.html — not here.
  */
 
 const THEME_META = {
@@ -36,9 +37,6 @@ function loadPortfolioThemeData() {
 const themeBootstrap = loadPortfolioThemeData();
 
 export const config = {
-    name: "Axel Karlsson",
-    role: "AI Engineer",
-
     github: {
         username: "klovaaxel",
         url: "https://github.com/klovaaxel",

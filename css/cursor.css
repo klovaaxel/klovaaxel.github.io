@@ -8,13 +8,32 @@
     --pointer-y: 0;
 }
 
-.has-cursor-fx {
+.has-cursor-fx:not(.using-keyboard) {
     cursor: none;
 }
 
-.has-cursor-fx a,
-.has-cursor-fx button {
+.has-cursor-fx:not(.using-keyboard) a,
+.has-cursor-fx:not(.using-keyboard) button {
     cursor: none;
+}
+
+.has-cursor-fx a:focus-visible,
+.has-cursor-fx button:focus-visible {
+    cursor: pointer;
+}
+
+.has-cursor-fx.using-keyboard {
+    cursor: auto;
+}
+
+.has-cursor-fx.using-keyboard a,
+.has-cursor-fx.using-keyboard button {
+    cursor: pointer;
+}
+
+.has-cursor-fx.using-keyboard .cursor-fx {
+    opacity: 0;
+    visibility: hidden;
 }
 
 .cursor-fx {
@@ -23,6 +42,13 @@
     z-index: 150;
     pointer-events: none;
     overflow: hidden;
+    transition:
+        opacity 0.35s ease,
+        visibility 0.35s ease;
+}
+
+.cursor-fx.is-idle {
+    opacity: 0;
 }
 
 .cursor-glow,
@@ -131,6 +157,10 @@ html:not([data-theme="sketch"]) .has-cursor-fx .social-link:hover {
     transform: translate(var(--mx, 0px), var(--my, 0px)) translateY(-3px) scale(1.04) rotate(-1deg);
 }
 
+html:not([data-theme="sketch"]) .has-cursor-fx .connect-cta:hover {
+    transform: translateY(-3px) scale(1.03);
+}
+
 html:not([data-theme="sketch"]) .has-cursor-fx .theme-btn {
     transform: translate(var(--mx, 0px), var(--my, 0px));
 }
@@ -146,6 +176,14 @@ html:not([data-theme="sketch"]) .has-cursor-fx [data-stagger="skills"] > *:hover
 
 html:not([data-theme="sketch"]) .has-cursor-fx .github-stat:hover {
     transform: translate(var(--mx, 0px), var(--my, 0px)) translateY(-4px) skewX(-2deg);
+}
+
+html:not([data-theme="sketch"]) .has-cursor-fx .hero-contact {
+    transform: translate(var(--mx, 0px), var(--my, 0px));
+}
+
+html:not([data-theme="sketch"]) .has-cursor-fx .hero-contact:hover {
+    transform: translate(var(--mx, 0px), var(--my, 0px)) translateY(-2px) scale(1.02);
 }
 
 @media (pointer: coarse), (prefers-reduced-motion: reduce) {

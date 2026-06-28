@@ -12,37 +12,26 @@
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <title>Axel Karlsson — AI Engineer</title>
 
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="Axel Karlsson" />
         <meta property="og:title" content="Axel Karlsson — AI Engineer" />
         <meta property="og:description" content="Axel Karlsson — AI Engineer | Hogia Infrastructure Products" />
         <meta property="og:url" content="https://axel.eyssen.se" />
-        <meta property="og:image" content="https://axel.eyssen.se/icons/icon-512.png" />
-        <meta name="twitter:card" content="summary" />
+        <meta property="og:image" content="https://axel.eyssen.se/icons/og-image.png" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Axel Karlsson — AI Engineer at Hogia Infrastructure Products" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Axel Karlsson — AI Engineer" />
+        <meta name="twitter:description" content="Axel Karlsson — AI Engineer | Hogia Infrastructure Products" />
+        <meta name="twitter:image" content="https://axel.eyssen.se/icons/og-image.png" />
 
         <link rel="icon" href="/icons/favicon.svg" type="image/svg+xml" />
         <link rel="icon" href="/icons/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
         <link rel="manifest" href="/site.webmanifest" />
 
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link rel="preconnect" href="https://api.github.com" />
-        <link
-            rel="preload"
-            as="style"
-            href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-        />
-        <link
-            href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-            rel="stylesheet"
-            media="print"
-            onload="this.media='all'"
-        />
-        <noscript>
-            <link
-                href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-                rel="stylesheet"
-            />
-        </noscript>
 
         <link rel="stylesheet" href="css/base.css" />
         <link rel="stylesheet" href="css/layout.css" />
@@ -233,8 +222,8 @@
                 <section class="hero section" aria-labelledby="hero-name" data-reveal="hero">
                     <h1 id="hero-name" class="hero-name">Axel Karlsson</h1>
                     <p id="hero-tagline" class="hero-tagline">
-                        Building software at the intersection of AI, web, and developer tooling — with a strong
-                        interest in accessibility.
+                        Building software at the intersection of AI, web, and developer tooling — with a strong interest
+                        in accessibility.
                     </p>
                     <div id="hero-meta" class="hero-meta">
                         <span>AI Engineer</span>
@@ -243,6 +232,22 @@
                         >
                         <span>Gothenburg, Sweden</span>
                     </div>
+                    <a class="hero-contact" href="mailto:klovakarlsson@gmail.com" data-magnetic>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <rect width="20" height="16" x="2" y="4" rx="2" />
+                            <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                        </svg>
+                        Email me
+                    </a>
                     <nav id="social-links" class="social-links" aria-label="Social links">
                         <a
                             class="social-link"
@@ -385,15 +390,12 @@
                     </ol>
                 </section>
 
-                <section class="section" id="github" aria-labelledby="github-heading" data-reveal="fade-up">
-                    <header class="section-header">
-                        <h2 id="github-heading" class="section-title">GitHub</h2>
-                        <p class="section-subtitle">Activity and contributions</p>
-                    </header>
-                    <div id="github-dashboard"></div>
-                </section>
-
-                <section class="section section-connect" id="connect" aria-labelledby="connect-heading" data-reveal="flip">
+                <section
+                    class="section section-connect"
+                    id="connect"
+                    aria-labelledby="connect-heading"
+                    data-reveal="flip"
+                >
                     <header class="section-header connect-header">
                         <h2 id="connect-heading" class="section-title">Connect</h2>
                         <p class="section-subtitle">Reach out — email is the fastest way to get in touch</p>
@@ -405,7 +407,7 @@
                                 Open to conversations about AI, software engineering, and web accessibility. AI Engineer
                                 | Hogia Infrastructure Products
                             </p>
-                            <a class="connect-cta" href="mailto:klovakarlsson@gmail.com" data-magnetic>
+                            <a class="connect-cta" href="mailto:klovakarlsson@gmail.com">
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     viewBox="0 0 24 24"
@@ -421,54 +423,29 @@
                                 </svg>
                                 Email me
                             </a>
-                            <nav
-                                id="connect-social-links"
-                                class="social-links connect-social-links"
-                                aria-label="Social links"
-                            >
-                                <a
-                                    class="social-link"
-                                    href="https://github.com/klovaaxel"
-                                    data-magnetic
-                                    target="_blank"
-                                    rel="noopener noreferrer"
+                            <p class="connect-more">
+                                Also on
+                                <a href="https://github.com/klovaaxel" target="_blank" rel="noopener noreferrer"
+                                    >GitHub<span class="sr-only"> (opens in new tab)</span></a
                                 >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                        aria-hidden="true"
-                                    >
-                                        <path
-                                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
-                                        />
-                                    </svg>
-                                    GitHub
-                                    <span class="sr-only"> (opens in new tab)</span>
-                                </a>
+                                and
                                 <a
-                                    class="social-link"
                                     href="https://www.linkedin.com/in/axel-a-karlsson/"
-                                    data-magnetic
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                >
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="currentColor"
-                                        aria-hidden="true"
-                                    >
-                                        <path
-                                            d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
-                                        />
-                                    </svg>
-                                    LinkedIn
-                                    <span class="sr-only"> (opens in new tab)</span>
-                                </a>
-                            </nav>
+                                    >LinkedIn<span class="sr-only"> (opens in new tab)</span></a
+                                >.
+                            </p>
                         </div>
                     </div>
+                </section>
+
+                <section class="section" id="github" aria-labelledby="github-heading" data-reveal="fade-up">
+                    <header class="section-header">
+                        <h2 id="github-heading" class="section-title">GitHub</h2>
+                        <p class="section-subtitle">Activity and contributions</p>
+                    </header>
+                    <div id="github-dashboard"></div>
                 </section>
             </main>
 
@@ -496,6 +473,151 @@
                 </filter>
             </defs>
         </svg>
+
+        <!-- GitHub dashboard templates (cloned by js/github.js) -->
+        <template id="github-skeleton-template">
+            <div class="github-dashboard github-skeleton" aria-busy="true" aria-label="Loading GitHub activity">
+                <div class="github-dashboard-header">
+                    <div class="github-skeleton-profile">
+                        <span class="github-skeleton github-skeleton-avatar" aria-hidden="true"></span>
+                        <span class="github-skeleton github-skeleton-handle" aria-hidden="true"></span>
+                    </div>
+                    <span class="github-skeleton github-skeleton-link" aria-hidden="true"></span>
+                </div>
+                <div class="github-stats" aria-hidden="true">
+                    <div class="github-skeleton-stat">
+                        <span class="github-skeleton github-skeleton-stat-label"></span>
+                        <span class="github-skeleton github-skeleton-stat-value"></span>
+                    </div>
+                    <div class="github-skeleton-stat">
+                        <span class="github-skeleton github-skeleton-stat-label"></span>
+                        <span class="github-skeleton github-skeleton-stat-value"></span>
+                    </div>
+                    <div class="github-skeleton-stat">
+                        <span class="github-skeleton github-skeleton-stat-label"></span>
+                        <span class="github-skeleton github-skeleton-stat-value"></span>
+                    </div>
+                    <div class="github-skeleton-stat">
+                        <span class="github-skeleton github-skeleton-stat-label"></span>
+                        <span class="github-skeleton github-skeleton-stat-value"></span>
+                    </div>
+                    <div class="github-skeleton-stat">
+                        <span class="github-skeleton github-skeleton-stat-label"></span>
+                        <span class="github-skeleton github-skeleton-stat-value"></span>
+                    </div>
+                </div>
+                <div class="github-skeleton-graph" aria-hidden="true">
+                    <span class="github-skeleton github-skeleton-graph-caption"></span>
+                    <div class="github-skeleton github-skeleton-graph-grid"></div>
+                </div>
+            </div>
+        </template>
+
+        <template id="github-error-template">
+            <div class="github-dashboard-error empty-state">
+                <p>Could not load GitHub dashboard.</p>
+                <p>
+                    <button type="button" class="github-retry-btn">Retry</button>
+                    <a data-github-profile-link href="#" target="_blank" rel="noopener noreferrer">
+                        View profile on GitHub
+                        <span class="sr-only"> (opens in new tab)</span>
+                    </a>
+                </p>
+            </div>
+        </template>
+
+        <template id="github-stat-template">
+            <div class="github-stat" data-magnetic>
+                <span class="github-stat-label"></span>
+                <span class="github-stat-value">
+                    <span class="github-stat-number"></span>
+                    <span class="github-stat-suffix" hidden></span>
+                </span>
+            </div>
+        </template>
+
+        <template id="github-contrib-cell-template">
+            <span
+                class="contrib-cell"
+                role="gridcell"
+                tabindex="-1"
+            ></span>
+        </template>
+
+        <template id="github-contrib-cell-empty-template">
+            <span class="contrib-cell contrib-cell--empty" aria-hidden="true"></span>
+        </template>
+
+        <template id="github-contrib-week-template">
+            <div class="contrib-week" role="row"></div>
+        </template>
+
+        <template id="github-contrib-month-template">
+            <span class="contrib-month"></span>
+        </template>
+
+        <template id="github-contrib-empty-template">
+            <figure class="contrib-graph">
+                <figcaption class="contrib-graph-caption">
+                    <span class="contrib-graph-total">No contribution data available</span>
+                </figcaption>
+                <p class="empty-state">Contribution history is unavailable right now.</p>
+            </figure>
+        </template>
+
+        <template id="github-contrib-graph-template">
+            <figure class="contrib-graph">
+                <figcaption class="contrib-graph-caption">
+                    <span class="contrib-graph-total"></span>
+                </figcaption>
+                <div class="contrib-graph-scroll" aria-label="Contribution graph scroll region">
+                    <div class="contrib-graph-layout">
+                        <div class="contrib-months" aria-hidden="true"></div>
+                        <div class="contrib-body">
+                            <div class="contrib-days" aria-hidden="true">
+                                <span></span><span>Mon</span><span></span><span>Wed</span><span></span
+                                ><span>Fri</span><span></span>
+                            </div>
+                            <div class="contrib-grid" role="grid"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contrib-legend" aria-hidden="true">
+                    <span>Less</span>
+                    <span class="contrib-cell" data-level="0"></span>
+                    <span class="contrib-cell" data-level="1"></span>
+                    <span class="contrib-cell" data-level="2"></span>
+                    <span class="contrib-cell" data-level="3"></span>
+                    <span class="contrib-cell" data-level="4"></span>
+                    <span>More</span>
+                </div>
+            </figure>
+        </template>
+
+        <template id="github-dashboard-template">
+            <div class="github-dashboard">
+                <div class="github-dashboard-header">
+                    <a class="github-dashboard-profile" data-github-profile-link href="#" target="_blank" rel="noopener noreferrer">
+                        <img
+                            class="profile-avatar"
+                            data-github-avatar
+                            alt=""
+                            width="48"
+                            height="48"
+                            loading="lazy"
+                        />
+                        <span class="github-dashboard-handle" data-github-handle></span>
+                        <span class="sr-only"> (opens in new tab)</span>
+                    </a>
+                    <a class="github-dashboard-link" data-github-profile-link href="#" target="_blank" rel="noopener noreferrer">
+                        View on GitHub →
+                        <span class="sr-only"> (opens in new tab)</span>
+                    </a>
+                </div>
+                <div class="github-stats" data-github-stats></div>
+                <div data-github-contrib-mount></div>
+            </div>
+        </template>
 
         <script type="module" src="js/main.js"></script>
     </body>

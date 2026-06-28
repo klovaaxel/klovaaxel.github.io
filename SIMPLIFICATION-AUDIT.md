@@ -5,13 +5,15 @@ Audit of opportunities to simplify the codebase using native HTML and CSS instea
 **Last reviewed:** 2026-06-28  
 **Companion doc:** [IMPROVEMENT-PLAN.md](IMPROVEMENT-PLAN.md)
 
+**PR status:** PR1 and PR2 are **complete** (static HTML content + static theme switcher). PR4 (remove cursor) is **declined** — keep cursor with ongoing a11y improvements instead. PR3 remains optional future work. PR5 (GitHub template refactor) is **complete**.
+
 ---
 
 ## Executive summary
 
-**Can we simplify meaningfully? Yes.**
+**Can we simplify meaningfully? Yes — and much of the low-hanging fruit is already shipped.**
 
-Scroll reveals, hero entrance, theme palettes, and sketch gating already lean on CSS. JavaScript is concentrated in: content hydration from `config.js`, theme persistence/chrome, GitHub API rendering, and cursor/magnetic effects.
+Scroll reveals, hero entrance, theme palettes, and sketch gating already lean on CSS. Hero, experience, skills, connect, and social links are now static HTML (PR1). Theme switcher buttons are static in `index.html` (PR2). JavaScript is concentrated in: theme persistence/chrome, GitHub API rendering, and cursor/magnetic effects.
 
 | Scenario                               | Estimated JS reduction                                              |
 | -------------------------------------- | ------------------------------------------------------------------- |
@@ -82,10 +84,9 @@ Scroll reveals, hero entrance, theme palettes, and sketch gating already lean on
 **Proposed:** Delete unused pre-migration `@keyframes` (~90 lines in `animations.css`).  
 **Risk:** None
 
-### 8. GitHub dashboard — keep async, simplify render
+### 8. GitHub dashboard — keep async, simplify render ✅ **Done**
 
-**Proposed:** `<template id="github-dashboard-tpl">` + data binding; optional drop of streak stats (~40 lines).  
-**Risk:** Low–medium
+**Implemented:** `<template>` elements in `index.html` + DOM binding in `js/github.js`; no `innerHTML` for API strings.
 
 ### 9. Cursor / magnetic — remove or keep
 
@@ -102,7 +103,7 @@ Scroll reveals, hero entrance, theme palettes, and sketch gating already lean on
 | Custom cursor + magnetic      | Strongest simplification candidate if visual downgrade OK |
 | Theme sweep click-origin      | Drop; keep color transition                               |
 | Dead animation keyframes      | Safe CSS deletion                                         |
-| `config.js` as content source | Keep for DX, or move to HTML-first                        |
+| `config.js` as content source | **Done** — profile content moved to HTML-first; `config.js` is GitHub + theme metadata only |
 | GitHub streak stats           | Optional trim                                             |
 | Unused cursor exports         | Remove                                                    |
 
@@ -110,25 +111,25 @@ Scroll reveals, hero entrance, theme palettes, and sketch gating already lean on
 
 ## Recommended simplification PRs (ordered)
 
-### PR 1 — Static content + no-JS baseline
+### PR 1 — Static content + no-JS baseline ✅ **Complete**
 
-Inline hero, about, skills, timeline, connect, social navs in `index.html`. Remove hydration from `main.js`. **~70–90 lines removed.**
+Inline hero, about, skills, timeline, connect, social navs in `index.html`. Hydration removed from `main.js`.
 
-### PR 2 — Static theme switcher + dedupe boot
+### PR 2 — Static theme switcher + dedupe boot ✅ **Complete**
 
-Theme buttons in HTML; slim `theme.js`; delete duplicate IIFE. **~50–70 lines removed.**
+Theme buttons in HTML; slim `theme.js`; duplicate IIFE removed.
 
-### PR 3 — CSS/JS hygiene (zero behavior change)
+### PR 3 — CSS/JS hygiene (zero behavior change) · **Optional**
 
 Delete unused keyframes; consolidate helpers; remove dead exports.
 
-### PR 4 — Optional: remove cursor effects
+### PR 4 — Remove cursor effects · **Declined**
 
-Delete `cursor.js`, `cursor.css`, `data-magnetic`, `refreshCursorTargets`. **Largest single win.**
+~~Delete `cursor.js`, `cursor.css`, `data-magnetic`, `refreshCursorTargets`.~~ **Decision:** keep custom cursor and magnetic effects; improve accessibility (pointer guards, reduced motion) rather than remove. See IMPROVEMENT-PLAN SIM-002.
 
-### PR 5 — GitHub template refactor (optional)
+### PR 5 — GitHub template refactor ✅ **Complete**
 
-`<template>` + simpler binding; optional streak removal.
+`<template>` shells in `index.html` for skeleton, error, dashboard, stats, and contribution graph; `js/github.js` clones templates and binds data via DOM APIs (`textContent` / `setAttribute`).
 
 ---
 
@@ -150,11 +151,11 @@ Delete `cursor.js`, `cursor.css`, `data-magnetic`, `refreshCursorTargets`. **Lar
 | Topic               | Verdict                                                  |
 | ------------------- | -------------------------------------------------------- |
 | Theme switching     | Static HTML buttons + small JS for storage, meta, gating |
-| GitHub dashboard    | Must stay async; template refactor optional              |
-| Cursor effects      | Remove entirely or keep as-is — no CSS equivalent        |
-| Hero/about/connect  | **Strong candidate for static HTML**                     |
-| Experience timeline | **Static HTML**                                          |
-| Social links        | Static duplicate navs or sprite                          |
+| GitHub dashboard    | **Template refactor complete** (PR5); async fetch unchanged |
+| Cursor effects      | **Keep** — removal declined; improve a11y instead          |
+| Hero/about/connect  | **Static HTML** (PR1 complete)                               |
+| Experience timeline | **Static HTML** (PR1 complete)                               |
+| Social links        | **Static HTML** (PR1 complete)                               |
 | Live region         | Already minimal (~9 lines) — keep                        |
 | Magnetic/parallax   | JS or removal                                            |
 | Theme sweep         | CSS animations exist; simplify JS trigger                |
@@ -164,18 +165,13 @@ Delete `cursor.js`, `cursor.css`, `data-magnetic`, `refreshCursorTargets`. **Lar
 
 ## Architecture note
 
-Most simplification opportunity is in the first seven `DOMContentLoaded` calls in `main.js` — not in GitHub or live regions:
+After PR1/PR2, `main.js` boot is minimal:
 
 ```js
-populateStaticContent();
-renderExperience();
-renderSkills();
-renderConnectSection();
-renderSocialLinks("social-links");
-renderSocialLinks("connect-social-links");
 initTheme();
 initCursor();
+refreshCursorTargets();
 loadGitHubDashboard();
 ```
 
-Items 1–6 are candidates for HTML; 7–8 (theme, cursor) can shrink; GitHub must stay.
+Content hydration is gone. Remaining simplification lever: PR3 hygiene. Cursor removal (PR4) is out of scope; GitHub template refactor (PR5) is complete.

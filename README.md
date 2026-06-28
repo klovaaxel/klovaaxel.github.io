@@ -13,13 +13,32 @@ Open [http://localhost:8080](http://localhost:8080).
 
 ## Configuration
 
-Edit `js/config.js` to update your name, tagline, social links, and GitHub settings.
+### Profile and content
+
+Edit **`index.html`** for visible copy and links:
+
+- Hero (name, role, tagline)
+- Experience timeline
+- Skills
+- Connect section and social links in the nav
+
+Content is static HTML — no JavaScript hydration.
+
+### GitHub and themes
+
+Edit **`js/config.js`** for:
+
+- GitHub username and profile URL (`config.github`)
+- Theme labels, icons, and sketch gating (`THEME_META`)
+
+Theme **colors and PWA chrome** (`themeColor`, `statusBarStyle`, default) live in **`#portfolio-theme-data`** JSON in `index.html`. `config.js` merges that bootstrap data with `THEME_META` at runtime.
 
 ## Themes
 
 The design system uses CSS custom properties:
 
 - `css/tokens.css` — spacing, typography, layout (theme-agnostic)
+- `css/fonts.css` — self-hosted Atkinson Hyperlegible (latin 400/700); sketch fonts load on demand via `js/theme.js`
 - `css/themes/*.css` — color palettes per theme
 
 Switch themes with the buttons in the top-right corner. The choice is saved in `localStorage`.
@@ -28,7 +47,17 @@ To add a new theme:
 
 1. Create `css/themes/your-theme.css` with `[data-theme="your-theme"]` color variables
 2. Import it in `css/base.css`
-3. Add an entry to `config.themes` in `js/config.js`
+3. Add an entry to `#portfolio-theme-data` in `index.html` (`id`, `themeColor`, `statusBarStyle`)
+4. Add a matching entry to `THEME_META` in `js/config.js` (label, icon; `requiresBorderShape` for sketch-like themes)
+5. Add a static theme button in `index.html` (see existing switcher markup)
+
+## Tests
+
+```bash
+npm test
+```
+
+Runs Node built-in unit tests in `tests/` (pure helpers such as theme resolution and GitHub date math). CI runs the same command via `.github/workflows/test.yml` on push and pull requests to `main`.
 
 ## Deploy to GitHub Pages
 
@@ -69,18 +98,37 @@ dig axel.eyssen.se CNAME +short
 ## Structure
 
 ```
-├── index.html
+├── index.html              # Static content, meta, theme JSON, early theme boot
 ├── CNAME
+├── site.webmanifest
+├── package.json            # npm test script
+├── assets/
+│   ├── fonts/              # Self-hosted Atkinson Hyperlegible (latin woff2)
+│   └── …                   # Theme background SVGs
 ├── css/
-│   ├── tokens.css      # Design tokens
-│   ├── base.css        # Reset + theme imports
-│   ├── layout.css      # Page structure
-│   ├── components.css  # UI components
-│   └── themes/         # Color themes
+│   ├── fonts.css           # @font-face for display font
+│   ├── tokens.css          # Design tokens
+│   ├── base.css            # Reset + theme imports
+│   ├── layout.css          # Page structure
+│   ├── components.css      # UI components
+│   ├── animations.css      # Reveals, theme sweep, Connect flip
+│   ├── cursor.css          # Custom cursor + parallax
+│   ├── sketch.css          # Sketch theme decorations
+│   ├── border-shape.css    # border-shape progressive enhancement
+│   └── themes/             # Color themes
 ├── js/
-│   ├── config.js       # Your profile & links
-│   ├── theme.js        # Theme switcher
-│   ├── github.js       # GitHub API integration
-│   └── main.js         # Entry point
-└── .github/workflows/pages.yml
+│   ├── config.js           # GitHub settings + theme metadata merge
+│   ├── html.js             # Shared escapeHtml helper
+│   ├── theme.js            # Theme switcher, storage, browser chrome
+│   ├── github.js           # GitHub API integration
+│   ├── cursor.js           # Custom cursor, magnetic elements
+│   ├── live-region.js      # aria-live announcements
+│   └── main.js             # Entry point
+├── tests/
+│   ├── theme.test.js
+│   └── github.test.js
+├── icons/                  # Favicon, PWA icons
+└── .github/workflows/
+    ├── pages.yml           # GitHub Pages deploy
+    └── test.yml            # CI unit tests
 ```
