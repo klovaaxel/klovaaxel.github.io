@@ -37,8 +37,8 @@ How to run portfolio improvement passes without repeating common failures (see [
 Run after every batch (human or agent):
 
 - [ ] `npm test` — all unit/smoke tests pass
-- [ ] `npm run test:e2e` — browser smoke (scroll at top, hero, theme switch, a11y scan)
-- [ ] Load site: **no scroll jump** on first paint
+- [ ] `npm run test:e2e` — browser smoke (scroll at top, hero, theme switch, ambient layers, a11y scan)
+- [ ] Load site (`npm start`): **no scroll jump** on first paint
 - [ ] Tab into GitHub grid: focus works; page does not jump on load
 - [ ] Theme: early boot matches session (no double-random flash)
 - [ ] Update IMPROVEMENT-PLAN checkboxes + changelog if shipping plan items
@@ -49,7 +49,7 @@ Run after every batch (human or agent):
 | Layer  | Command                | Catches                                     |
 | ------ | ---------------------- | ------------------------------------------- |
 | Unit   | `npm test`             | Pure helpers, DOM mocks, HTML smoke         |
-| E2E    | `npm run test:e2e`     | Scroll, focus, theme switch, axe violations |
+| E2E    | `npm run test:e2e`     | Scroll, focus, theme switch, ambient layers, axe violations |
 | Manual | Simple Browser / local | Visual typography, sketch theme             |
 
 ## CI

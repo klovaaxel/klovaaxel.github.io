@@ -419,6 +419,10 @@ Follow-up from [RETRO-2026-06.md](RETRO-2026-06.md) after the improvement arc an
        **Problem:** Cache and generation guards are unit-tested; full fetch/render path is not.  
        **Acceptance:** Test with DOM fixtures + mocked `fetch` covering cache hit, bypass, and stale generation.
 
+- [x] **ENG-008** · **P2** · **S** · Ambient theme guards + visual dev ergonomics  
+       **Files:** `css/theme-ambient.css`, `tests/`, `package.json`, `docs/retros/`  
+       **Done:** `npm start`, smoke ambient contract, E2E per-theme layer visibility, DESIGN-SYSTEM ambient section. See [docs/retros/2026-06-28-animated-ambient-themes.md](docs/retros/2026-06-28-animated-ambient-themes.md).
+
 ---
 
 ## 4. Completed

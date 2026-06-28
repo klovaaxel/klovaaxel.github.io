@@ -121,6 +121,13 @@ describe("index.html smoke", () => {
         assert.match(head, /<script\s+src=["']js\/theme-bootstrap\.js["']/);
     });
 
+    it("includes animated ambient theme layer", () => {
+        assert.match(html, /class=["'][^"']*theme-ambient[^"']*["']/);
+        const baseCss = readFileSync(join(ROOT, "css/base.css"), "utf8");
+        assert.match(baseCss, /theme-ambient\.css/);
+        assert.ok(existsSync(join(ROOT, "css/theme-ambient.css")), "missing css/theme-ambient.css");
+    });
+
     it("includes self-hosted Atkinson font files", () => {
         for (const file of [
             "assets/fonts/atkinson-hyperlegible-latin-400.woff2",

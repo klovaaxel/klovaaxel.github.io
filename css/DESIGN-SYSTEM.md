@@ -49,6 +49,28 @@ Then import in `base.css` and register in `js/config.js`.
 
 `document.documentElement.dataset.theme` is set to the active theme id. A random theme is picked on each load via `js/theme-bootstrap.js`; the switcher applies choices for the current session only (no persistence).
 
+## Ambient backgrounds (`css/theme-ambient.css`)
+
+Decorative layers live in `.theme-ambient` inside `.page` (scrolls with content). One `.ambient-layer` per core theme; visibility toggled via `html[data-theme="…"]`.
+
+| Theme  | Layer class       | Notes                                      |
+| ------ | ----------------- | ------------------------------------------ |
+| ocean  | `.ambient-ocean`  | SVG base + waves; bubbles page-absolute    |
+| forest | `.ambient-forest` | SVG base (oversized, static); mist/leaves  |
+| dark   | `.ambient-space`  | Nebula + stars                             |
+| light  | `.ambient-sunny`  | Sun rays + clouds (high contrast on cream) |
+| sketch | (none)            | Sketch CSS handles its own decor           |
+
+**Rules when editing:**
+
+- **Scroll model:** Background art scrolls with `.page`; particles are usually page-absolute. Do not pin the whole ambient stack to the viewport unless the user asks.
+- **Bleed:** Oversize static bases (`inset: -6%`, `scale(1.06)`); animate overlays, not full-bleed rotated backgrounds.
+- **Light themes:** Start decorative opacity high (~0.85+); pale-on-pale is easy to miss.
+- **Motion:** `prefers-reduced-motion` disables ambient animations in `theme-ambient.css`.
+- **Cards:** Ocean/forest/dark/light use frosted glass on dashboard cards (defined in `theme-ambient.css`).
+
+Preview: `npm start` → http://localhost:8080 — cycle themes and scroll.
+
 ## Text contrast (A11Y-002)
 
 `--color-text-muted` already met WCAG AA (4.5:1) on each theme’s `--color-bg`. `--color-text-subtle` was lightened on dark themes and darkened on light/sketch so captions (section subtitles, timeline periods, footer, contribution graph labels/legend) reach ≥ 4.5:1 on body backgrounds.

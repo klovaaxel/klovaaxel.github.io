@@ -6,10 +6,10 @@ Personal portfolio site for [axel.eyssen.se](https://axel.eyssen.se).
 
 ```bash
 cd ~/Projects/axel-portfolio
-python3 -m http.server 8080
+npm start
 ```
 
-Open [http://localhost:8080](http://localhost:8080).
+Open [http://localhost:8080](http://localhost:8080). (`npm start` runs `python3 -m http.server 8080`.)
 
 ## Configuration
 

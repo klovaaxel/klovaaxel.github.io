@@ -20,6 +20,22 @@ test.describe("portfolio smoke", () => {
         await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
     });
 
+    test("shows matching ambient layer for each core theme", async ({ page }) => {
+        const cases = [
+            { label: "Ocean theme", theme: "ocean", layer: ".ambient-ocean" },
+            { label: "Forest theme", theme: "forest", layer: ".ambient-forest" },
+            { label: "Dark theme", theme: "dark", layer: ".ambient-space" },
+            { label: "Light theme", theme: "light", layer: ".ambient-sunny" },
+        ];
+
+        for (const { label, theme, layer } of cases) {
+            await page.goto("/");
+            await page.getByRole("button", { name: label }).click();
+            await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+            await expect(page.locator(layer)).toBeVisible();
+        }
+    });
+
     test("passes axe accessibility scan", async ({ page }) => {
         await page.goto("/");
         const results = await new AxeBuilder({ page }).disableRules(["color-contrast"]).analyze();
