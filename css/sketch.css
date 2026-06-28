@@ -173,7 +173,6 @@
 }
 
 [data-theme="sketch"] .hero-name {
-    font-size: clamp(4rem, 20vw + 0.5rem, 12rem);
     line-height: 0.88;
     rotate: -1.2deg;
     filter: url(#sketch-ink-rough);

@@ -220,7 +220,10 @@
 
             <main id="main" class="page-main">
                 <section class="hero section" aria-labelledby="hero-name" data-reveal="hero">
-                    <h1 id="hero-name" class="hero-name">Axel Karlsson</h1>
+                    <h1 id="hero-name" class="hero-name">
+                        <span class="hero-name-part">Axel</span>
+                        <span class="hero-name-part">Karlsson</span>
+                    </h1>
                     <p id="hero-tagline" class="hero-tagline">
                         Building software at the intersection of AI, web, and developer tooling — with a strong interest
                         in accessibility.
@@ -537,11 +540,7 @@
         </template>
 
         <template id="github-contrib-cell-template">
-            <span
-                class="contrib-cell"
-                role="gridcell"
-                tabindex="-1"
-            ></span>
+            <span class="contrib-cell" role="gridcell" tabindex="-1"></span>
         </template>
 
         <template id="github-contrib-cell-empty-template">
@@ -575,8 +574,8 @@
                         <div class="contrib-months" aria-hidden="true"></div>
                         <div class="contrib-body">
                             <div class="contrib-days" aria-hidden="true">
-                                <span></span><span>Mon</span><span></span><span>Wed</span><span></span
-                                ><span>Fri</span><span></span>
+                                <span></span><span>Mon</span><span></span><span>Wed</span><span></span><span>Fri</span
+                                ><span></span>
                             </div>
                             <div class="contrib-grid" role="grid"></div>
                         </div>
@@ -597,19 +596,24 @@
         <template id="github-dashboard-template">
             <div class="github-dashboard">
                 <div class="github-dashboard-header">
-                    <a class="github-dashboard-profile" data-github-profile-link href="#" target="_blank" rel="noopener noreferrer">
-                        <img
-                            class="profile-avatar"
-                            data-github-avatar
-                            alt=""
-                            width="48"
-                            height="48"
-                            loading="lazy"
-                        />
+                    <a
+                        class="github-dashboard-profile"
+                        data-github-profile-link
+                        href="#"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <img class="profile-avatar" data-github-avatar alt="" width="48" height="48" loading="lazy" />
                         <span class="github-dashboard-handle" data-github-handle></span>
                         <span class="sr-only"> (opens in new tab)</span>
                     </a>
-                    <a class="github-dashboard-link" data-github-profile-link href="#" target="_blank" rel="noopener noreferrer">
+                    <a
+                        class="github-dashboard-link"
+                        data-github-profile-link
+                        href="#"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
                         View on GitHub →
                         <span class="sr-only"> (opens in new tab)</span>
                     </a>
