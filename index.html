@@ -53,37 +53,136 @@
                 ]
             }
         </script>
-        <script>
-            (function () {
-                var data = JSON.parse(document.getElementById("portfolio-theme-data").textContent);
-                var themeById = {};
-                data.themes.forEach(function (theme) {
-                    themeById[theme.id] = theme;
-                });
-                var supportsSketch =
-                    typeof CSS !== "undefined" && CSS.supports && CSS.supports("border-shape", "circle(50%)");
-                var themeIds = data.themes
-                    .map(function (theme) {
-                        return theme.id;
-                    })
-                    .filter(function (id) {
-                        return id !== "sketch" || supportsSketch;
-                    });
-                var theme = themeIds[Math.floor(Math.random() * themeIds.length)] || data.defaultTheme;
-                document.documentElement.dataset.theme = theme;
-                var chrome = themeById[theme] || themeById[data.defaultTheme];
-                var themeColor = document.querySelector('meta[name="theme-color"]');
-                if (themeColor) themeColor.setAttribute("content", chrome.themeColor);
-                var statusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
-                if (statusBar) statusBar.setAttribute("content", chrome.statusBarStyle);
-            })();
-        </script>
+        <script src="js/theme-bootstrap.js"></script>
     </head>
     <body>
         <a class="skip-link" href="#main">Skip to main content</a>
         <div id="live-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
 
         <div class="page">
+            <div class="theme-ambient" aria-hidden="true">
+                <div class="ambient-layer ambient-ocean">
+                    <div class="ambient-ocean-base"></div>
+                    <div class="ambient-ocean-waves">
+                        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+                            <path
+                                d="M0 60 C150 20 300 100 450 55 S750 15 900 65 S1050 35 1200 70 L1200 120 L0 120 Z"
+                                fill="rgb(91 159 212 / 0.12)"
+                            />
+                        </svg>
+                        <svg viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+                            <path
+                                d="M0 60 C150 20 300 100 450 55 S750 15 900 65 S1050 35 1200 70 L1200 120 L0 120 Z"
+                                fill="rgb(91 159 212 / 0.12)"
+                            />
+                        </svg>
+                    </div>
+                    <div class="ambient-bubbles">
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                        <span class="ambient-bubble"></span>
+                    </div>
+                </div>
+                <div class="ambient-layer ambient-forest">
+                    <div class="ambient-forest-base"></div>
+                    <div class="ambient-forest-light"></div>
+                    <div class="ambient-forest-mist"></div>
+                    <div class="ambient-forest-mist ambient-forest-mist--deep"></div>
+                    <div class="ambient-leaves">
+                        <span class="ambient-leaf"></span>
+                        <span class="ambient-leaf"></span>
+                        <span class="ambient-leaf"></span>
+                        <span class="ambient-leaf"></span>
+                        <span class="ambient-leaf"></span>
+                        <span class="ambient-leaf"></span>
+                        <span class="ambient-leaf"></span>
+                        <span class="ambient-leaf"></span>
+                        <span class="ambient-leaf"></span>
+                        <span class="ambient-leaf"></span>
+                    </div>
+                    <div class="ambient-pollen">
+                        <span class="ambient-pollen-bit"></span>
+                        <span class="ambient-pollen-bit"></span>
+                        <span class="ambient-pollen-bit"></span>
+                        <span class="ambient-pollen-bit"></span>
+                        <span class="ambient-pollen-bit"></span>
+                        <span class="ambient-pollen-bit"></span>
+                        <span class="ambient-pollen-bit"></span>
+                        <span class="ambient-pollen-bit"></span>
+                    </div>
+                    <div class="ambient-fireflies">
+                        <span class="ambient-firefly"></span>
+                        <span class="ambient-firefly"></span>
+                        <span class="ambient-firefly"></span>
+                        <span class="ambient-firefly"></span>
+                        <span class="ambient-firefly"></span>
+                        <span class="ambient-firefly"></span>
+                        <span class="ambient-firefly"></span>
+                        <span class="ambient-firefly"></span>
+                        <span class="ambient-firefly"></span>
+                        <span class="ambient-firefly"></span>
+                    </div>
+                </div>
+                <div class="ambient-layer ambient-space">
+                    <div class="ambient-space-base"></div>
+                    <div class="ambient-nebula"></div>
+                    <div class="ambient-stars">
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                        <span class="ambient-star"></span>
+                    </div>
+                    <span class="ambient-shooting-star"></span>
+                </div>
+                <div class="ambient-layer ambient-sunny">
+                    <div class="ambient-sunny-base"></div>
+                    <div class="ambient-sun-rays"></div>
+                    <div class="ambient-sun"></div>
+                    <div class="ambient-clouds">
+                        <span class="ambient-cloud"></span>
+                        <span class="ambient-cloud"></span>
+                        <span class="ambient-cloud"></span>
+                        <span class="ambient-cloud"></span>
+                        <span class="ambient-cloud"></span>
+                    </div>
+                </div>
+            </div>
+
             <header class="page-header">
                 <nav aria-label="Theme">
                     <div id="theme-switcher" class="theme-switcher" role="group" aria-label="Choose theme">
@@ -447,7 +546,12 @@
 
         <!-- GitHub dashboard templates (cloned by js/github.js) -->
         <template id="github-skeleton-template">
-            <div class="github-dashboard github-skeleton" aria-busy="true" aria-label="Loading GitHub activity">
+            <div
+                class="github-dashboard github-skeleton"
+                role="status"
+                aria-busy="true"
+                aria-label="Loading GitHub activity"
+            >
                 <div class="github-dashboard-header">
                     <div class="github-skeleton-profile">
                         <span class="github-skeleton github-skeleton-avatar" aria-hidden="true"></span>

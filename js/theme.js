@@ -1,11 +1,10 @@
 import { config } from "./config.js";
 import { refreshCursorTargets } from "./cursor.js";
 import { announceStatus } from "./live-region.js";
+import { pickRandomThemeId, SKETCH_THEME_ID } from "./theme-pick.js";
 
-const STORAGE_KEY = "axel-portfolio-theme";
 const THEME_TRANSITION_MS = 750;
 const THEME_SWEEP_MS = 1200;
-const SKETCH_THEME_ID = "sketch";
 const SKETCH_FONTS_ID = "sketch-fonts";
 const SKETCH_FONTS_HREF =
     "https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&display=swap";
@@ -37,20 +36,27 @@ function ensureSketchFonts() {
 
 export function pickRandomTheme(options = {}) {
     const supportsSketch = options.supportsSketch ?? supportsSketchTheme();
-    const pool = config.themes.map((theme) => theme.id).filter((id) => id !== SKETCH_THEME_ID || supportsSketch);
+    return pickRandomThemeId(config.themes, config.defaultTheme, supportsSketch);
+}
 
-    if (!pool.length) return config.defaultTheme;
-
-    return pool[Math.floor(Math.random() * pool.length)];
+export function readInitialThemeFromDocument() {
+    const fromDom = document.documentElement.dataset.theme;
+    return fromDom ? resolveTheme(fromDom) : pickRandomTheme();
 }
 
 export function initTheme() {
-    setTheme(pickRandomTheme(), undefined, { silent: true, persist: false });
+    try {
+        localStorage.removeItem("axel-portfolio-theme");
+    } catch {
+        // Ignore storage errors (private mode, blocked APIs).
+    }
+
+    setTheme(readInitialThemeFromDocument(), undefined, { silent: true });
     wireThemeSwitcher();
 }
 
 export function setTheme(themeId, event, options = {}) {
-    const { silent = false, persist = !silent } = options;
+    const { silent = false } = options;
     const root = document.documentElement;
     const resolvedTheme = resolveTheme(themeId);
     const previousTheme = root.dataset.theme;
@@ -65,10 +71,6 @@ export function setTheme(themeId, event, options = {}) {
     }
 
     root.dataset.theme = resolvedTheme;
-
-    if (persist) {
-        localStorage.setItem(STORAGE_KEY, themeId);
-    }
 
     if (resolvedTheme === SKETCH_THEME_ID) {
         ensureSketchFonts();

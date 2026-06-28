@@ -12,10 +12,11 @@ This document captures prioritized improvements discovered through code review (
 
 **When starting work:**
 
-1. Pick a phase (or a single item by ID).
-2. Update the item's checkbox and status in this file when you begin and when you ship.
-3. Link PRs or commits in the item notes if helpful.
-4. Move shipped items to **Completed** (or mark **Done** inline and mirror in Completed).
+1. Read [docs/IMPROVEMENT-WORKFLOW.md](docs/IMPROVEMENT-WORKFLOW.md) and [docs/UX-PRINCIPLES.md](docs/UX-PRINCIPLES.md).
+2. Pick a phase (or a single item by ID).
+3. Update the item's checkbox and status in this file when you begin and when you ship.
+4. Link PRs or commits in the item notes if helpful.
+5. Move shipped items to **Completed** (or mark **Done** inline and mirror in Completed).
 
 **When reviewing:**
 
@@ -23,15 +24,17 @@ This document captures prioritized improvements discovered through code review (
 - Run local preview: `python3 -m http.server 8080` (see [README.md](README.md)).
 - Prefer vertical slices: one ID per PR when possible.
 
-**Top 5 impact (do these first if choosing ad hoc):**
+**Top 5 impact (Phase 7 — post-retro hardening, 2026-06):**
 
-| Rank | ID                    | Summary                                                  |
-| ---- | --------------------- | -------------------------------------------------------- |
-| 1    | PERF-001 / PERF-002   | Defer or split Google Fonts; stop blocking first paint   |
-| 2    | CONTENT-001           | Open Graph & Twitter Card meta                           |
-| 3    | CONTENT-002 / BUG-002 | GitHub dashboard hardening (empty data, skeleton, retry) |
-| 4    | A11Y-001              | Contribution graph keyboard access                       |
-| 5    | BUG-001–006           | Sketch/theme robustness cluster                          |
+| Rank | ID        | Summary                                                       |
+| ---- | --------- | ------------------------------------------------------------- |
+| 1    | THEME-001 | Single theme boot path; no double-random; no localStorage lie |
+| 2    | ENG-005   | Playwright + axe in CI                                        |
+| 3    | A11Y-009  | Cursor keyboard mode on focusin, not Tab-only                 |
+| 4    | ENG-006   | GitHub load-generation guard tests                            |
+| 5    | DOC-002   | Workflow + UX principles + retro doc on disk                  |
+
+Phases 1–6 are complete. Use Phase 7 items for the next improvement pass.
 
 ---
 
@@ -383,7 +386,38 @@ Second pass after Phases 1–5. Focus: doc drift, SEO completion, IA, simplifica
 
 - [x] **ENG-004** · **P3** · **M** · Grid keyboard + E2E smoke tests  
        **Files:** `tests/`, `.github/workflows/test.yml`  
-       **Done:** Static smoke tests in `tests/smoke.test.js` (no Playwright); grid keyboard unit tests for `wireContributionGridKeyboard`.
+       **Done:** Static smoke tests in `tests/smoke.test.js`; grid keyboard unit tests. Superseded by **ENG-005** (Playwright + axe).
+
+---
+
+## Phase 7 — Retro hardening (2026-06)
+
+Follow-up from [RETRO-2026-06.md](RETRO-2026-06.md) after the improvement arc and Connect/theme UX pass.
+
+- [x] **THEME-001** · **P1** · **M** · Unify theme bootstrap; remove localStorage drift  
+       **Files:** `js/theme-bootstrap.js`, `js/theme-pick.js`, `js/theme.js`, `index.html`, `README.md`  
+       **Fix:** Early boot in external sync script; `initTheme()` reads `data-theme` (no re-roll); switcher session-only; stale `localStorage` key cleared on init.
+
+- [x] **A11Y-009** · **P2** · **S** · Cursor keyboard mode on any focusable focusin  
+       **Files:** `js/cursor.js`  
+       **Fix:** `using-keyboard` on `focusin` for links/buttons/inputs, not Tab-only.
+
+- [x] **ENG-005** · **P2** · **M** · Playwright E2E + axe in CI  
+       **Files:** `playwright.config.js`, `tests/e2e/`, `package.json`, `.github/workflows/test.yml`  
+       **Fix:** Scroll-at-top, theme switch, axe scan (color-contrast disabled — sketch themes vary).
+
+- [x] **ENG-006** · **P2** · **S** · GitHub load-generation guard tests  
+       **Files:** `js/github.js`, `tests/github-load.test.js`  
+       **Fix:** Exported `beginGitHubLoad` / `isGitHubLoadCurrent`; unit test for stale-load discard.
+
+- [x] **DOC-002** · **P2** · **S** · Process docs from retro  
+       **Files:** `docs/IMPROVEMENT-WORKFLOW.md`, `docs/UX-PRINCIPLES.md`, `RETRO-2026-06.md`  
+       **Fix:** Post-merge checklist, contact hierarchy, retro on disk.
+
+- [ ] **ENG-007** · **P3** · **M** · Mock-fetch integration test for `loadGitHubDashboard`  
+       **Files:** `tests/`, `js/github.js`  
+       **Problem:** Cache and generation guards are unit-tested; full fetch/render path is not.  
+       **Acceptance:** Test with DOM fixtures + mocked `fetch` covering cache hit, bypass, and stale generation.
 
 ---
 
@@ -402,32 +436,37 @@ Shipped features and quick wins—keep for context; do not re-open unless regres
 
 ## 5. File reference
 
-| Path                                                       | Role                                                   |
-| ---------------------------------------------------------- | ------------------------------------------------------ |
-| [index.html](index.html)                                   | Shell, meta, font links, early theme script, sections  |
-| [js/config.js](js/config.js)                               | GitHub username, themes (from `#portfolio-theme-data`) |
-| [js/main.js](js/main.js)                                   | Boot: theme, cursor, GitHub (~10 lines)                |
-| [js/theme.js](js/theme.js)                                 | Theme switcher, sweep, localStorage, switcher UI       |
-| [js/github.js](js/github.js)                               | GitHub API, contributions graph, streaks               |
-| [js/cursor.js](js/cursor.js)                               | Custom cursor, magnetic elements, parallax vars        |
-| [js/live-region.js](js/live-region.js)                     | `announceStatus` for assistive tech                    |
-| [css/base.css](css/base.css)                               | Reset, theme imports, skip link                        |
-| [css/tokens.css](css/tokens.css)                           | Spacing, typography, layout tokens                     |
-| [css/layout.css](css/layout.css)                           | Page structure, sections                               |
-| [css/components.css](css/components.css)                   | Hero, GitHub dashboard, contrib graph, cards           |
-| [css/animations.css](css/animations.css)                   | Reveals, theme sweep, Connect flip                     |
-| [css/cursor.css](css/cursor.css)                           | Cursor FX + parallax transforms                        |
-| [css/sketch.css](css/sketch.css)                           | Sketch-only decorative styles                          |
-| [css/border-shape.css](css/border-shape.css)               | `border-shape` progressive enhancement                 |
-| [css/themes/](css/themes/)                                 | Per-theme color palettes                               |
-| [css/DESIGN-SYSTEM.md](css/DESIGN-SYSTEM.md)               | Token & theme documentation                            |
-| [site.webmanifest](site.webmanifest)                       | PWA metadata                                           |
-| [README.md](README.md)                                     | Local dev, deploy, structure                           |
-| [.github/workflows/pages.yml](.github/workflows/pages.yml) | GitHub Pages deploy                                    |
-| [js/html.js](js/html.js)                                   | Shared `escapeHtml` for safe templating                |
-| [tests/](tests/)                                           | Node built-in unit tests for pure functions            |
-| [package.json](package.json)                               | Test script (`npm test`)                               |
-| [.github/workflows/test.yml](.github/workflows/test.yml)   | CI test workflow on push/PR                            |
+| Path                                                         | Role                                                   |
+| ------------------------------------------------------------ | ------------------------------------------------------ |
+| [index.html](index.html)                                     | Shell, meta, font links, theme-bootstrap.js, sections  |
+| [js/config.js](js/config.js)                                 | GitHub username, themes (from `#portfolio-theme-data`) |
+| [js/theme-bootstrap.js](js/theme-bootstrap.js)               | Sync random theme before first paint                   |
+| [js/theme-pick.js](js/theme-pick.js)                         | Shared theme pool helpers                              |
+| [docs/IMPROVEMENT-WORKFLOW.md](docs/IMPROVEMENT-WORKFLOW.md) | Post-merge checklist, subagent rules                   |
+| [docs/UX-PRINCIPLES.md](docs/UX-PRINCIPLES.md)               | Contact hierarchy, page narrative                      |
+| [RETRO-2026-06.md](RETRO-2026-06.md)                         | Improvement arc retrospective                          |
+| [js/main.js](js/main.js)                                     | Boot: theme, cursor, GitHub (~10 lines)                |
+| [js/theme.js](js/theme.js)                                   | Theme switcher, sweep, browser chrome, switcher UI     |
+| [js/github.js](js/github.js)                                 | GitHub API, contributions graph, streaks               |
+| [js/cursor.js](js/cursor.js)                                 | Custom cursor, magnetic elements, parallax vars        |
+| [js/live-region.js](js/live-region.js)                       | `announceStatus` for assistive tech                    |
+| [css/base.css](css/base.css)                                 | Reset, theme imports, skip link                        |
+| [css/tokens.css](css/tokens.css)                             | Spacing, typography, layout tokens                     |
+| [css/layout.css](css/layout.css)                             | Page structure, sections                               |
+| [css/components.css](css/components.css)                     | Hero, GitHub dashboard, contrib graph, cards           |
+| [css/animations.css](css/animations.css)                     | Reveals, theme sweep, Connect flip                     |
+| [css/cursor.css](css/cursor.css)                             | Cursor FX + parallax transforms                        |
+| [css/sketch.css](css/sketch.css)                             | Sketch-only decorative styles                          |
+| [css/border-shape.css](css/border-shape.css)                 | `border-shape` progressive enhancement                 |
+| [css/themes/](css/themes/)                                   | Per-theme color palettes                               |
+| [css/DESIGN-SYSTEM.md](css/DESIGN-SYSTEM.md)                 | Token & theme documentation                            |
+| [site.webmanifest](site.webmanifest)                         | PWA metadata                                           |
+| [README.md](README.md)                                       | Local dev, deploy, structure                           |
+| [.github/workflows/pages.yml](.github/workflows/pages.yml)   | GitHub Pages deploy                                    |
+| [js/html.js](js/html.js)                                     | Shared `escapeHtml` for safe templating                |
+| [tests/](tests/)                                             | Node built-in unit tests for pure functions            |
+| [package.json](package.json)                                 | Test script (`npm test`)                               |
+| [.github/workflows/test.yml](.github/workflows/test.yml)     | CI test workflow on push/PR                            |
 
 ---
 
@@ -435,6 +474,7 @@ Shipped features and quick wins—keep for context; do not re-open unless regres
 
 | Date       | Change                                                                                        |
 | ---------- | --------------------------------------------------------------------------------------------- |
+| 2026-06-23 | Phase 7: theme boot unification, Playwright+axe CI, workflow docs, retro on disk              |
 | 2026-06-28 | Phase 6 complete: GitHub templates, self-hosted fonts, smoke tests (34 tests)                 |
 | 2026-06-28 | Phase 6 continued: Connect IA, sketch focus, cache, dead-code cleanup (21 tests)              |
 | 2026-06-28 | Phase 6 quick fixes: GitHub grid/race, cursor a11y, SEO meta, docs (17 tests pass)            |

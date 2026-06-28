@@ -115,6 +115,12 @@ describe("index.html smoke", () => {
         }
     });
 
+    it("loads early theme bootstrap before body", () => {
+        const headEnd = html.indexOf("</head>");
+        const head = html.slice(0, headEnd);
+        assert.match(head, /<script\s+src=["']js\/theme-bootstrap\.js["']/);
+    });
+
     it("includes self-hosted Atkinson font files", () => {
         for (const file of [
             "assets/fonts/atkinson-hyperlegible-latin-400.woff2",

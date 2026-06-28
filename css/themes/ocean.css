@@ -27,36 +27,10 @@
     --contrib-level-2: #1a6b8a;
     --contrib-level-3: #2d9cca;
     --contrib-level-4: #5b9fd4;
-
-    --theme-ambient-image: url("/assets/ocean-bg.svg");
 }
 
 [data-theme="ocean"] body {
     background-color: var(--color-bg);
-    background-image:
-        radial-gradient(ellipse 80% 50% at 50% -5%, rgb(91 159 212 / 0.14) 0%, transparent 55%),
-        radial-gradient(ellipse 60% 35% at 100% 80%, rgb(20 50 80 / 0.35) 0%, transparent 50%),
-        linear-gradient(180deg, rgb(14 28 45 / 0.35) 0%, transparent 38%, rgb(4 8 14 / 0.5) 100%),
-        var(--theme-ambient-image);
-    background-size:
-        100% 100%,
-        100% 100%,
-        100% 100%,
-        cover;
-    background-position: center, center, center, center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-}
-
-@media (max-width: 48rem) {
-    [data-theme="ocean"] body {
-        background-attachment: scroll;
-    }
-}
-
-[data-theme="ocean"] .page {
-    position: relative;
-    isolation: isolate;
 }
 
 [data-theme="ocean"] .github-dashboard,

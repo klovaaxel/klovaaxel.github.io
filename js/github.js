@@ -13,6 +13,14 @@ const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "
 
 let loadGeneration = 0;
 
+export function beginGitHubLoad() {
+    return ++loadGeneration;
+}
+
+export function isGitHubLoadCurrent(generation) {
+    return generation === loadGeneration;
+}
+
 export function readGitHubCache(now = Date.now()) {
     if (typeof sessionStorage === "undefined") return null;
 
@@ -95,7 +103,7 @@ export async function loadGitHubDashboard({ bypassCache = false } = {}) {
     const container = document.getElementById("github-dashboard");
     if (!container) return;
 
-    const generation = ++loadGeneration;
+    const generation = beginGitHubLoad();
 
     const cached = bypassCache ? null : readGitHubCache();
     if (cached) {
@@ -113,14 +121,14 @@ export async function loadGitHubDashboard({ bypassCache = false } = {}) {
             fetchContributions(config.github.username),
         ]);
 
-        if (generation !== loadGeneration) return;
+        if (!isGitHubLoadCurrent(generation)) return;
 
         const contributions = activity.contributions ?? [];
         writeGitHubCache(user, { ...activity, contributions });
         renderDashboardInto(container, user, { ...activity, contributions });
         announceStatus("GitHub activity loaded");
     } catch {
-        if (generation !== loadGeneration) return;
+        if (!isGitHubLoadCurrent(generation)) return;
 
         mountError(container);
         container.querySelector(".github-retry-btn")?.addEventListener("click", (event) => {

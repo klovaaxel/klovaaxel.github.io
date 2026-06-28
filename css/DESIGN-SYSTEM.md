@@ -14,22 +14,22 @@ This portfolio uses a token-based CSS architecture for easy theming.
 
 Every theme must define:
 
-| Token                   | Purpose                         |
-| ----------------------- | ------------------------------- |
-| `--color-bg`            | Page background                 |
-| `--color-bg-elevated`   | Raised surfaces (header, pills) |
-| `--color-bg-muted`      | Subtle backgrounds              |
-| `--color-surface`       | Cards                           |
-| `--color-text`          | Primary text                    |
-| `--color-text-muted`    | Secondary text (≥ 4.5:1 on `--color-bg`) |
+| Token                   | Purpose                                                            |
+| ----------------------- | ------------------------------------------------------------------ |
+| `--color-bg`            | Page background                                                    |
+| `--color-bg-elevated`   | Raised surfaces (header, pills)                                    |
+| `--color-bg-muted`      | Subtle backgrounds                                                 |
+| `--color-surface`       | Cards                                                              |
+| `--color-text`          | Primary text                                                       |
+| `--color-text-muted`    | Secondary text (≥ 4.5:1 on `--color-bg`)                           |
 | `--color-text-subtle`   | Tertiary text (≥ 4.5:1 on `--color-bg`; captions, periods, legend) |
-| `--color-accent`        | Brand / interactive accent      |
-| `--color-accent-hover`  | Accent hover state              |
-| `--color-accent-muted`  | Accent backgrounds              |
-| `--color-border`        | Default borders                 |
-| `--color-border-strong` | Emphasized borders              |
-| `--color-link`          | Inline links                    |
-| `--color-link-hover`    | Link hover                      |
+| `--color-accent`        | Brand / interactive accent                                         |
+| `--color-accent-hover`  | Accent hover state                                                 |
+| `--color-accent-muted`  | Accent backgrounds                                                 |
+| `--color-border`        | Default borders                                                    |
+| `--color-border-strong` | Emphasized borders                                                 |
+| `--color-link`          | Inline links                                                       |
+| `--color-link-hover`    | Link hover                                                         |
 
 ## Adding a theme
 
@@ -47,7 +47,7 @@ Then import in `base.css` and register in `js/config.js`.
 
 ## Theme switching
 
-`document.documentElement.dataset.theme` is set to the active theme id. The choice persists in `localStorage` under `axel-portfolio-theme`.
+`document.documentElement.dataset.theme` is set to the active theme id. A random theme is picked on each load via `js/theme-bootstrap.js`; the switcher applies choices for the current session only (no persistence).
 
 ## Text contrast (A11Y-002)
 

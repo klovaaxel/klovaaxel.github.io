@@ -41,7 +41,7 @@ The design system uses CSS custom properties:
 - `css/fonts.css` — self-hosted Atkinson Hyperlegible (latin 400/700); sketch fonts load on demand via `js/theme.js`
 - `css/themes/*.css` — color palettes per theme
 
-Switch themes with the buttons in the top-right corner. The choice is saved in `localStorage`.
+Switch themes with the buttons in the top-right corner. A **random theme** is chosen on each page load (`js/theme-bootstrap.js` in `<head>`). Manual picks apply for the **current session only** — nothing is saved to `localStorage`.
 
 To add a new theme:
 
@@ -54,10 +54,12 @@ To add a new theme:
 ## Tests
 
 ```bash
-npm test
+npm test          # unit + smoke (Node)
+npm run test:e2e  # Playwright browser smoke + axe
+npm run test:all  # both (CI)
 ```
 
-Runs Node built-in unit tests in `tests/` (pure helpers such as theme resolution and GitHub date math). CI runs the same command via `.github/workflows/test.yml` on push and pull requests to `main`.
+Runs Node built-in unit tests in `tests/` (theme helpers, GitHub math, HTML smoke) and Playwright E2E checks (scroll at top, theme switch, axe). CI runs `npm run test:all` via `.github/workflows/test.yml` on push and pull requests to `main`.
 
 ## Deploy to GitHub Pages
 
@@ -98,7 +100,7 @@ dig axel.eyssen.se CNAME +short
 ## Structure
 
 ```
-├── index.html              # Static content, meta, theme JSON, early theme boot
+├── index.html              # Static content, meta, theme JSON, theme-bootstrap.js
 ├── CNAME
 ├── site.webmanifest
 ├── package.json            # npm test script
@@ -119,14 +121,24 @@ dig axel.eyssen.se CNAME +short
 ├── js/
 │   ├── config.js           # GitHub settings + theme metadata merge
 │   ├── html.js             # Shared escapeHtml helper
-│   ├── theme.js            # Theme switcher, storage, browser chrome
+│   ├── theme-bootstrap.js  # Sync random theme before first paint
+│   ├── theme-pick.js       # Shared theme pool helpers (tests + theme.js)
+│   ├── theme.js            # Theme switcher, browser chrome, switcher UI
 │   ├── github.js           # GitHub API integration
 │   ├── cursor.js           # Custom cursor, magnetic elements
 │   ├── live-region.js      # aria-live announcements
 │   └── main.js             # Entry point
 ├── tests/
 │   ├── theme.test.js
-│   └── github.test.js
+│   ├── theme-pick.test.js
+│   ├── github.test.js
+│   ├── github-load.test.js
+│   ├── smoke.test.js
+│   └── e2e/                # Playwright smoke + axe
+├── docs/
+│   ├── IMPROVEMENT-WORKFLOW.md
+│   └── UX-PRINCIPLES.md
+├── playwright.config.js
 ├── icons/                  # Favicon, PWA icons
 └── .github/workflows/
     ├── pages.yml           # GitHub Pages deploy

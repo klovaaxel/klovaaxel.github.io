@@ -115,9 +115,18 @@ function bindPointer() {
     });
 }
 
+const FOCUSABLE_SELECTOR =
+    'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 function bindKeyboardMode() {
     document.addEventListener("keydown", (event) => {
         if (event.key !== "Tab" || usingKeyboard) return;
+        setUsingKeyboard(true);
+    });
+
+    document.addEventListener("focusin", (event) => {
+        if (!(event.target instanceof Element)) return;
+        if (!event.target.matches(FOCUSABLE_SELECTOR)) return;
         setUsingKeyboard(true);
     });
 }
