@@ -95,13 +95,13 @@ describe("wireContributionGridKeyboard", () => {
         assert.doesNotThrow(() => wireContributionGridKeyboard({ querySelector: () => null }));
     });
 
-    it("focuses the first cell with contributions on init", () => {
+    it("sets initial roving tabindex without scrolling focus on init", () => {
         const { container, cells } = createGridHarness([
             { week: 0, day: 0, level: 0 },
             { week: 1, day: 0, level: 2 },
         ]);
         wireContributionGridKeyboard(container);
-        assert.equal(document.activeElement, cells[1]);
+        assert.notEqual(document.activeElement, cells[1]);
         assert.equal(cells[0].tabIndex, -1);
         assert.equal(cells[1].tabIndex, 0);
     });

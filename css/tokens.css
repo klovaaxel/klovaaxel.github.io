@@ -16,7 +16,7 @@
     --text-2xl: 1.625rem;
     --text-3xl: 2rem;
     --text-4xl: clamp(2.5rem, 6vw, 4.25rem);
-    --text-5xl: clamp(1.75rem, 5vw + 0.75rem, 11rem);
+    --text-5xl: clamp(4rem, 18vw + 1rem, 15rem);
 
     --leading-tight: 1.05;
     --leading-normal: 1.5;

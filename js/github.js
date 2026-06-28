@@ -412,11 +412,15 @@ export function findLastCellInDayRow(cells, day) {
     return null;
 }
 
-function focusContributionCell(cells, cell) {
+function setRovingTabIndex(cells, activeCell) {
     cells.forEach((item) => {
-        item.tabIndex = item === cell ? 0 : -1;
+        item.tabIndex = item === activeCell ? 0 : -1;
     });
-    cell?.focus();
+}
+
+function focusContributionCell(cells, cell) {
+    setRovingTabIndex(cells, cell);
+    cell?.focus({ preventScroll: true });
 }
 
 export function wireContributionGridKeyboard(container) {
@@ -427,7 +431,7 @@ export function wireContributionGridKeyboard(container) {
     if (!cells.length) return;
 
     const initial = cells.find((cell) => Number(cell.dataset.level) > 0) ?? cells[0];
-    focusContributionCell(cells, initial);
+    setRovingTabIndex(cells, initial);
 
     grid.addEventListener("keydown", (event) => {
         const active = document.activeElement;
