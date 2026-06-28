@@ -36,6 +36,8 @@ This document captures prioritized improvements discovered through code review (
 
 Phases 1–6 are complete. Use Phase 7 items for the next improvement pass.
 
+**Update (2026-06-28):** Phases 1–7 complete. See **Phase 8** for the next discovery pass.
+
 ---
 
 ## 2. Status legend
@@ -414,14 +416,33 @@ Follow-up from [RETRO-2026-06.md](RETRO-2026-06.md) after the improvement arc an
        **Files:** `docs/IMPROVEMENT-WORKFLOW.md`, `docs/UX-PRINCIPLES.md`, `RETRO-2026-06.md`  
        **Fix:** Post-merge checklist, contact hierarchy, retro on disk.
 
-- [ ] **ENG-007** · **P3** · **M** · Mock-fetch integration test for `loadGitHubDashboard`  
-       **Files:** `tests/`, `js/github.js`  
-       **Problem:** Cache and generation guards are unit-tested; full fetch/render path is not.  
-       **Acceptance:** Test with DOM fixtures + mocked `fetch` covering cache hit, bypass, and stale generation.
+- [x] **ENG-007** · **P3** · **M** · Mock-fetch integration test for `loadGitHubDashboard`  
+       **Files:** `tests/github-dashboard.integration.test.js`  
+       **Done:** DOM fixture + mocked `fetch`; cache hit, bypass cache, stale generation.
 
 - [x] **ENG-008** · **P2** · **S** · Ambient theme guards + visual dev ergonomics  
        **Files:** `css/theme-ambient.css`, `tests/`, `package.json`, `docs/retros/`  
        **Done:** `npm start`, smoke ambient contract, E2E per-theme layer visibility, DESIGN-SYSTEM ambient section. See [docs/retros/2026-06-28-animated-ambient-themes.md](docs/retros/2026-06-28-animated-ambient-themes.md).
+
+---
+
+## Phase 8 — Next discovery pass (not started)
+
+Phases 1–7 are complete (2026-06-28). Do **not** reopen shipped IDs unless regressing.
+
+**To start Phase 8:**
+
+1. Holistic review (code, a11y, UX, perf, content) — one parent pass, not parallel subagents first.
+2. File new IDs in this section with acceptance criteria.
+3. Run slice retro from [Phase 7 close-out](docs/retros/2026-06-28-phase7-plan-closeout.md) follow-through before picking scope.
+
+**Open product questions** (from [RETRO-2026-06.md](RETRO-2026-06.md)) — candidates for user decision before implementation:
+
+- Remove Connect section vs keep quiet footer echo
+- Triple email entry points — intentional redundancy?
+- Random theme every load vs first-visit-only
+
+_No Phase 8 items filed yet._
 
 ---
 
@@ -478,6 +499,7 @@ Shipped features and quick wins—keep for context; do not re-open unless regres
 
 | Date       | Change                                                                                        |
 | ---------- | --------------------------------------------------------------------------------------------- |
+| 2026-06-28 | ENG-007: mock-fetch integration tests for loadGitHubDashboard (46 tests pass)                 |
 | 2026-06-23 | Phase 7: theme boot unification, Playwright+axe CI, workflow docs, retro on disk              |
 | 2026-06-28 | Phase 6 complete: GitHub templates, self-hosted fonts, smoke tests (34 tests)                 |
 | 2026-06-28 | Phase 6 continued: Connect IA, sketch focus, cache, dead-code cleanup (21 tests)              |

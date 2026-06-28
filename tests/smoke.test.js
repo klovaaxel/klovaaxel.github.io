@@ -3,19 +3,12 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, it } from "node:test";
+import { GITHUB_TEMPLATE_IDS } from "./fixtures/github-template-ids.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const html = readFileSync(join(ROOT, "index.html"), "utf8");
 
 const REQUIRED_IDS = ["main", "github-dashboard", "live-status", "portfolio-theme-data", "connect", "social-links"];
-
-const GITHUB_TEMPLATE_IDS = [
-    "github-skeleton-template",
-    "github-error-template",
-    "github-dashboard-template",
-    "github-stat-template",
-    "github-contrib-graph-template",
-];
 
 function assertIdPresent(id) {
     const pattern = new RegExp(`\\bid=["']${id}["']`);

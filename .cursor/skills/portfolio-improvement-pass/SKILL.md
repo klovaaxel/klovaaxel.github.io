@@ -33,6 +33,17 @@ Orchestrates work on this repo. Read linked docs before coding.
 1. Run `npm test` — baseline green
 2. **One plan ID** per PR or subagent
 3. UX/IA: map all contact surfaces (hero CTA, social nav, Connect, footer) before reordering
+4. If IMPROVEMENT-PLAN has no open items, **say so** — run close-out retro; Phase 8 needs a fresh review pass
+
+## Plan close-out (Phases 1–7 complete)
+
+When the durable backlog is exhausted:
+
+1. Slice retro → `docs/retros/` + update `RETRO-2026-06.md`
+2. Do not reopen shipped IDs unless regressing
+3. New work → new IMPROVEMENT-PLAN phase after holistic review
+
+See [docs/IMPROVEMENT-WORKFLOW.md](../../docs/IMPROVEMENT-WORKFLOW.md#plan-close-out).
 
 ## Delegation
 
@@ -47,6 +58,8 @@ Orchestrates work on this repo. Read linked docs before coding.
 
 Subagent prompt must include: file list, `npm test`, constraints above, no commit unless asked.
 
+**Parent after subagent:** `npm run test:all` when seams may be affected (load, focus, theme, GitHub).
+
 ## Section order (default)
 
 Hero → About → Experience → GitHub → Connect → Footer
@@ -57,7 +70,7 @@ Proof before ask. Connect is quiet echo — not a second hero.
 
 ```bash
 npm start             # local preview http://localhost:8080
-npm test              # unit + HTML smoke (42+)
+npm test              # unit + HTML smoke (48+)
 npm run test:e2e      # scroll, theme, axe
 npm run test:all      # CI
 python3 -m http.server 8080  # manual preview

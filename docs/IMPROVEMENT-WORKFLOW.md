@@ -32,6 +32,32 @@ How to run portfolio improvement passes without repeating common failures (see [
 - Typography / hero sizing taste calls
 - IMPROVEMENT-PLAN checkbox + changelog updates in the same commit as code
 
+### After subagents return
+
+- Run **`npm run test:all`** (not unit-only) when changes touch load, focus, theme, or async widgets
+- Reconcile integration seams before declaring done — see `subagent-integration-seams`
+
+## Plan close-out
+
+When all phased items are **Done** or **Won't fix**:
+
+1. Tell the user the backlog is exhausted (don't dispatch subagents for phantom work).
+2. Run a **slice retro** (`small-retro`); update [RETRO-2026-06.md](../RETRO-2026-06.md) residual section.
+3. Encode repeat findings into skills / CI guards (see retro follow-through table below).
+4. **Phase 8+** — start a new holistic review; add a fresh section to IMPROVEMENT-PLAN. Do not reopen shipped IDs unless regressing.
+
+## GitHub template sync
+
+Dashboard shells use `<template id="…">` in `index.html` and `cloneTemplate()` in `js/github.js`.
+
+| Artifact | Role |
+| -------- | ---- |
+| `tests/fixtures/github-template-ids.js` | Canonical id list |
+| `tests/github-templates.test.js` | CI guard: fixture ↔ `index.html` ↔ `github.js` |
+| `tests/github-dashboard.integration.test.js` | Hand-rolled DOM harness — must include every canonical id |
+
+When adding or renaming a GitHub template: update **all four** in the same commit.
+
 ## Post-merge checklist
 
 Run after every batch (human or agent):
@@ -46,11 +72,11 @@ Run after every batch (human or agent):
 
 ## Test layers
 
-| Layer  | Command                | Catches                                     |
-| ------ | ---------------------- | ------------------------------------------- |
-| Unit   | `npm test`             | Pure helpers, DOM mocks, HTML smoke         |
+| Layer  | Command                | Catches                                                     |
+| ------ | ---------------------- | ----------------------------------------------------------- |
+| Unit   | `npm test`             | Pure helpers, DOM mocks, HTML smoke                         |
 | E2E    | `npm run test:e2e`     | Scroll, focus, theme switch, ambient layers, axe violations |
-| Manual | Simple Browser / local | Visual typography, sketch theme             |
+| Manual | Simple Browser / local | Visual typography, sketch theme                             |
 
 ## CI
 
@@ -67,3 +93,13 @@ Run after every batch (human or agent):
 | `small-retro`                                | Personal — slice/environment retro + follow-through to skills |
 
 Run a **slice retro** after each phase; encode repeat findings into skills (see `small-retro` → Retro follow-through).
+
+## Retro follow-through (this repo)
+
+| Finding | Artifact |
+| ------- | -------- |
+| Stack invariants | `.cursor/skills/portfolio-improvement-pass/` |
+| Delegation / seams | `subagent-integration-seams` (personal) |
+| Test layers | `static-site-testing` (personal) |
+| Template drift | `tests/fixtures/github-template-ids.js` + `github-templates.test.js` |
+| Phase complete | Slice retro in `docs/retros/` + update `RETRO-2026-06.md` |

@@ -28,6 +28,11 @@
 | Invisible light decor       | Start opacity ≥ 0.85 on cream/pale backgrounds |
 | Bubbles at document bottom  | Distribute with `top: %` across page height    |
 | Rotating full-bleed SVG     | Oversize + clip base; sway mist only           |
+| GitHub template drift       | Sync `tests/fixtures/github-template-ids.js` + index + github.js + integration harness |
+
+## GitHub templates
+
+Canonical ids: `tests/fixtures/github-template-ids.js`. CI contract: `tests/github-templates.test.js`. When changing templates, update fixture + HTML + JS + integration harness together.
 
 ## Adding a theme
 
