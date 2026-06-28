@@ -18,8 +18,7 @@
     [data-theme="sketch"] .theme-switcher,
     [data-theme="sketch"] .github-dashboard,
     [data-theme="sketch"] .github-stat,
-    [data-theme="sketch"] .github-dashboard-link,
-    [data-theme="sketch"] #connect .profile-card {
+    [data-theme="sketch"] .github-dashboard-link {
         border-radius: 0;
     }
 
@@ -129,64 +128,6 @@
 
     [data-theme="sketch"] .github-stat {
         border-shape: var(--drawn-chip);
-    }
-
-    [data-theme="sketch"] #connect .profile-card {
-        margin-top: 1rem;
-        box-shadow: var(--shadow-lg);
-        border-shape: shape(
-            from 3% 11%,
-            line to 11% 9.5%,
-            line to 19% 10.8%,
-            line to 27% 9%,
-            line to 35% 11%,
-            line to 41% 9.5%,
-            line to 44% 7%,
-            line to 47% 4%,
-            line to 49.5% 1%,
-            line to 52% 4%,
-            line to 55% 7%,
-            line to 58% 9.5%,
-            line to 66% 10.5%,
-            line to 74% 9%,
-            line to 82% 11%,
-            line to 90% 9.5%,
-            line to 97% 12%,
-            line to 99% 19%,
-            line to 97.5% 27%,
-            line to 99.2% 35%,
-            line to 96.8% 43%,
-            line to 98.5% 51%,
-            line to 97.2% 59%,
-            line to 99% 67%,
-            line to 96.5% 75%,
-            line to 98.2% 83%,
-            line to 95.8% 91%,
-            line to 97.5% 96.5%,
-            line to 89% 98.8%,
-            line to 81% 97.2%,
-            line to 73% 99.2%,
-            line to 65% 96.8%,
-            line to 57% 98.5%,
-            line to 49% 97%,
-            line to 41% 99.2%,
-            line to 33% 96.5%,
-            line to 25% 98%,
-            line to 17% 96.2%,
-            line to 9% 98.5%,
-            line to 2.5% 93%,
-            line to 1.2% 85%,
-            line to 3.5% 77%,
-            line to 1% 69%,
-            line to 2.8% 61%,
-            line to 1.5% 53%,
-            line to 3.2% 45%,
-            line to 1.2% 37%,
-            line to 2.9% 29%,
-            line to 1.4% 21%,
-            line to 3% 13%,
-            close
-        );
     }
 
     [data-theme="sketch"] .github-dashboard-profile .profile-avatar {

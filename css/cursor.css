@@ -142,7 +142,7 @@
 
 /* Magnetic elements */
 
-[data-magnetic]:not(#connect .profile-card) {
+[data-magnetic] {
     --mx: 0px;
     --my: 0px;
     transform: translate(var(--mx), var(--my));
@@ -155,10 +155,6 @@ html:not([data-theme="sketch"]) .has-cursor-fx .social-link {
 
 html:not([data-theme="sketch"]) .has-cursor-fx .social-link:hover {
     transform: translate(var(--mx, 0px), var(--my, 0px)) translateY(-3px) scale(1.04) rotate(-1deg);
-}
-
-html:not([data-theme="sketch"]) .has-cursor-fx .connect-cta:hover {
-    transform: translateY(-3px) scale(1.03);
 }
 
 html:not([data-theme="sketch"]) .has-cursor-fx .theme-btn {

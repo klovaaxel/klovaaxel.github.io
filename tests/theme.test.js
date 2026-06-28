@@ -1,8 +1,37 @@
 import assert from "node:assert/strict";
 import { after, before, describe, it } from "node:test";
-import { resolveTheme, supportsSketchTheme } from "../js/theme.js";
+import { pickRandomTheme, resolveTheme, supportsSketchTheme } from "../js/theme.js";
 
 const originalCss = globalThis.CSS;
+
+describe("pickRandomTheme", () => {
+    before(() => {
+        globalThis.CSS = { supports: () => false };
+    });
+
+    after(() => {
+        if (originalCss === undefined) {
+            delete globalThis.CSS;
+        } else {
+            globalThis.CSS = originalCss;
+        }
+    });
+
+    it("returns a theme from the available pool", () => {
+        const theme = pickRandomTheme({ supportsSketch: false });
+        assert.ok(["dark", "light", "forest", "ocean"].includes(theme));
+    });
+
+    it("includes sketch when border-shape is supported", () => {
+        const originalRandom = Math.random;
+        Math.random = () => 0.99;
+        try {
+            assert.equal(pickRandomTheme({ supportsSketch: true }), "sketch");
+        } finally {
+            Math.random = originalRandom;
+        }
+    });
+});
 
 describe("resolveTheme", () => {
     before(() => {

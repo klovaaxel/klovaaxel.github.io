@@ -509,9 +509,7 @@ html.theme-transitioning *::after {
     [data-stagger] > *,
     .github-dashboard,
     .github-stat,
-    .contrib-graph-scroll,
-    #connect .profile-card,
-    #connect .connect-card {
+    .contrib-graph-scroll {
         opacity: 1;
         transform: none;
         clip-path: none;
@@ -525,7 +523,6 @@ html.theme-transitioning *::after {
 /* ── Interactive ── */
 
 .social-link,
-.connect-cta,
 .github-dashboard-link,
 .theme-btn {
     transition:
@@ -554,22 +551,6 @@ html.theme-transitioning *::after {
 
 .github-stat:hover {
     transform: translateY(-4px) skewX(-2deg);
-}
-
-.profile-card,
-#connect .connect-card {
-    transition:
-        background-color var(--duration-normal) var(--ease-out),
-        border-color var(--duration-normal) var(--ease-out),
-        box-shadow var(--duration-slow) var(--ease-out);
-}
-
-#connect .connect-card:hover {
-    border-color: color-mix(in srgb, var(--color-accent) 55%, var(--color-border));
-    box-shadow:
-        var(--shadow-lg),
-        0 0 0 1px color-mix(in srgb, var(--color-accent) 18%, transparent),
-        0 0 3.5rem color-mix(in srgb, var(--color-accent) 22%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -601,9 +582,7 @@ html.theme-transitioning *::after {
     .github-dashboard,
     .github-stat,
     .contrib-graph-scroll,
-    .contrib-cell,
-    #connect .profile-card,
-    #connect .connect-card {
+    .contrib-cell {
         opacity: 1 !important;
         transform: none !important;
         clip-path: none !important;

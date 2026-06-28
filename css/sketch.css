@@ -249,27 +249,6 @@
         2px 3px 6px rgb(26 23 20 / 0.12);
 }
 
-[data-theme="sketch"] .connect-cta {
-    padding: calc(var(--sketch-inset) + 0.15rem) var(--sketch-inset-xl);
-    color: var(--color-bg-elevated);
-    background: var(--color-accent);
-    border: var(--sketch-stroke) solid var(--color-border-strong);
-    border-radius: 0;
-    rotate: -0.6deg;
-    box-shadow:
-        var(--shadow-sm),
-        2px 3px 6px rgb(26 23 20 / 0.12);
-}
-
-[data-theme="sketch"] .connect-cta:hover {
-    color: var(--color-bg-elevated);
-    rotate: 0deg;
-}
-
-[data-theme="sketch"] .connect-more {
-    border-top-style: dashed;
-}
-
 [data-theme="sketch"] .social-link {
     padding: var(--sketch-inset) var(--sketch-inset-lg);
     line-height: 1.35;
@@ -301,17 +280,6 @@
     [data-theme="sketch"] #experience .timeline {
         padding: var(--sketch-inset-lg) var(--sketch-inset-lg) var(--sketch-inset-md);
     }
-}
-
-[data-theme="sketch"] #connect .profile-card,
-[data-theme="sketch"] #connect .connect-card {
-    margin-top: 1rem;
-    padding: calc(var(--sketch-inset-xl) + 0.85rem) var(--sketch-inset-xl) var(--sketch-inset-xl);
-    border-width: var(--sketch-stroke);
-    box-shadow:
-        var(--shadow-sm),
-        var(--shadow-ink),
-        0 0 2.5rem color-mix(in srgb, var(--color-accent) 12%, transparent);
 }
 
 [data-theme="sketch"] .empty-state {
@@ -506,35 +474,6 @@
     font-family: var(--font-display);
     font-size: var(--text-sm);
     color: var(--color-accent);
-}
-
-/* ── Connect card tape ── */
-
-[data-theme="sketch"] #connect .profile-card::before,
-[data-theme="sketch"] #connect .profile-card::after,
-[data-theme="sketch"] #connect .connect-card::before,
-[data-theme="sketch"] #connect .connect-card::after {
-    content: "";
-    position: absolute;
-    top: -0.55rem;
-    width: 3.5rem;
-    height: 1.1rem;
-    background: rgb(255 255 255 / 0.45);
-    border: 1px solid rgb(26 23 20 / 0.14);
-    box-shadow: 0 1px 2px rgb(26 23 20 / 0.08);
-    pointer-events: none;
-}
-
-[data-theme="sketch"] #connect .profile-card::before,
-[data-theme="sketch"] #connect .connect-card::before {
-    left: 18%;
-    rotate: -7deg;
-}
-
-[data-theme="sketch"] #connect .profile-card::after,
-[data-theme="sketch"] #connect .connect-card::after {
-    right: 16%;
-    rotate: 5deg;
 }
 
 /* ── Footer & cursor ── */
@@ -776,9 +715,7 @@ html.theme-sweeping[data-sweep-from="sketch"] .theme-sweep-ring {
         animation-range: cover 0% cover 35%;
     }
 
-    [data-theme="sketch"] [data-reveal="flip"],
-    [data-theme="sketch"] #connect .profile-card,
-    [data-theme="sketch"] #connect .connect-card {
+    [data-theme="sketch"] [data-reveal="flip"] {
         animation-name: sketch-scroll-unfold;
     }
 

@@ -25,10 +25,6 @@ export function resolveTheme(themeId) {
     return themeId;
 }
 
-function isValidThemeId(themeId) {
-    return config.themes.some((theme) => theme.id === themeId);
-}
-
 function ensureSketchFonts() {
     if (document.getElementById(SKETCH_FONTS_ID)) return;
 
@@ -39,21 +35,22 @@ function ensureSketchFonts() {
     document.head.appendChild(link);
 }
 
+export function pickRandomTheme(options = {}) {
+    const supportsSketch = options.supportsSketch ?? supportsSketchTheme();
+    const pool = config.themes.map((theme) => theme.id).filter((id) => id !== SKETCH_THEME_ID || supportsSketch);
+
+    if (!pool.length) return config.defaultTheme;
+
+    return pool[Math.floor(Math.random() * pool.length)];
+}
+
 export function initTheme() {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    let userTheme = saved ?? config.defaultTheme;
-
-    if (saved !== null && !isValidThemeId(saved)) {
-        userTheme = config.defaultTheme;
-        localStorage.setItem(STORAGE_KEY, config.defaultTheme);
-    }
-
-    setTheme(userTheme, undefined, { silent: true });
+    setTheme(pickRandomTheme(), undefined, { silent: true, persist: false });
     wireThemeSwitcher();
 }
 
 export function setTheme(themeId, event, options = {}) {
-    const { silent = false } = options;
+    const { silent = false, persist = !silent } = options;
     const root = document.documentElement;
     const resolvedTheme = resolveTheme(themeId);
     const previousTheme = root.dataset.theme;
@@ -69,7 +66,7 @@ export function setTheme(themeId, event, options = {}) {
 
     root.dataset.theme = resolvedTheme;
 
-    if (!silent) {
+    if (persist) {
         localStorage.setItem(STORAGE_KEY, themeId);
     }
 
