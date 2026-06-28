@@ -34,7 +34,6 @@
 }
 
 [data-theme="ocean"] .github-dashboard,
-[data-theme="ocean"] .profile-card,
 [data-theme="ocean"] .github-stat {
     background: color-mix(in srgb, var(--color-surface) 88%, transparent);
     backdrop-filter: blur(6px);

@@ -83,6 +83,12 @@ Preview: `npm start` → http://localhost:8080 — cycle themes and scroll.
 | ocean  | `#7a8fa8`             |
 | sketch | `#5c544c`             |
 
+## Interactive contrast (A11Y-011)
+
+Hero email CTA (`.hero-contact`) and social pills (`.social-link`) use **opaque** per-theme colors in `components.css` (not token-only `var(--color-accent)`) so they pass AA against ambient/decorative layers. Both use `isolation: isolate` to keep axe from compositing through backdrop blur.
+
+E2E: `tests/e2e/smoke.spec.js` runs axe `color-contrast` on dark/light/forest/ocean after each theme switch settles (`prefers-reduced-motion`, wait for `.theme-transitioning` to clear). Sketch is excluded (hand-drawn palette). Ambient layers excluded from scan scope.
+
 ## Mixed language (A11Y-003 / UX-004)
 
 Page default is `lang="en"` (UI chrome and narrative). Swedish résumé strings (job titles, degree names) are marked with `lang="sv"` on the containing element in static HTML. English-only strings stay unmarked. Future bilingual content: keep UI language consistent per section; wrap non-default-language phrases in an element with the appropriate `lang` attribute rather than changing the document root.

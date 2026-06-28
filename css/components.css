@@ -57,6 +57,9 @@
 }
 
 .hero-contact {
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
@@ -68,7 +71,7 @@
     letter-spacing: 0.02em;
     text-decoration: none;
     color: var(--color-bg);
-    background: var(--color-accent);
+    background-color: var(--color-accent);
     border: 2px solid var(--color-accent);
     border-radius: var(--radius-full);
     transition:
@@ -86,14 +89,10 @@
 
 .hero-contact:hover {
     color: var(--color-bg);
-    background: var(--color-accent-hover);
+    background-color: var(--color-accent-hover);
     border-color: var(--color-accent-hover);
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 6px 20px color-mix(in srgb, var(--color-accent) 30%, transparent);
-}
-
-[data-theme="light"] .hero-contact {
-    color: var(--color-bg-elevated);
 }
 
 /* Social links */
@@ -107,6 +106,9 @@
 }
 
 .social-link {
+    position: relative;
+    z-index: 1;
+    isolation: isolate;
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
@@ -116,7 +118,7 @@
     font-weight: var(--weight-bold);
     color: var(--color-text);
     text-decoration: none;
-    background: var(--color-bg-elevated);
+    background-color: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-full);
     transition:
@@ -580,17 +582,7 @@
     font-size: var(--text-base);
 }
 
-/* Profile card */
-
-.profile-card {
-    display: flex;
-    gap: var(--space-6);
-    align-items: center;
-    padding: var(--space-6);
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-}
+/* Profile avatar (GitHub dashboard) */
 
 .profile-avatar {
     width: 4.5rem;
@@ -599,23 +591,8 @@
     border: 2px solid var(--color-border);
 }
 
-.profile-info {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-}
-
-.profile-bio {
-    font-size: var(--text-sm);
-    color: var(--color-text-muted);
-}
-
-.profile-stats {
-    display: flex;
-    gap: var(--space-4);
-    margin-top: var(--space-2);
-    font-size: var(--text-xs);
-    color: var(--color-text-subtle);
+.profile-avatar[hidden] {
+    display: none;
 }
 
 /* Loading & empty states */
@@ -715,33 +692,37 @@
     color: var(--color-text-subtle);
 }
 
-/* Connect — quiet closing section (primary contact is in the hero) */
+/* Footer contact — quiet closing links (primary contact is in the hero) */
 
-.connect-lead {
+.footer-lead {
     max-width: 42ch;
+    margin-inline: auto;
+    margin-bottom: var(--space-4);
+    font-size: var(--text-sm);
+    color: var(--color-text-muted);
 }
 
-.connect-links {
+.footer-contact {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: var(--space-2) var(--space-6);
+    margin-bottom: var(--space-4);
     font-family: var(--font-display);
     font-size: var(--text-sm);
     font-weight: var(--weight-bold);
 }
 
-.connect-links a {
+.footer-contact a {
     color: var(--color-text-muted);
     text-decoration: none;
 }
 
-.connect-links a:hover {
+.footer-contact a:hover {
     color: var(--color-link-hover);
     text-decoration: underline;
     text-underline-offset: 0.2em;
 }
-
-/* Footer */
 
 .footer-text {
     font-size: var(--text-sm);
@@ -751,4 +732,73 @@
 /* Scroll anchor offset for fixed header */
 .section {
     scroll-margin-top: var(--space-16);
+}
+
+/* A11Y-011: opaque CTA + social pills — AA contrast per theme (loads after theme tokens) */
+[data-theme="dark"] .hero-contact {
+    color: #0c0c0e;
+    background-color: #a8874a;
+    border-color: #a8874a;
+}
+
+[data-theme="dark"] .hero-contact:hover {
+    color: #0c0c0e;
+    background-color: #c9a86c;
+    border-color: #c9a86c;
+}
+
+[data-theme="dark"] .social-link {
+    color: #f2f0eb;
+    background-color: #141418;
+}
+
+[data-theme="light"] .hero-contact {
+    color: #ffffff;
+    background-color: #6f5410;
+    border-color: #6f5410;
+}
+
+[data-theme="light"] .hero-contact:hover {
+    color: #ffffff;
+    background-color: #5c4610;
+    border-color: #5c4610;
+}
+
+[data-theme="light"] .social-link {
+    color: #1a1814;
+    background-color: #ffffff;
+}
+
+[data-theme="forest"] .hero-contact {
+    color: #052010;
+    background-color: #3d9e5c;
+    border-color: #3d9e5c;
+}
+
+[data-theme="forest"] .hero-contact:hover {
+    color: #052010;
+    background-color: #4db870;
+    border-color: #4db870;
+}
+
+[data-theme="forest"] .social-link {
+    color: #e8f0ea;
+    background-color: #152019;
+}
+
+[data-theme="ocean"] .hero-contact {
+    color: #080d14;
+    background-color: #4a8fc4;
+    border-color: #4a8fc4;
+}
+
+[data-theme="ocean"] .hero-contact:hover {
+    color: #080d14;
+    background-color: #5b9fd4;
+    border-color: #5b9fd4;
+}
+
+[data-theme="ocean"] .social-link {
+    color: #e8eef6;
+    background-color: #0e1624;
 }

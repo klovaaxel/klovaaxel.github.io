@@ -9,6 +9,7 @@ import {
     findFirstCellInDayRow,
     findLastCellInDayRow,
     readGitHubCache,
+    sanitizeHttpsImageUrl,
     writeGitHubCache,
     wireContributionGridKeyboard,
     GITHUB_CACHE_KEY,
@@ -81,6 +82,26 @@ function createGridHarness(cellsData) {
         },
     };
 }
+
+describe("sanitizeHttpsImageUrl", () => {
+    it("accepts https URLs", () => {
+        assert.equal(
+            sanitizeHttpsImageUrl("https://avatars.githubusercontent.com/u/1?v=4"),
+            "https://avatars.githubusercontent.com/u/1?v=4",
+        );
+    });
+
+    it("rejects javascript: and http: URLs", () => {
+        assert.equal(sanitizeHttpsImageUrl("javascript:alert(1)"), "");
+        assert.equal(sanitizeHttpsImageUrl("http://example.com/a.png"), "");
+    });
+
+    it("rejects empty and invalid values", () => {
+        assert.equal(sanitizeHttpsImageUrl(""), "");
+        assert.equal(sanitizeHttpsImageUrl(null), "");
+        assert.equal(sanitizeHttpsImageUrl("not-a-url"), "");
+    });
+});
 
 describe("wireContributionGridKeyboard", () => {
     before(() => {

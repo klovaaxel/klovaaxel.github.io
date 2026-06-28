@@ -62,9 +62,9 @@ Subagent prompt must include: file list, `npm test`, constraints above, no commi
 
 ## Section order (default)
 
-Hero → About → Experience → GitHub → Connect → Footer
+Hero → About → Experience → GitHub → Footer
 
-Proof before ask. Connect is quiet echo — not a second hero.
+Proof before ask. Footer holds quiet contact links (Connect section merged 2026-06).
 
 ## Test commands
 

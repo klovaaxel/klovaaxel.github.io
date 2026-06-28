@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://axel.eyssen.se/sitemap.xml

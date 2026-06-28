@@ -34,7 +34,6 @@
 }
 
 [data-theme="forest"] .github-dashboard,
-[data-theme="forest"] .profile-card,
 [data-theme="forest"] .github-stat {
     background: color-mix(in srgb, var(--color-surface) 88%, transparent);
     backdrop-filter: blur(6px);

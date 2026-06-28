@@ -20,7 +20,7 @@ Edit **`index.html`** for visible copy and links:
 - Hero (name, role, tagline)
 - Experience timeline
 - Skills
-- Connect section and social links in the nav
+- Footer contact links and social links in the hero
 
 Content is static HTML — no JavaScript hydration.
 
@@ -31,7 +31,29 @@ Edit **`js/config.js`** for:
 - GitHub username and profile URL (`config.github`)
 - Theme labels, icons, and sketch gating (`THEME_META`)
 
+The dashboard fetches data at runtime from two third-party origins (see [GitHub dashboard APIs](#github-dashboard-apis)).
+
 Theme **colors and PWA chrome** (`themeColor`, `statusBarStyle`, default) live in **`#portfolio-theme-data`** JSON in `index.html`. `config.js` merges that bootstrap data with `THEME_META` at runtime.
+
+### GitHub dashboard APIs
+
+`js/github.js` loads the contributions widget on every visit:
+
+| Origin                                            | Purpose                                                                                     |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `https://api.github.com`                          | User profile (avatar, repo count, followers) — unauthenticated, **60 requests/hour per IP** |
+| `https://github-contributions-api.jogruber.de/v4` | Contribution history (not an official GitHub API)                                           |
+
+**Behavior:**
+
+- Responses are cached in **`sessionStorage`** for **5 minutes** (`GITHUB_CACHE_TTL_MS`). **Retry** bypasses cache.
+- A **load-generation guard** discards stale in-flight fetches if a newer load starts (e.g. double Retry).
+- On failure, the dashboard shows an error state with **Retry** and a link to the profile on GitHub.
+- Avatar URLs from the API are restricted to **`https:`** before applying to `<img src>`.
+
+**Head hints:** `<link rel="preconnect" href="https://api.github.com">` is in `index.html`. The contributions host has no preconnect (optional future improvement).
+
+If either API is down or rate-limited, visitors still see static page content; only the GitHub section is affected.
 
 ## Themes
 
@@ -59,7 +81,7 @@ npm run test:e2e  # Playwright browser smoke + axe
 npm run test:all  # both (CI)
 ```
 
-Runs Node built-in unit tests in `tests/` (theme helpers, GitHub math, HTML smoke) and Playwright E2E checks (scroll at top, theme switch, axe). CI runs `npm run test:all` via `.github/workflows/test.yml` on push and pull requests to `main`.
+Runs Node built-in unit tests in `tests/` (theme helpers, GitHub math, HTML smoke, integration mocks) and Playwright E2E checks (scroll at top, theme switch, contribution grid keyboard, axe). CI runs `npm run test:all` via `.github/workflows/test.yml` on push and pull requests to `main`.
 
 ## Deploy to GitHub Pages
 
@@ -113,7 +135,7 @@ dig axel.eyssen.se CNAME +short
 │   ├── base.css            # Reset + theme imports
 │   ├── layout.css          # Page structure
 │   ├── components.css      # UI components
-│   ├── animations.css      # Reveals, theme sweep, Connect flip
+│   ├── animations.css      # Reveals, theme sweep
 │   ├── cursor.css          # Custom cursor + parallax
 │   ├── sketch.css          # Sketch theme decorations
 │   ├── border-shape.css    # border-shape progressive enhancement

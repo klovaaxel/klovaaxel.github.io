@@ -67,6 +67,19 @@ function profileUrl(user) {
     return user.html_url ?? config.github.url;
 }
 
+/** Only allow https image URLs from API data (avatar.src trust boundary). */
+export function sanitizeHttpsImageUrl(url) {
+    if (typeof url !== "string" || !url) return "";
+
+    try {
+        const parsed = new URL(url);
+        if (parsed.protocol !== "https:") return "";
+        return parsed.href;
+    } catch {
+        return "";
+    }
+}
+
 function renderDashboardInto(container, user, activity) {
     const contributions = activity.contributions ?? [];
     const streaks = computeStreaks(contributions);
@@ -333,7 +346,14 @@ function buildDashboard(user, activity, streaks) {
 
     const dashboard = cloneTemplate("github-dashboard-template");
     const avatar = dashboard.querySelector("[data-github-avatar]");
-    avatar.src = user.avatar_url ?? "";
+    const safeAvatarUrl = sanitizeHttpsImageUrl(user.avatar_url);
+    if (safeAvatarUrl) {
+        avatar.src = safeAvatarUrl;
+        avatar.hidden = false;
+    } else {
+        avatar.removeAttribute("src");
+        avatar.hidden = true;
+    }
     dashboard.querySelector("[data-github-handle]").textContent = `@${user.login}`;
     dashboard.querySelectorAll("[data-github-profile-link]").forEach((link) => {
         link.href = url;

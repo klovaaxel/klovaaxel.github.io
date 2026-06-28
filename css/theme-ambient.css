@@ -1317,10 +1317,8 @@ html[data-theme="light"] .ambient-sunny {
 /* ── Glass cards on ambient themes ── */
 
 [data-theme="dark"] .github-dashboard,
-[data-theme="dark"] .profile-card,
 [data-theme="dark"] .github-stat,
 [data-theme="light"] .github-dashboard,
-[data-theme="light"] .profile-card,
 [data-theme="light"] .github-stat {
     background: color-mix(in srgb, var(--color-surface) 88%, transparent);
     backdrop-filter: blur(6px);

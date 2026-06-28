@@ -24,17 +24,9 @@ This document captures prioritized improvements discovered through code review (
 - Run local preview: `python3 -m http.server 8080` (see [README.md](README.md)).
 - Prefer vertical slices: one ID per PR when possible.
 
-**Top 5 impact (Phase 8 — discovery pass, 2026-06):**
+**Top 5 impact:** Phase 8 complete (2026-06-28). Next backlog items TBD — re-run discovery or pick from open phases when planning Phase 9.
 
-| Rank | ID        | Summary                                              |
-| ---- | --------- | ---------------------------------------------------- |
-| 1    | ENG-009   | Sanitize GitHub `avatar_url` before `img.src`        |
-| 2    | A11Y-010  | Complete `lang="sv"` coverage in static HTML         |
-| 3    | DOC-003   | Refresh SIMPLIFICATION-AUDIT.md (doc drift)          |
-| 4    | ENG-011   | E2E contribution grid keyboard smoke                   |
-| 5    | UX-007    | Product decision: Connect section fate (before code) |
-
-Phases 1–7 are complete. Pick from **Phase 8** below. Decide **UX-007**, **UX-008**, **THEME-002** before IA/theme implementation slices.
+Phase 8: **12/12 done** (footer IA, security, SEO, per-theme contrast guard).
 
 ---
 
@@ -435,105 +427,49 @@ Holistic review after Phases 1–7. Do **not** reopen shipped IDs unless regress
 
 ### Product decisions (user input before implementation)
 
-- [ ] **UX-007** · **P2** · **S** · **Decision: Connect section fate**  
-       **Files:** `index.html`, `docs/UX-PRINCIPLES.md`, `css/components.css`  
-       **Problem:** Connect duplicates hero contact after UX-005/006. Retro: remove vs keep quiet echo.  
-       **Acceptance criteria:**
-    - Written decision in `docs/UX-PRINCIPLES.md` (remove | keep minimal | merge into footer).
-    - If remove: section deleted; narrative updated; tests pass.
-    - If keep: confirm visual weight ≤ hero in browser.
+- [x] **UX-007** · **P2** · **S** · **Decision: Connect section fate**  
+       **Done:** Merge into footer — section removed; compact links + tagline in `.page-footer` (2026-06-28).
 
-- [ ] **UX-008** · **P2** · **S** · **Decision: Email entry-point redundancy**  
-       **Files:** `index.html`, `docs/UX-PRINCIPLES.md`  
-       **Problem:** Three identical `mailto:` links (hero CTA, social nav, Connect). Principles allow hero + quiet Connect only.  
-       **Acceptance criteria:**
-    - Document intentional count (1, 2, or 3) and rationale.
-    - Separate implementation ID applies policy after decision.
-    - Hero remains sole **primary** CTA by visual weight.
+- [x] **UX-008** · **P2** · **S** · **Decision: Email entry-point redundancy**  
+       **Done:** Three intentional — hero CTA, social nav, footer; documented in `docs/UX-PRINCIPLES.md`.
 
-- [ ] **THEME-002** · **P2** · **S** · **Decision: Random theme policy**  
-       **Files:** `js/theme-bootstrap.js`, `js/theme.js`, `README.md`, `docs/UX-PRINCIPLES.md`  
-       **Problem:** Random theme on every full load; switcher is session-only. Retro: vs first-visit-only.  
-       **Acceptance criteria:**
-    - Product choice in README + UX principles.
-    - If first-visit-only: bootstrap reads/writes session key; reload preserves choice; tests updated.
-    - If every-load: close question explicitly; no persistence doc drift.
+- [x] **THEME-002** · **P2** · **S** · **Decision: Random theme policy**  
+       **Done:** Every full page load (current behavior); documented in README + UX principles.
 
 ### Accessibility
 
-- [ ] **A11Y-010** · **P2** · **S** · Complete `lang="sv"` coverage  
-       **Files:** `index.html`  
-       **Problem:** About copy and timeline still have unmarked Swedish (`gymnasieingenjör`, institution names).  
-       **Acceptance criteria:**
-    - Swedish phrases in About use `lang="sv"` per UX-004 strategy.
-    - Timeline Swedish institutions marked consistently (or documented proper-noun exception).
-    - Page default `lang="en"` unchanged.
+- [x] **A11Y-010** · **P2** · **S** · Complete `lang="sv"` coverage  
+       **Done:** About + Swedish institution names in timeline marked (2026-06-28).
 
-- [ ] **A11Y-011** · **P2** · **M** · Contrast verification beyond disabled axe rule  
-       **Files:** `tests/e2e/smoke.spec.js`, `css/themes/*.css`, `css/DESIGN-SYSTEM.md`  
-       **Problem:** E2E axe disables `color-contrast` globally; non-sketch themes lack automated AA guard.  
-       **Acceptance criteria:**
-    - Per-theme axe for dark/light/forest/ocean with color-contrast enabled, or documented manual checklist.
-    - Sketch excluded or scoped with rationale.
-    - CI green; no false positives from ambient layers.
+- [x] **A11Y-011** · **P2** · **M** · Contrast verification beyond disabled axe rule  
+       **Done:** Per-theme axe `color-contrast` in E2E (dark/light/forest/ocean; sketch excluded); opaque CTA/social overrides in `components.css`; theme-settle wait in test (2026-06-28).
 
 ### Security & robustness
 
-- [ ] **ENG-009** · **P1** · **S** · Sanitize GitHub `avatar_url` before `img.src`  
-       **Files:** `js/github.js`, `tests/github-dashboard.integration.test.js`  
-       **Problem:** `avatar.src = user.avatar_url` trusts API JSON; malicious URL could bypass expectations.  
-       **Acceptance criteria:**
-    - Only `https:` avatar URLs applied; else omit or static placeholder.
-    - Test rejects `javascript:` and non-HTTPS URLs.
-    - Happy-path dashboard render unchanged.
+- [x] **ENG-009** · **P1** · **S** · Sanitize GitHub `avatar_url` before `img.src`  
+       **Done:** `sanitizeHttpsImageUrl()`; avatar hidden when URL invalid (2026-06-28).
 
-- [ ] **ENG-010** · **P2** · **S** · Document third-party API dependency  
-       **Files:** `README.md`, `js/github.js`  
-       **Problem:** Contributions from `github-contributions-api.jogruber.de`; failure modes undocumented.  
-       **Acceptance criteria:**
-    - README lists both API origins, cache TTL, Retry behavior.
-    - Note GitHub unauthenticated rate limits and proxy availability risk.
+- [x] **ENG-010** · **P2** · **S** · Document third-party API dependency  
+       **Done:** README GitHub dashboard APIs section (2026-06-28).
 
-### Engineering & tests
+- [x] **ENG-011** · **P2** · **M** · E2E contribution grid keyboard  
+       **Done:** Mocked API + Tab/Arrow test in `tests/e2e/smoke.spec.js` (2026-06-28).
 
-- [ ] **ENG-011** · **P2** · **M** · E2E contribution grid keyboard  
-       **Files:** `tests/e2e/smoke.spec.js`  
-       **Problem:** Grid keyboard unit-tested only; scroll/focus regressions need browser coverage.  
-       **Acceptance criteria:**
-    - Playwright: Tab to gridcell, Arrow moves focus, `scrollY` stays 0.
-    - No `.focus()` on load.
-    - Runs in `npm run test:all`.
-
-- [ ] **ENG-012** · **P3** · **S** · theme-bootstrap ↔ theme-pick alignment guard  
-       **Files:** `js/theme-bootstrap.js`, `js/theme-pick.js`, `tests/`  
-       **Problem:** Bootstrap IIFE duplicates pool logic inline; drift risk after THEME-001.  
-       **Acceptance criteria:**
-    - Test asserts bootstrap filter rules match `pickRandomThemeId`, or bootstrap shares one source.
+- [x] **ENG-012** · **P3** · **S** · theme-bootstrap ↔ theme-pick alignment guard  
+       **Done:** `tests/theme-bootstrap-alignment.test.js` (2026-06-28).
 
 ### Content & SEO
 
-- [ ] **CONTENT-006** · **P3** · **S** · `robots.txt` + `sitemap.xml` for custom domain  
-       **Files:** `robots.txt`, `sitemap.xml` (new), `index.html` (optional canonical)  
-       **Problem:** No robots/sitemap; no `<link rel="canonical">` for `https://axel.eyssen.se`.  
-       **Acceptance criteria:**
-    - `robots.txt` allows crawl; `sitemap.xml` lists `/` with lastmod.
-    - Canonical or og:url strategy documented if added.
+- [x] **CONTENT-006** · **P3** · **S** · `robots.txt` + `sitemap.xml` for custom domain  
+       **Done:** Static files + canonical link; smoke test (2026-06-28).
 
 ### Docs & hygiene
 
-- [ ] **DOC-003** · **P2** · **S** · Refresh SIMPLIFICATION-AUDIT.md  
-       **Files:** `SIMPLIFICATION-AUDIT.md`  
-       **Problem:** Still claims `localStorage`, `innerHTML` switcher, inline head script vs shipped bootstrap.  
-       **Acceptance criteria:**
-    - Reflects HTML-first model, session switcher, template GitHub, SIM-002 won't fix.
-    - Remove deleted API references.
+- [x] **DOC-003** · **P2** · **S** · Refresh SIMPLIFICATION-AUDIT.md  
+       **Done:** Reflects HTML-first, session theme, templates, footer IA (2026-06-28).
 
-- [ ] **SIM-005** · **P3** · **S** · Remove orphaned Connect/profile-card CSS  
-       **Files:** `css/components.css`, `css/sketch.css`, theme CSS  
-       **Problem:** `.profile-card`, `.connect-cta` rules remain; Connect is text links only.  
-       **Acceptance criteria:**
-    - Unused selectors removed; no visual regression.
-    - Grep confirms no stale HTML/JS references.
+- [x] **SIM-005** · **P3** · **S** · Remove orphaned Connect/profile-card CSS  
+       **Done:** Connect styles → footer; profile-card rules removed (2026-06-28).
 
 ---
 
@@ -552,43 +488,43 @@ Shipped features and quick wins—keep for context; do not re-open unless regres
 
 ## 5. File reference
 
-| Path                                                         | Role                                                   |
-| ------------------------------------------------------------ | ------------------------------------------------------ |
-| [index.html](index.html)                                     | Shell, meta, font links, theme-bootstrap.js, sections  |
-| [js/config.js](js/config.js)                                 | GitHub username, themes (from `#portfolio-theme-data`) |
-| [js/theme-bootstrap.js](js/theme-bootstrap.js)               | Sync random theme before first paint                   |
-| [js/theme-pick.js](js/theme-pick.js)                         | Shared theme pool helpers                              |
-| [docs/IMPROVEMENT-WORKFLOW.md](docs/IMPROVEMENT-WORKFLOW.md) | Post-merge checklist, subagent rules                   |
-| [docs/UX-PRINCIPLES.md](docs/UX-PRINCIPLES.md)               | Contact hierarchy, page narrative                      |
-| [RETRO-2026-06.md](RETRO-2026-06.md)                         | Improvement arc retrospective                          |
-| [js/main.js](js/main.js)                                     | Boot: theme, cursor, GitHub (~10 lines)                |
-| [js/theme.js](js/theme.js)                                   | Theme switcher, sweep, browser chrome, switcher UI     |
-| [js/github.js](js/github.js)                                 | GitHub API, contributions graph, streaks               |
-| [js/cursor.js](js/cursor.js)                                 | Custom cursor, magnetic elements, parallax vars        |
-| [js/live-region.js](js/live-region.js)                       | `announceStatus` for assistive tech                    |
-| [css/base.css](css/base.css)                                 | Reset, theme imports, skip link                        |
-| [css/tokens.css](css/tokens.css)                             | Spacing, typography, layout tokens                     |
-| [css/layout.css](css/layout.css)                             | Page structure, sections                               |
-| [css/components.css](css/components.css)                     | Hero, GitHub dashboard, contrib graph, cards           |
-| [css/animations.css](css/animations.css)                     | Reveals, theme sweep, Connect flip                     |
-| [css/cursor.css](css/cursor.css)                             | Cursor FX + parallax transforms                        |
-| [css/sketch.css](css/sketch.css)                             | Sketch-only decorative styles                          |
-| [css/border-shape.css](css/border-shape.css)                 | `border-shape` progressive enhancement                 |
-| [css/themes/](css/themes/)                                   | Per-theme color palettes                               |
-| [css/theme-ambient.css](css/theme-ambient.css)               | Animated ambient layers per theme                        |
-| [css/DESIGN-SYSTEM.md](css/DESIGN-SYSTEM.md)                 | Token & theme documentation                            |
-| [site.webmanifest](site.webmanifest)                         | PWA metadata                                           |
-| [README.md](README.md)                                       | Local dev, deploy, structure                           |
-| [.github/workflows/pages.yml](.github/workflows/pages.yml)   | GitHub Pages deploy                                    |
-| [js/html.js](js/html.js)                                     | Shared `escapeHtml` for safe templating                |
-| [tests/](tests/)                                             | Node unit/smoke + GitHub integration tests             |
-| [tests/fixtures/github-template-ids.js](tests/fixtures/github-template-ids.js) | Canonical GitHub template ids              |
-| [tests/github-dashboard.integration.test.js](tests/github-dashboard.integration.test.js) | Mock-fetch GitHub load tests |
-| [tests/github-templates.test.js](tests/github-templates.test.js) | Template id contract (HTML ↔ JS)           |
-| [tests/e2e/](tests/e2e/)                                     | Playwright smoke + axe                                 |
-| [docs/retros/](docs/retros/)                                 | Slice retrospectives                                     |
-| [package.json](package.json)                                 | Test script (`npm test`)                               |
-| [.github/workflows/test.yml](.github/workflows/test.yml)     | CI test workflow on push/PR                            |
+| Path                                                                                     | Role                                                   |
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| [index.html](index.html)                                                                 | Shell, meta, font links, theme-bootstrap.js, sections  |
+| [js/config.js](js/config.js)                                                             | GitHub username, themes (from `#portfolio-theme-data`) |
+| [js/theme-bootstrap.js](js/theme-bootstrap.js)                                           | Sync random theme before first paint                   |
+| [js/theme-pick.js](js/theme-pick.js)                                                     | Shared theme pool helpers                              |
+| [docs/IMPROVEMENT-WORKFLOW.md](docs/IMPROVEMENT-WORKFLOW.md)                             | Post-merge checklist, subagent rules                   |
+| [docs/UX-PRINCIPLES.md](docs/UX-PRINCIPLES.md)                                           | Contact hierarchy, page narrative                      |
+| [RETRO-2026-06.md](RETRO-2026-06.md)                                                     | Improvement arc retrospective                          |
+| [js/main.js](js/main.js)                                                                 | Boot: theme, cursor, GitHub (~10 lines)                |
+| [js/theme.js](js/theme.js)                                                               | Theme switcher, sweep, browser chrome, switcher UI     |
+| [js/github.js](js/github.js)                                                             | GitHub API, contributions graph, streaks               |
+| [js/cursor.js](js/cursor.js)                                                             | Custom cursor, magnetic elements, parallax vars        |
+| [js/live-region.js](js/live-region.js)                                                   | `announceStatus` for assistive tech                    |
+| [css/base.css](css/base.css)                                                             | Reset, theme imports, skip link                        |
+| [css/tokens.css](css/tokens.css)                                                         | Spacing, typography, layout tokens                     |
+| [css/layout.css](css/layout.css)                                                         | Page structure, sections                               |
+| [css/components.css](css/components.css)                                                 | Hero, GitHub dashboard, contrib graph, cards           |
+| [css/animations.css](css/animations.css)                                                 | Reveals, theme sweep, Connect flip                     |
+| [css/cursor.css](css/cursor.css)                                                         | Cursor FX + parallax transforms                        |
+| [css/sketch.css](css/sketch.css)                                                         | Sketch-only decorative styles                          |
+| [css/border-shape.css](css/border-shape.css)                                             | `border-shape` progressive enhancement                 |
+| [css/themes/](css/themes/)                                                               | Per-theme color palettes                               |
+| [css/theme-ambient.css](css/theme-ambient.css)                                           | Animated ambient layers per theme                      |
+| [css/DESIGN-SYSTEM.md](css/DESIGN-SYSTEM.md)                                             | Token & theme documentation                            |
+| [site.webmanifest](site.webmanifest)                                                     | PWA metadata                                           |
+| [README.md](README.md)                                                                   | Local dev, deploy, structure                           |
+| [.github/workflows/pages.yml](.github/workflows/pages.yml)                               | GitHub Pages deploy                                    |
+| [js/html.js](js/html.js)                                                                 | Shared `escapeHtml` for safe templating                |
+| [tests/](tests/)                                                                         | Node unit/smoke + GitHub integration tests             |
+| [tests/fixtures/github-template-ids.js](tests/fixtures/github-template-ids.js)           | Canonical GitHub template ids                          |
+| [tests/github-dashboard.integration.test.js](tests/github-dashboard.integration.test.js) | Mock-fetch GitHub load tests                           |
+| [tests/github-templates.test.js](tests/github-templates.test.js)                         | Template id contract (HTML ↔ JS)                       |
+| [tests/e2e/](tests/e2e/)                                                                 | Playwright smoke + axe                                 |
+| [docs/retros/](docs/retros/)                                                             | Slice retrospectives                                   |
+| [package.json](package.json)                                                             | Test script (`npm test`)                               |
+| [.github/workflows/test.yml](.github/workflows/test.yml)                                 | CI test workflow on push/PR                            |
 
 ---
 
@@ -596,6 +532,8 @@ Shipped features and quick wins—keep for context; do not re-open unless regres
 
 | Date       | Change                                                                                        |
 | ---------- | --------------------------------------------------------------------------------------------- |
+| 2026-06-28 | Phase 8 complete: A11Y-011 per-theme contrast E2E + CTA/social opaque colors                  |
+| 2026-06-28 | Phase 8 batch: UX-007 footer merge, ENG-009 avatar guard, A11Y-010, DOC-003, SIM-005          |
 | 2026-06-28 | Phase 8 discovery: 12 new backlog items from holistic review                                  |
 | 2026-06-28 | Phase 7 close-out: ENG-007 integration tests, template contract, retro follow-through         |
 | 2026-06-23 | Phase 7: theme boot unification, Playwright+axe CI, workflow docs, retro on disk              |

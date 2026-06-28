@@ -4,27 +4,39 @@ Durable product rules from the 2026 improvement arc. Use when planning IA or cop
 
 ## Contact hierarchy
 
-| Priority    | Surface                               | Role                                          |
-| ----------- | ------------------------------------- | --------------------------------------------- |
-| **Primary** | Hero — Email me button + social links | First action for new visitors                 |
-| **Proof**   | Experience → GitHub                   | Credibility before repeat asks                |
-| **Closing** | Connect — quiet text links            | Optional reminder; must not compete with hero |
-| **Footer**  | Copyright                             | No contact duplication required               |
+| Priority    | Surface                               | Role                                                  |
+| ----------- | ------------------------------------- | ----------------------------------------------------- |
+| **Primary** | Hero — Email me button + social links | First action for new visitors                         |
+| **Proof**   | Experience → GitHub                   | Credibility before repeat asks                        |
+| **Closing** | Footer — compact text links + tagline | Soft reminder after proof; must not compete with hero |
+| **Footer**  | Copyright                             | Legal line only                                       |
 
-**Rule:** Do not promote Connect above GitHub unless hero contact is removed. One primary action per viewport.
+**Rule:** One primary action per viewport (hero Email me). Footer and social nav are secondary.
+
+### Email entry points (UX-008 — intentional)
+
+Three `mailto:` links by design — different contexts, not duplicate CTAs with equal weight:
+
+| Location   | Role                                     |
+| ---------- | ---------------------------------------- |
+| Hero CTA   | Primary — button treatment, icon + label |
+| Social nav | Peer to GitHub/LinkedIn — icon row       |
+| Footer     | Closing reminder — plain text link       |
+
+Do not add a fourth without updating this table.
 
 ## Page narrative
 
-**Hero → About → Experience → GitHub → Connect → Footer**
+**Hero → About → Experience → GitHub → Footer**
 
 - Identity before inventory
 - Proof before ask
-- Connect is a soft landing, not a second hero
+- Footer is the soft landing (Connect section removed 2026-06; links merged here)
 
 ## Interaction
 
 - **Never steal focus on load** — widgets (GitHub grid, carousels) init tabindex without `.focus()`.
-- **Theme** — random on each visit; switcher applies for current session only (no `localStorage`).
+- **Theme** — random on **every full page load**; switcher applies for current session only (no `localStorage`). Product choice confirmed 2026-06 (THEME-002).
 - **Delight is optional** — cursor FX and sketch theme gate on `pointer: fine` / `border-shape`; core path works without them.
 
 ## Typography
@@ -35,4 +47,4 @@ Durable product rules from the 2026 improvement arc. Use when planning IA or cop
 
 1. Sketch contact surfaces (table above).
 2. Check mobile scroll depth to primary CTA (hero only).
-3. Avoid duplicate Email CTAs with equal visual weight.
+3. Avoid a new contact surface with equal visual weight to the hero Email button.

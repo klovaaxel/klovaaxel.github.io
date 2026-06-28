@@ -218,8 +218,7 @@
     display: none;
 }
 
-[data-theme="sketch"] .about-text,
-[data-theme="sketch"] .profile-bio {
+[data-theme="sketch"] .about-text {
     line-height: 1.8;
     background-image: repeating-linear-gradient(
         transparent,
@@ -293,7 +292,6 @@
 [data-theme="sketch"] .theme-switcher,
 [data-theme="sketch"] .github-dashboard,
 [data-theme="sketch"] .github-stat,
-[data-theme="sketch"] .profile-card,
 [data-theme="sketch"] .github-dashboard-link {
     position: relative;
     border: var(--sketch-stroke) solid var(--color-border-strong);
@@ -786,7 +784,6 @@ html.theme-sweeping[data-sweep-from="sketch"] .theme-sweep-ring {
     [data-theme="sketch"] .theme-switcher,
     [data-theme="sketch"] .github-dashboard,
     [data-theme="sketch"] .github-stat,
-    [data-theme="sketch"] .profile-card,
     [data-theme="sketch"] .hero-tagline {
         border-style: solid;
         border-radius: 2px;

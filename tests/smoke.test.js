@@ -8,7 +8,7 @@ import { GITHUB_TEMPLATE_IDS } from "./fixtures/github-template-ids.js";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const html = readFileSync(join(ROOT, "index.html"), "utf8");
 
-const REQUIRED_IDS = ["main", "github-dashboard", "live-status", "portfolio-theme-data", "connect", "social-links"];
+const REQUIRED_IDS = ["main", "github-dashboard", "live-status", "portfolio-theme-data", "social-links"];
 
 function assertIdPresent(id) {
     const pattern = new RegExp(`\\bid=["']${id}["']`);
@@ -108,6 +108,11 @@ describe("index.html smoke", () => {
         }
     });
 
+    it("includes footer contact links", () => {
+        assert.match(html, /class=["'][^"']*footer-contact[^"']*["']/);
+        assert.match(html, /mailto:klovakarlsson@gmail.com/);
+    });
+
     it("loads early theme bootstrap before body", () => {
         const headEnd = html.indexOf("</head>");
         const head = html.slice(0, headEnd);
@@ -129,5 +134,13 @@ describe("index.html smoke", () => {
             assert.ok(existsSync(join(ROOT, file)), `missing font file: ${file}`);
         }
         assert.ok(existsSync(join(ROOT, "css/fonts.css")), "missing css/fonts.css");
+    });
+
+    it("includes SEO static files for custom domain", () => {
+        assert.ok(existsSync(join(ROOT, "robots.txt")), "missing robots.txt");
+        assert.ok(existsSync(join(ROOT, "sitemap.xml")), "missing sitemap.xml");
+        const robots = readFileSync(join(ROOT, "robots.txt"), "utf8");
+        assert.match(robots, /Sitemap:\s*https:\/\/axel\.eyssen\.se\/sitemap\.xml/);
+        assert.match(html, /<link\s+rel=["']canonical["']/i);
     });
 });
