@@ -62,7 +62,7 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
 
 ## Phase 1 — Quick wins
 
-- [ ] **PERF-001** · **P0** · **S** · Lazy-load sketch fonts only when needed  
+- [x] **PERF-001** · **P0** · **S** · Lazy-load sketch fonts only when needed  
   **Files:** `index.html`, `js/theme.js`, `css/tokens.css`, `css/sketch.css`  
   **Problem:** Three Google Font families (Atkinson Hyperlegible, Caveat, Patrick Hand) load on every visit via blocking `<link>` in `index.html` lines 20–25. Sketch-only faces should not penalize dark/light/forest/ocean.  
   **Acceptance criteria:**
@@ -71,7 +71,7 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
   - No FOUT flash on repeat sketch visits (optional `link rel="preload"` once loaded).
   - Lighthouse "render-blocking resources" no longer lists sketch families for non-sketch loads.
 
-- [ ] **PERF-002** · **P0** · **S** · Stop render-blocking font CSS  
+- [x] **PERF-002** · **P0** · **S** · Stop render-blocking font CSS  
   **Files:** `index.html`  
   **Problem:** Same font `<link>` blocks first paint for all themes.  
   **Acceptance criteria:**
@@ -79,7 +79,7 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
   - First Contentful Paint improves on throttled 4G (manual or Lighthouse).
   - Works with Phase 1 sketch lazy-load strategy (PERF-001).
 
-- [ ] **CONTENT-001** · **P0** · **S** · Open Graph & Twitter Card meta  
+- [x] **CONTENT-001** · **P0** · **S** · Open Graph & Twitter Card meta  
   **Files:** `index.html`, `js/config.js`, optionally `js/main.js`  
   **Problem:** No `og:*` or `twitter:*` tags; link previews show generic title/description.  
   **Acceptance criteria:**
@@ -88,14 +88,14 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
   - Values driven from `config` where practical so one edit updates HTML injection.
   - Validates on [opengraph.xyz](https://www.opengraph.xyz/) or Twitter Card validator.
 
-- [ ] **PERF-003** · **P1** · **S** · `preconnect` to GitHub API  
+- [x] **PERF-003** · **P1** · **S** · `preconnect` to GitHub API  
   **Files:** `index.html`  
   **Problem:** `github.js` fetches `api.github.com` with no early connection hint.  
   **Acceptance criteria:**
   - `<link rel="preconnect" href="https://api.github.com">` (and `dns-prefetch` fallback if desired) in `<head>`.
   - No duplicate preconnect to origins already listed.
 
-- [ ] **UX-001** · **P1** · **S** · Link Hogia via `config.companyUrl`  
+- [x] **UX-001** · **P1** · **S** · Link Hogia via `config.companyUrl`  
   **Files:** `js/main.js`, `js/config.js`  
   **Problem:** `config.companyUrl` exists but hero meta renders company as plain text (`populateStaticContent` builds spans without links).  
   **Acceptance criteria:**
@@ -103,14 +103,14 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
   - Link has accessible name; external link treatment per A11Y-004 if new tab.
   - Experience timeline company names optionally link (same URL)—document choice in PR.
 
-- [ ] **CONTENT-003** · **P2** · **S** · Title consistency (HTML vs JS)  
+- [x] **CONTENT-003** · **P2** · **S** · Title consistency (HTML vs JS)  
   **Files:** `index.html`, `js/main.js`  
   **Problem:** Static `<title>Axel Karlsson</title>` vs runtime `` `${config.name} — ${config.role}` ``.  
   **Acceptance criteria:**
   - Single source of truth: either static title matches config pattern or `<title>` is set only from JS before paint (inline script) with same format.
   - `meta description` stays aligned with title/headline strategy.
 
-- [ ] **A11Y-004** · **P2** · **S** · External link new-tab cues  
+- [x] **A11Y-004** · **P2** · **S** · External link new-tab cues  
   **Files:** `js/main.js`, `js/github.js`, `css/components.css`  
   **Problem:** `target="_blank"` links lack visible or screen-reader indication of new window.  
   **Acceptance criteria:**
@@ -122,7 +122,7 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
 
 ## Phase 2 — Robustness
 
-- [ ] **BUG-001** · **P0** · **S** · Preserve sketch preference when `border-shape` unsupported  
+- [x] **BUG-001** · **P0** · **S** · Preserve sketch preference when `border-shape` unsupported  
   **Files:** `js/theme.js`, `index.html` (inline bootstrap)  
   **Problem:** `setTheme` calls `localStorage.setItem(STORAGE_KEY, resolvedTheme)` (line 47). When saved theme is `sketch` but unsupported, `resolveTheme` returns `dark` and **overwrites** the user's sketch preference.  
   **Acceptance criteria:**
@@ -130,7 +130,7 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
   - On supported browsers, sketch restores automatically.
   - Inline head script and `theme.js` agree on behavior.
 
-- [ ] **BUG-002** · **P0** · **S** · Guard empty GitHub contributions in `buildWeeks`  
+- [x] **BUG-002** · **P0** · **S** · Guard empty GitHub contributions in `buildWeeks`  
   **Files:** `js/github.js`  
   **Problem:** `buildWeeks` reads `contributions[0]` and `contributions[length-1]` without length check—empty API array throws.  
   **Acceptance criteria:**
@@ -138,7 +138,7 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
   - `computeStreaks` handles `[]` safely (returns `{ current: 0, longest: 0 }`).
   - Unit test covers empty array (see ENG-001).
 
-- [ ] **BUG-003** · **P1** · **S** · Corrupt `localStorage` theme must not trigger sweep every load  
+- [x] **BUG-003** · **P1** · **S** · Corrupt `localStorage` theme must not trigger sweep every load  
   **Files:** `js/theme.js`  
   **Problem:** Invalid saved theme resolves to default; if `dataset.theme` was unset on first `setTheme`, `isThemeChange` may be true and fire sweep incorrectly.  
   **Acceptance criteria:**
@@ -146,7 +146,7 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
   - Sweep only on explicit user theme change after init.
   - Invalid keys normalized once; storage optionally repaired.
 
-- [ ] **BUG-004** · **P1** · **M** · Cursor parallax vs Connect card scroll animation  
+- [x] **BUG-004** · **P1** · **M** · Cursor parallax vs Connect card scroll animation  
   **Files:** `js/cursor.js`, `css/cursor.css`, `css/animations.css`  
   **Problem:** `cursor.js` sets `--pointer-x/y` on `documentElement`; `cursor.css` applies `transform` to `.profile-card` and `.hero-name`, conflicting with `data-reveal` / flip animations on `#connect`.  
   **Acceptance criteria:**
@@ -154,7 +154,7 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
   - Parallax still works on hero when cursor FX enabled.
   - `prefers-reduced-motion: reduce` disables conflicting transforms (already partially handled).
 
-- [ ] **BUG-005** · **P1** · **S** · Theme sweep when leaving sketch theme  
+- [x] **BUG-005** · **P1** · **S** · Theme sweep when leaving sketch theme  
   **Files:** `js/theme.js`, `css/animations.css` (theme sweep styles)  
   **Problem:** Sweep may not run or display correctly when transitioning **from** sketch (e.g. sketch-specific CSS or timing).  
   **Acceptance criteria:**
@@ -162,7 +162,7 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
   - Switching to sketch also sweeps consistently.
   - No stuck `theme-sweeping` class.
 
-- [ ] **BUG-006** · **P1** · **S** · Sketch hover styles vs `cursor.css`  
+- [x] **BUG-006** · **P1** · **S** · Sketch hover styles vs `cursor.css`  
   **Files:** `css/cursor.css`, `css/sketch.css`  
   **Problem:** `.has-cursor-fx` rules override sketch theme hover treatments (e.g. hand-drawn borders, wobble).  
   **Acceptance criteria:**
@@ -170,7 +170,7 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
   - Specificity or `[data-theme="sketch"]` guards prevent global cursor overrides from winning.
   - Verify theme buttons, social links, contrib cells, profile card.
 
-- [ ] **CONTENT-002** · **P0** · **M** · GitHub loading skeleton & retry on error  
+- [x] **CONTENT-002** · **P0** · **M** · GitHub loading skeleton & retry on error  
   **Files:** `js/github.js`, `css/components.css`  
   **Problem:** Loading is plain text; errors show static message with no retry.  
   **Acceptance criteria:**

@@ -141,6 +141,148 @@
     border-radius: var(--radius-lg);
 }
 
+.github-dashboard.github-skeleton {
+    pointer-events: none;
+}
+
+.github-skeleton {
+    display: block;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(
+        90deg,
+        var(--color-bg-muted) 0%,
+        var(--color-bg-elevated) 50%,
+        var(--color-bg-muted) 100%
+    );
+    background-size: 200% 100%;
+    animation: pulse-soft 1.2s ease-in-out infinite;
+}
+
+.github-skeleton-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+}
+
+.github-skeleton-profile {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.github-skeleton-avatar {
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-full);
+}
+
+.github-skeleton-handle {
+    width: 6.5rem;
+    height: 1rem;
+}
+
+.github-skeleton-link {
+    width: 8.5rem;
+    height: 2.5rem;
+    border-radius: var(--radius-full);
+}
+
+.github-skeleton-stats {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+}
+
+@media (min-width: 40rem) {
+    .github-skeleton-stats {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}
+
+.github-skeleton-stat {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    height: 4.5rem;
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-elevated);
+}
+
+.github-skeleton-stat-label {
+    width: 70%;
+    height: 0.75rem;
+}
+
+.github-skeleton-stat-value {
+    width: 45%;
+    height: 1.25rem;
+}
+
+.github-skeleton-stat:nth-child(odd) .github-skeleton {
+    animation-delay: 0.1s;
+}
+
+.github-skeleton-graph {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--color-bg-elevated);
+}
+
+.github-skeleton-graph-caption {
+    width: 55%;
+    height: 0.875rem;
+}
+
+.github-skeleton-graph-grid {
+    flex: 1;
+    min-height: 5.5rem;
+    border-radius: var(--radius-sm);
+}
+
+.github-dashboard-error {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    align-items: center;
+    text-align: center;
+}
+
+.github-dashboard-error p:last-child {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: center;
+    align-items: center;
+}
+
+.github-retry-btn {
+    padding: var(--space-2) var(--space-4);
+    font: inherit;
+    font-family: var(--font-display);
+    font-size: var(--text-sm);
+    font-weight: var(--weight-bold);
+    color: var(--color-text);
+    cursor: pointer;
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    transition:
+        background-color var(--duration-fast) var(--ease-out),
+        border-color var(--duration-fast) var(--ease-out);
+}
+
+.github-retry-btn:hover {
+    background: var(--color-bg-muted);
+    border-color: var(--color-border-strong);
+}
+
 .github-dashboard-header {
     display: flex;
     flex-wrap: wrap;

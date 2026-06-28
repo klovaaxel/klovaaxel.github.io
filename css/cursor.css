@@ -116,27 +116,27 @@
 
 /* Magnetic elements */
 
-[data-magnetic] {
+[data-magnetic]:not(#connect .profile-card) {
     --mx: 0px;
     --my: 0px;
     transform: translate(var(--mx), var(--my));
     transition: transform 0.12s var(--ease-spring);
 }
 
-.has-cursor-fx .social-link {
+html:not([data-theme="sketch"]) .has-cursor-fx .social-link {
     transform: translate(var(--mx, 0px), var(--my, 0px));
 }
 
-.has-cursor-fx .social-link:hover {
+html:not([data-theme="sketch"]) .has-cursor-fx .social-link:hover {
     transform: translate(var(--mx, 0px), var(--my, 0px)) translateY(-3px) scale(1.04) rotate(-1deg);
 }
 
-.has-cursor-fx .theme-btn {
+html:not([data-theme="sketch"]) .has-cursor-fx .theme-btn {
     transform: translate(var(--mx, 0px), var(--my, 0px));
 }
 
-.has-cursor-fx .skill-tag:hover,
-.has-cursor-fx [data-stagger="skills"] > *:hover {
+html:not([data-theme="sketch"]) .has-cursor-fx .skill-tag:hover,
+html:not([data-theme="sketch"]) .has-cursor-fx [data-stagger="skills"] > *:hover {
     transform: translate(var(--mx, 0px), var(--my, 0px)) translateY(-4px) rotate(2deg) scale(1.05);
 }
 
@@ -144,17 +144,8 @@
     transform: translateY(-1px);
 }
 
-.has-cursor-fx .github-dashboard-link:hover {
-    transform: translateY(-1px);
-}
-
-.has-cursor-fx .github-stat:hover {
+html:not([data-theme="sketch"]) .has-cursor-fx .github-stat:hover {
     transform: translate(var(--mx, 0px), var(--my, 0px)) translateY(-4px) skewX(-2deg);
-}
-
-.has-cursor-fx .profile-card {
-    transform: translate(calc(var(--pointer-x) * 6px + var(--mx, 0px)), calc(var(--pointer-y) * 4px + var(--my, 0px)));
-    transition: transform 0.22s var(--ease-spring);
 }
 
 @media (pointer: coarse), (prefers-reduced-motion: reduce) {
@@ -174,8 +165,7 @@
     .has-cursor-fx .page-main,
     .has-cursor-fx [data-reveal="hero"] .hero-name,
     .has-cursor-fx [data-reveal="hero"] .hero-tagline,
-    .has-cursor-fx [data-reveal="hero"] .social-links,
-    .has-cursor-fx .profile-card {
+    .has-cursor-fx [data-reveal="hero"] .social-links {
         transform: none;
     }
 }

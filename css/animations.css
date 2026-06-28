@@ -76,94 +76,6 @@
     }
 }
 
-@keyframes reveal-slide-left {
-    from {
-        opacity: 0;
-        transform: translateX(-4.5rem);
-        clip-path: inset(0 100% 0 0);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-        clip-path: inset(0 0 0 0);
-    }
-}
-
-@keyframes reveal-slide-right {
-    from {
-        opacity: 0;
-        transform: translateX(4.5rem);
-        clip-path: inset(0 0 0 100%);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-        clip-path: inset(0 0 0 0);
-    }
-}
-
-@keyframes reveal-sweep-up {
-    from {
-        opacity: 0;
-        transform: translateY(4rem);
-        clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-        clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-    }
-}
-
-@keyframes reveal-flip-in {
-    from {
-        opacity: 0;
-        transform: perspective(900px) rotateX(18deg) translateY(3rem);
-    }
-
-    to {
-        opacity: 1;
-        transform: perspective(900px) rotateX(0) translateY(0);
-    }
-}
-
-@keyframes title-underline-sweep {
-    from {
-        transform: scaleX(0) skewX(-12deg);
-    }
-
-    to {
-        transform: scaleX(1) skewX(0);
-    }
-}
-
-@keyframes stagger-skill-in {
-    from {
-        opacity: 0;
-        transform: translateX(var(--slide-from, -2rem)) rotate(var(--tilt, -5deg)) scale(0.8);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0) rotate(0) scale(1);
-    }
-}
-
-@keyframes stagger-timeline-in {
-    from {
-        opacity: 0;
-        transform: translateX(-3rem);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
 @keyframes timeline-line-grow {
     from {
         transform: translateX(-50%) scaleY(0);
@@ -171,44 +83,6 @@
 
     to {
         transform: translateX(-50%) scaleY(1);
-    }
-}
-
-@keyframes stat-slam {
-    from {
-        opacity: 0;
-        transform: translateY(2.5rem) rotate(-3deg) scale(0.88);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) rotate(0) scale(1);
-    }
-}
-
-@keyframes dashboard-panel-slide {
-    from {
-        opacity: 0;
-        transform: translateX(5rem) skewX(3deg);
-        clip-path: inset(0 0 0 100%);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateX(0) skewX(0);
-        clip-path: inset(0 0 0 0);
-    }
-}
-
-@keyframes graph-sweep-reveal {
-    from {
-        clip-path: inset(0 100% 0 0);
-        opacity: 0.4;
-    }
-
-    to {
-        clip-path: inset(0 0 0 0);
-        opacity: 1;
     }
 }
 
@@ -256,18 +130,6 @@
     50% {
         opacity: 1;
         transform: translateX(0.5rem);
-    }
-}
-
-@keyframes footer-slide-up {
-    from {
-        opacity: 0;
-        transform: translateY(100%);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
     }
 }
 
@@ -382,16 +244,6 @@ html.theme-transitioning *::after {
     entry 100% {
         opacity: 1;
         transform: translateY(0);
-    }
-}
-
-@keyframes scroll-fade-in {
-    entry 0% {
-        opacity: 0;
-    }
-
-    entry 100% {
-        opacity: 1;
     }
 }
 

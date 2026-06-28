@@ -4,6 +4,8 @@ import { announceStatus } from "./live-region.js";
 
 const CONTRIBUTIONS_API = "https://github-contributions-api.jogruber.de/v4";
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const NEW_TAB_SR_ONLY = '<span class="sr-only"> (opens in new tab)</span>';
+const STAT_LABELS = ["Contributions", "Public repos", "Followers", "Current streak", "Longest streak"];
 
 function toDateKey(date) {
     const year = date.getFullYear();
@@ -21,7 +23,7 @@ export async function loadGitHubDashboard() {
     const container = document.getElementById("github-dashboard");
     if (!container) return;
 
-    container.innerHTML = `<p class="loading">Loading GitHub activity…</p>`;
+    container.innerHTML = renderSkeleton();
     announceStatus("Loading GitHub activity");
 
     try {
@@ -30,12 +32,16 @@ export async function loadGitHubDashboard() {
             fetchContributions(config.github.username),
         ]);
 
-        const streaks = computeStreaks(activity.contributions);
-        container.innerHTML = renderDashboard(user, activity, streaks);
+        const contributions = activity.contributions ?? [];
+        const streaks = computeStreaks(contributions);
+        container.innerHTML = renderDashboard(user, { ...activity, contributions }, streaks);
         refreshCursorTargets();
         announceStatus("GitHub activity loaded");
     } catch {
-        container.innerHTML = `<p class="empty-state">Could not load GitHub dashboard. <a href="${config.github.url}">View profile on GitHub</a>.</p>`;
+        container.innerHTML = renderError();
+        container.querySelector(".github-retry-btn")?.addEventListener("click", () => {
+            loadGitHubDashboard();
+        });
         announceStatus("Could not load GitHub activity");
     }
 }
@@ -55,6 +61,10 @@ async function fetchContributions(username) {
 }
 
 function computeStreaks(contributions) {
+    if (!contributions?.length) {
+        return { current: 0, longest: 0 };
+    }
+
     const activeDates = new Set(contributions.filter((day) => day.count > 0).map((day) => day.date));
 
     let longest = 0;
@@ -90,6 +100,10 @@ function computeStreaks(contributions) {
 }
 
 function buildWeeks(contributions) {
+    if (!contributions?.length) {
+        return [];
+    }
+
     const byDate = new Map(contributions.map((day) => [day.date, day]));
     const first = parseDate(contributions[0].date);
     const last = parseDate(contributions[contributions.length - 1].date);
@@ -149,55 +163,64 @@ function formatDisplayDate(dateStr) {
     });
 }
 
-function renderDashboard(user, activity, streaks) {
-    const weeks = buildWeeks(activity.contributions);
-    const labels = monthLabels(weeks);
-    const total = activity.total?.lastYear ?? 0;
-    const profileUrl = user.html_url ?? config.github.url;
-
-    const stats = [
-        { label: "Contributions", value: total, suffix: "last year" },
-        { label: "Public repos", value: user.public_repos },
-        { label: "Followers", value: user.followers },
-        { label: "Current streak", value: streaks.current, suffix: "days" },
-        { label: "Longest streak", value: streaks.longest, suffix: "days" },
-    ];
-
+function renderSkeleton() {
     return `
-    <div class="github-dashboard">
+    <div class="github-dashboard github-skeleton" aria-busy="true" aria-label="Loading GitHub activity">
       <div class="github-dashboard-header">
-        <a class="github-dashboard-profile" href="${profileUrl}" target="_blank" rel="noopener noreferrer">
-          <img
-            class="profile-avatar"
-            src="${user.avatar_url}"
-            alt=""
-            width="48"
-            height="48"
-            loading="lazy"
-          />
-          <span class="github-dashboard-handle">@${escapeHtml(user.login)}</span>
-        </a>
-        <a class="github-dashboard-link" href="${profileUrl}" target="_blank" rel="noopener noreferrer">
-          View on GitHub →
-        </a>
+        <div class="github-skeleton-profile">
+          <span class="github-skeleton github-skeleton-avatar" aria-hidden="true"></span>
+          <span class="github-skeleton github-skeleton-handle" aria-hidden="true"></span>
+        </div>
+        <span class="github-skeleton github-skeleton-link" aria-hidden="true"></span>
       </div>
 
-      <dl class="github-stats">
-        ${stats
-            .map(
-                (stat) => `
-          <div class="github-stat" data-magnetic>
-            <dt class="github-stat-label">${escapeHtml(stat.label)}</dt>
-            <dd class="github-stat-value">
-              ${stat.value}
-              ${stat.suffix ? `<span class="github-stat-suffix">${escapeHtml(stat.suffix)}</span>` : ""}
-            </dd>
+      <dl class="github-stats" aria-hidden="true">
+        ${STAT_LABELS.map(
+            () => `
+          <div class="github-skeleton-stat">
+            <span class="github-skeleton github-skeleton-stat-label"></span>
+            <span class="github-skeleton github-skeleton-stat-value"></span>
           </div>
         `,
-            )
-            .join("")}
+        ).join("")}
       </dl>
 
+      <div class="github-skeleton-graph" aria-hidden="true">
+        <span class="github-skeleton github-skeleton-graph-caption"></span>
+        <div class="github-skeleton github-skeleton-graph-grid"></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderError() {
+    return `
+    <div class="github-dashboard-error empty-state">
+      <p>Could not load GitHub dashboard.</p>
+      <p>
+        <button type="button" class="github-retry-btn">Retry</button>
+        <a href="${config.github.url}" target="_blank" rel="noopener noreferrer">
+          View profile on GitHub
+          ${NEW_TAB_SR_ONLY}
+        </a>
+      </p>
+    </div>
+  `;
+}
+
+function renderContributionGraph(weeks, labels, total) {
+    if (!weeks.length) {
+        return `
+      <figure class="contrib-graph">
+        <figcaption class="contrib-graph-caption">
+          <span class="contrib-graph-total">No contribution data available</span>
+        </figcaption>
+        <p class="empty-state">Contribution history is unavailable right now.</p>
+      </figure>
+    `;
+    }
+
+    return `
       <figure class="contrib-graph">
         <figcaption class="contrib-graph-caption">
           <span class="contrib-graph-total">${total} contributions in the last year</span>
@@ -256,6 +279,62 @@ function renderDashboard(user, activity, streaks) {
           <span>More</span>
         </div>
       </figure>
+    `;
+}
+
+function renderDashboard(user, activity, streaks) {
+    const contributions = activity.contributions ?? [];
+    const weeks = buildWeeks(contributions);
+    const labels = monthLabels(weeks);
+    const total = activity.total?.lastYear ?? 0;
+    const profileUrl = user.html_url ?? config.github.url;
+
+    const stats = [
+        { label: "Contributions", value: total, suffix: "last year" },
+        { label: "Public repos", value: user.public_repos },
+        { label: "Followers", value: user.followers },
+        { label: "Current streak", value: streaks.current, suffix: "days" },
+        { label: "Longest streak", value: streaks.longest, suffix: "days" },
+    ];
+
+    return `
+    <div class="github-dashboard">
+      <div class="github-dashboard-header">
+        <a class="github-dashboard-profile" href="${profileUrl}" target="_blank" rel="noopener noreferrer">
+          <img
+            class="profile-avatar"
+            src="${user.avatar_url}"
+            alt=""
+            width="48"
+            height="48"
+            loading="lazy"
+          />
+          <span class="github-dashboard-handle">@${escapeHtml(user.login)}</span>
+          ${NEW_TAB_SR_ONLY}
+        </a>
+        <a class="github-dashboard-link" href="${profileUrl}" target="_blank" rel="noopener noreferrer">
+          View on GitHub →
+          ${NEW_TAB_SR_ONLY}
+        </a>
+      </div>
+
+      <dl class="github-stats">
+        ${stats
+            .map(
+                (stat) => `
+          <div class="github-stat" data-magnetic>
+            <dt class="github-stat-label">${escapeHtml(stat.label)}</dt>
+            <dd class="github-stat-value">
+              ${stat.value}
+              ${stat.suffix ? `<span class="github-stat-suffix">${escapeHtml(stat.suffix)}</span>` : ""}
+            </dd>
+          </div>
+        `,
+            )
+            .join("")}
+      </dl>
+
+      ${renderContributionGraph(weeks, labels, total)}
     </div>
   `;
 }
