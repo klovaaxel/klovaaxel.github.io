@@ -6,6 +6,7 @@
     "scope": "/",
     "display": "standalone",
     "background_color": "#0c0c0e",
+    "_comment_theme_color": "theme_color and background_color match config.defaultTheme (dark, #0c0c0e). Web manifests are static — they cannot follow runtime theme switches. Live browser chrome uses meta theme-color, updated by js/theme.js updateBrowserChrome().",
     "theme_color": "#0c0c0e",
     "icons": [
         {

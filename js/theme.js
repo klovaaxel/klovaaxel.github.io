@@ -117,7 +117,10 @@ function updateSwitcherState(activeId) {
 }
 
 function updateBrowserChrome(themeId) {
-    const theme = config.themes.find((item) => item.id === themeId) ?? config.themes[0];
+    // Runtime meta theme-color only — site.webmanifest theme_color is static (see manifest _comment_theme_color).
+    const theme =
+        config.themes.find((item) => item.id === themeId) ??
+        config.themes.find((item) => item.id === config.defaultTheme);
     if (!theme) return;
 
     document.querySelector('meta[name="theme-color"]')?.setAttribute("content", theme.themeColor);

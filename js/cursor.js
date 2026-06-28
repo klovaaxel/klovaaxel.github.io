@@ -2,6 +2,7 @@ import { config } from "./config.js";
 
 const MAGNETIC_SELECTOR = "[data-magnetic]";
 const MAGNETIC_STRENGTH = 0.32;
+const IDLE_PAUSE_MS = 2000;
 
 let enabled = false;
 let mouseX = 0;
@@ -13,6 +14,8 @@ let ringY = 0;
 let dotX = 0;
 let dotY = 0;
 let frameId = 0;
+let rafActive = false;
+let lastMoveTime = 0;
 
 let glowEl;
 let ringEl;
@@ -25,13 +28,14 @@ export function initCursor() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
     enabled = true;
+    lastMoveTime = Date.now();
     document.documentElement.classList.add("has-cursor-fx");
 
     createLayer();
     bindMagneticElements();
     bindPointer();
 
-    frameId = requestAnimationFrame(tick);
+    resumeRaf();
 }
 
 function createLayer() {
@@ -52,12 +56,20 @@ function createLayer() {
     document.body.append(layerEl);
 }
 
+function resumeRaf() {
+    if (!enabled || rafActive) return;
+    rafActive = true;
+    frameId = requestAnimationFrame(tick);
+}
+
 function bindPointer() {
     document.addEventListener(
         "mousemove",
         (event) => {
             mouseX = event.clientX;
             mouseY = event.clientY;
+            lastMoveTime = Date.now();
+            resumeRaf();
 
             const nx = mouseX / window.innerWidth - 0.5;
             const ny = mouseY / window.innerHeight - 0.5;
@@ -111,6 +123,9 @@ export function bindMagneticElement(element) {
 }
 
 function onMagneticMove(element, event) {
+    lastMoveTime = Date.now();
+    resumeRaf();
+
     const rect = element.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
@@ -130,6 +145,12 @@ function onMagneticLeave(element) {
 
 function tick() {
     if (!enabled) return;
+
+    if (Date.now() - lastMoveTime > IDLE_PAUSE_MS) {
+        rafActive = false;
+        frameId = 0;
+        return;
+    }
 
     glowX += (mouseX - glowX) * 0.28;
     glowY += (mouseY - glowY) * 0.28;
@@ -152,6 +173,7 @@ export function refreshCursorTargets() {
 
 export function destroyCursor() {
     enabled = false;
+    rafActive = false;
     cancelAnimationFrame(frameId);
     layerEl?.remove();
     document.documentElement.classList.remove("has-cursor-fx");

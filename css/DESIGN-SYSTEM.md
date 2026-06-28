@@ -21,8 +21,8 @@ Every theme must define:
 | `--color-bg-muted`      | Subtle backgrounds              |
 | `--color-surface`       | Cards                           |
 | `--color-text`          | Primary text                    |
-| `--color-text-muted`    | Secondary text                  |
-| `--color-text-subtle`   | Tertiary text                   |
+| `--color-text-muted`    | Secondary text (≥ 4.5:1 on `--color-bg`) |
+| `--color-text-subtle`   | Tertiary text (≥ 4.5:1 on `--color-bg`; captions, periods, legend) |
 | `--color-accent`        | Brand / interactive accent      |
 | `--color-accent-hover`  | Accent hover state              |
 | `--color-accent-muted`  | Accent backgrounds              |
@@ -48,3 +48,19 @@ Then import in `base.css` and register in `js/config.js`.
 ## Theme switching
 
 `document.documentElement.dataset.theme` is set to the active theme id. The choice persists in `localStorage` under `axel-portfolio-theme`.
+
+## Text contrast (A11Y-002)
+
+`--color-text-muted` already met WCAG AA (4.5:1) on each theme’s `--color-bg`. `--color-text-subtle` was lightened on dark themes and darkened on light/sketch so captions (section subtitles, timeline periods, footer, contribution graph labels/legend) reach ≥ 4.5:1 on body backgrounds.
+
+| Theme  | `--color-text-subtle` |
+| ------ | --------------------- |
+| dark   | `#8a8680`             |
+| light  | `#6b6560`             |
+| forest | `#7a9488`             |
+| ocean  | `#7a8fa8`             |
+| sketch | `#5c544c`             |
+
+## Mixed language (A11Y-003 / UX-004)
+
+Page default is `lang="en"` (UI chrome and narrative). Swedish résumé strings (job titles, degree names) are marked with `lang="sv"` on the containing element in static HTML. English-only strings stay unmarked. Future bilingual content: keep UI language consistent per section; wrap non-default-language phrases in an element with the appropriate `lang` attribute rather than changing the document root.

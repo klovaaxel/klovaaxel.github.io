@@ -1,5 +1,13 @@
+/**
+ * GitHub dashboard: API fetch, contribution graph, streak stats.
+ *
+ * innerHTML templating:
+ * - Trusted (static markup, numeric counters, MONTHS labels, skeleton/error shells): no escape.
+ * - Escaped via escapeHtml: API strings (login, avatar URL, profile URL, tooltips, stat labels).
+ */
 import { config } from "./config.js";
 import { refreshCursorTargets } from "./cursor.js";
+import { escapeHtml } from "./html.js";
 import { announceStatus } from "./live-region.js";
 
 const CONTRIBUTIONS_API = "https://github-contributions-api.jogruber.de/v4";
@@ -35,6 +43,7 @@ export async function loadGitHubDashboard() {
         const contributions = activity.contributions ?? [];
         const streaks = computeStreaks(contributions);
         container.innerHTML = renderDashboard(user, { ...activity, contributions }, streaks);
+        wireContributionGridKeyboard(container);
         refreshCursorTargets();
         announceStatus("GitHub activity loaded");
     } catch {
@@ -60,7 +69,7 @@ async function fetchContributions(username) {
     return res.json();
 }
 
-function computeStreaks(contributions) {
+export function computeStreaks(contributions) {
     if (!contributions?.length) {
         return { current: 0, longest: 0 };
     }
@@ -99,7 +108,7 @@ function computeStreaks(contributions) {
     return { current, longest };
 }
 
-function buildWeeks(contributions) {
+export function buildWeeks(contributions) {
     if (!contributions?.length) {
         return [];
     }
@@ -194,12 +203,13 @@ function renderSkeleton() {
 }
 
 function renderError() {
+    const profileUrl = escapeHtml(config.github.url);
     return `
     <div class="github-dashboard-error empty-state">
       <p>Could not load GitHub dashboard.</p>
       <p>
         <button type="button" class="github-retry-btn">Retry</button>
-        <a href="${config.github.url}" target="_blank" rel="noopener noreferrer">
+        <a href="${profileUrl}" target="_blank" rel="noopener noreferrer">
           View profile on GitHub
           ${NEW_TAB_SR_ONLY}
         </a>
@@ -225,7 +235,11 @@ function renderContributionGraph(weeks, labels, total) {
         <figcaption class="contrib-graph-caption">
           <span class="contrib-graph-total">${total} contributions in the last year</span>
         </figcaption>
-        <div class="contrib-graph-scroll">
+        <div
+          class="contrib-graph-scroll"
+          tabindex="0"
+          aria-label="Contribution graph scroll region"
+        >
           <div class="contrib-graph-layout" style="--week-count: ${weeks.length}">
             <div class="contrib-months" aria-hidden="true">
               ${labels
@@ -242,15 +256,15 @@ function renderContributionGraph(weeks, labels, total) {
               </div>
               <div
                 class="contrib-grid"
-                role="img"
+                role="grid"
                 aria-label="${total} contributions in the last year on GitHub"
               >
                 ${weeks
                     .map(
-                        (week) => `
-                  <div class="contrib-week">
+                        (week, weekIndex) => `
+                  <div class="contrib-week" role="row">
                     ${week
-                        .map((day) => {
+                        .map((day, dayIndex) => {
                             if (day.hidden) {
                                 return `<span class="contrib-cell contrib-cell--empty" aria-hidden="true"></span>`;
                             }
@@ -258,7 +272,8 @@ function renderContributionGraph(weeks, labels, total) {
                                 day.count === 0
                                     ? `No contributions on ${formatDisplayDate(day.date)}`
                                     : `${day.count} contribution${day.count === 1 ? "" : "s"} on ${formatDisplayDate(day.date)}`;
-                            return `<span class="contrib-cell" data-level="${day.level}" title="${escapeHtml(label)}"></span>`;
+                            const safeLabel = escapeHtml(label);
+                            return `<span class="contrib-cell" role="gridcell" data-level="${day.level}" data-week="${weekIndex}" data-day="${dayIndex}" tabindex="-1" aria-label="${safeLabel}" title="${safeLabel}"></span>`;
                         })
                         .join("")}
                   </div>
@@ -287,7 +302,8 @@ function renderDashboard(user, activity, streaks) {
     const weeks = buildWeeks(contributions);
     const labels = monthLabels(weeks);
     const total = activity.total?.lastYear ?? 0;
-    const profileUrl = user.html_url ?? config.github.url;
+    const profileUrl = escapeHtml(user.html_url ?? config.github.url);
+    const avatarUrl = escapeHtml(user.avatar_url ?? "");
 
     const stats = [
         { label: "Contributions", value: total, suffix: "last year" },
@@ -303,7 +319,7 @@ function renderDashboard(user, activity, streaks) {
         <a class="github-dashboard-profile" href="${profileUrl}" target="_blank" rel="noopener noreferrer">
           <img
             class="profile-avatar"
-            src="${user.avatar_url}"
+            src="${avatarUrl}"
             alt=""
             width="48"
             height="48"
@@ -339,6 +355,83 @@ function renderDashboard(user, activity, streaks) {
   `;
 }
 
-function escapeHtml(str) {
-    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+function getContributionCells(grid) {
+    return [...grid.querySelectorAll('.contrib-cell[role="gridcell"]')];
+}
+
+function cellCoords(cell) {
+    return {
+        week: Number(cell.dataset.week),
+        day: Number(cell.dataset.day),
+    };
+}
+
+function findCellByCoords(cells, week, day) {
+    return cells.find((cell) => {
+        const { week: w, day: d } = cellCoords(cell);
+        return w === week && d === day;
+    });
+}
+
+function focusContributionCell(cells, cell) {
+    cells.forEach((item) => {
+        item.tabIndex = item === cell ? 0 : -1;
+    });
+    cell?.focus();
+}
+
+function wireContributionGridKeyboard(container) {
+    const grid = container.querySelector(".contrib-grid[role='grid']");
+    if (!grid) return;
+
+    const cells = getContributionCells(grid);
+    if (!cells.length) return;
+
+    const maxWeek = Math.max(...cells.map((cell) => cellCoords(cell).week));
+    const maxDay = 6;
+
+    const initial =
+        cells.find((cell) => Number(cell.dataset.level) > 0) ?? cells[0];
+    focusContributionCell(cells, initial);
+
+    grid.addEventListener("keydown", (event) => {
+        const active = document.activeElement;
+        if (!active?.classList.contains("contrib-cell")) return;
+
+        const { week, day } = cellCoords(active);
+        let next = null;
+
+        switch (event.key) {
+            case "ArrowRight":
+                next = findCellByCoords(cells, Math.min(week + 1, maxWeek), day);
+                break;
+            case "ArrowLeft":
+                next = findCellByCoords(cells, Math.max(week - 1, 0), day);
+                break;
+            case "ArrowDown":
+                next = findCellByCoords(cells, week, Math.min(day + 1, maxDay));
+                break;
+            case "ArrowUp":
+                next = findCellByCoords(cells, week, Math.max(day - 1, 0));
+                break;
+            case "Home":
+                next = findCellByCoords(cells, 0, day);
+                break;
+            case "End":
+                next = findCellByCoords(cells, maxWeek, day);
+                break;
+            case "Enter":
+            case " ":
+                announceStatus(active.getAttribute("aria-label") ?? "");
+                event.preventDefault();
+                return;
+            default:
+                return;
+        }
+
+        if (next) {
+            event.preventDefault();
+            focusContributionCell(cells, next);
+        }
+    });
 }

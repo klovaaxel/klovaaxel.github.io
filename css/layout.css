@@ -58,6 +58,21 @@
     color: var(--color-text-muted);
 }
 
+/* Connect — visual weight above GitHub dashboard */
+
+.section-connect {
+    margin-bottom: calc(var(--section-gap) + var(--space-4));
+}
+
+.section-connect .connect-header {
+    margin-bottom: var(--space-10);
+}
+
+.section-connect .section-subtitle {
+    font-size: var(--text-base);
+    max-width: 36ch;
+}
+
 @media (min-width: 48rem) {
     .page-header {
         padding: var(--space-6) var(--space-10);

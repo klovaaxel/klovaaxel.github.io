@@ -52,31 +52,41 @@
         <link rel="stylesheet" href="css/animations.css" />
         <link rel="stylesheet" href="css/cursor.css" />
 
+        <script type="application/json" id="portfolio-theme-data">
+            {
+                "defaultTheme": "dark",
+                "themes": [
+                    { "id": "dark", "themeColor": "#0c0c0e", "statusBarStyle": "black-translucent" },
+                    { "id": "light", "themeColor": "#f7f5f0", "statusBarStyle": "default" },
+                    { "id": "forest", "themeColor": "#0d1410", "statusBarStyle": "black-translucent" },
+                    { "id": "ocean", "themeColor": "#080d14", "statusBarStyle": "black-translucent" },
+                    { "id": "sketch", "themeColor": "#f0e9dc", "statusBarStyle": "default" }
+                ]
+            }
+        </script>
         <script>
             (function () {
-                var themes = {
-                    dark: { color: "#0c0c0e", statusBar: "black-translucent" },
-                    light: { color: "#f7f5f0", statusBar: "default" },
-                    forest: { color: "#0d1410", statusBar: "black-translucent" },
-                    ocean: { color: "#080d14", statusBar: "black-translucent" },
-                    sketch: { color: "#f0e9dc", statusBar: "default" },
-                };
+                var data = JSON.parse(document.getElementById("portfolio-theme-data").textContent);
+                var themeById = {};
+                data.themes.forEach(function (theme) {
+                    themeById[theme.id] = theme;
+                });
                 var STORAGE_KEY = "axel-portfolio-theme";
                 var supportsSketch =
                     typeof CSS !== "undefined" && CSS.supports && CSS.supports("border-shape", "circle(50%)");
-                var saved = localStorage.getItem(STORAGE_KEY) || "dark";
+                var saved = localStorage.getItem(STORAGE_KEY) || data.defaultTheme;
                 var theme = saved;
                 if (saved === "sketch" && !supportsSketch) {
-                    theme = "dark";
-                } else if (!themes[saved]) {
-                    theme = "dark";
+                    theme = data.defaultTheme;
+                } else if (!themeById[saved]) {
+                    theme = data.defaultTheme;
                 }
                 document.documentElement.dataset.theme = theme;
-                var meta = themes[theme] || themes.dark;
+                var chrome = themeById[theme] || themeById[data.defaultTheme];
                 var themeColor = document.querySelector('meta[name="theme-color"]');
-                if (themeColor) themeColor.setAttribute("content", meta.color);
+                if (themeColor) themeColor.setAttribute("content", chrome.themeColor);
                 var statusBar = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
-                if (statusBar) statusBar.setAttribute("content", meta.statusBar);
+                if (statusBar) statusBar.setAttribute("content", chrome.statusBarStyle);
             })();
         </script>
     </head>
@@ -383,22 +393,38 @@
                     <div id="github-dashboard"></div>
                 </section>
 
-                <section class="section" id="connect" aria-labelledby="connect-heading" data-reveal="flip">
-                    <header class="section-header">
+                <section class="section section-connect" id="connect" aria-labelledby="connect-heading" data-reveal="flip">
+                    <header class="section-header connect-header">
                         <h2 id="connect-heading" class="section-title">Connect</h2>
-                        <p class="section-subtitle">Find me elsewhere on the web</p>
+                        <p class="section-subtitle">Reach out — email is the fastest way to get in touch</p>
                     </header>
-                    <div class="profile-card" data-magnetic>
+                    <div class="profile-card connect-card" data-magnetic>
                         <div class="profile-info">
                             <p id="connect-name" class="profile-name">Axel Karlsson</p>
                             <p id="connect-bio" class="profile-bio">
                                 Open to conversations about AI, software engineering, and web accessibility. AI Engineer
                                 | Hogia Infrastructure Products
                             </p>
+                            <a class="connect-cta" href="mailto:klovakarlsson@gmail.com" data-magnetic>
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    aria-hidden="true"
+                                >
+                                    <rect width="20" height="16" x="2" y="4" rx="2" />
+                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+                                </svg>
+                                Email me
+                            </a>
                             <nav
                                 id="connect-social-links"
                                 class="social-links connect-social-links"
-                                aria-label="Contact links"
+                                aria-label="Social links"
                             >
                                 <a
                                     class="social-link"
@@ -439,22 +465,6 @@
                                     </svg>
                                     LinkedIn
                                     <span class="sr-only"> (opens in new tab)</span>
-                                </a>
-                                <a class="social-link" href="mailto:klovakarlsson@gmail.com" data-magnetic>
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        stroke-width="2"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        aria-hidden="true"
-                                    >
-                                        <rect width="20" height="16" x="2" y="4" rx="2" />
-                                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                                    </svg>
-                                    Email
                                 </a>
                             </nav>
                         </div>
