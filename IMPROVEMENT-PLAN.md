@@ -24,19 +24,17 @@ This document captures prioritized improvements discovered through code review (
 - Run local preview: `python3 -m http.server 8080` (see [README.md](README.md)).
 - Prefer vertical slices: one ID per PR when possible.
 
-**Top 5 impact (Phase 7 — post-retro hardening, 2026-06):**
+**Top 5 impact (Phase 8 — discovery pass, 2026-06):**
 
-| Rank | ID        | Summary                                                       |
-| ---- | --------- | ------------------------------------------------------------- |
-| 1    | THEME-001 | Single theme boot path; no double-random; no localStorage lie |
-| 2    | ENG-005   | Playwright + axe in CI                                        |
-| 3    | A11Y-009  | Cursor keyboard mode on focusin, not Tab-only                 |
-| 4    | ENG-006   | GitHub load-generation guard tests                            |
-| 5    | DOC-002   | Workflow + UX principles + retro doc on disk                  |
+| Rank | ID        | Summary                                              |
+| ---- | --------- | ---------------------------------------------------- |
+| 1    | ENG-009   | Sanitize GitHub `avatar_url` before `img.src`        |
+| 2    | A11Y-010  | Complete `lang="sv"` coverage in static HTML         |
+| 3    | DOC-003   | Refresh SIMPLIFICATION-AUDIT.md (doc drift)          |
+| 4    | ENG-011   | E2E contribution grid keyboard smoke                   |
+| 5    | UX-007    | Product decision: Connect section fate (before code) |
 
-Phases 1–6 are complete. Use Phase 7 items for the next improvement pass.
-
-**Update (2026-06-28):** Phases 1–7 complete. See **Phase 8** for the next discovery pass.
+Phases 1–7 are complete. Pick from **Phase 8** below. Decide **UX-007**, **UX-008**, **THEME-002** before IA/theme implementation slices.
 
 ---
 
@@ -62,6 +60,9 @@ Inline markers: `[ ]` not started · `[~]` in progress · `[x]` done · `[-]` wo
 | **3 — Accessibility depth** | Keyboard, contrast, i18n hints | WCAG-oriented gaps beyond quick wins   |
 | **4 — Polish**              | Content, layout, PWA           | Cohesive voice and visual hierarchy    |
 | **5 — Engineering**         | Tests, architecture, security  | Maintainability and safe refactors     |
+| **6 — Consolidation**       | Doc drift, IA, simplification  | Second review; templates, cache, a11y  |
+| **7 — Retro hardening**     | Theme boot, E2E, workflow      | Fixes from RETRO-2026-06               |
+| **8 — Discovery**           | Security, decisions, SEO, docs | Holistic review 2026-06-28             |
 
 ---
 
@@ -426,23 +427,113 @@ Follow-up from [RETRO-2026-06.md](RETRO-2026-06.md) after the improvement arc an
 
 ---
 
-## Phase 8 — Next discovery pass (not started)
+## Phase 8 — Discovery pass (2026-06-28)
 
-Phases 1–7 are complete (2026-06-28). Do **not** reopen shipped IDs unless regressing.
+Holistic review after Phases 1–7. Do **not** reopen shipped IDs unless regressing.
 
-**To start Phase 8:**
+**Suggested order:** product decisions (UX-007/008, THEME-002) → ENG-009 → A11Y-010 → DOC-003 → ENG-011.
 
-1. Holistic review (code, a11y, UX, perf, content) — one parent pass, not parallel subagents first.
-2. File new IDs in this section with acceptance criteria.
-3. Run slice retro from [Phase 7 close-out](docs/retros/2026-06-28-phase7-plan-closeout.md) follow-through before picking scope.
+### Product decisions (user input before implementation)
 
-**Open product questions** (from [RETRO-2026-06.md](RETRO-2026-06.md)) — candidates for user decision before implementation:
+- [ ] **UX-007** · **P2** · **S** · **Decision: Connect section fate**  
+       **Files:** `index.html`, `docs/UX-PRINCIPLES.md`, `css/components.css`  
+       **Problem:** Connect duplicates hero contact after UX-005/006. Retro: remove vs keep quiet echo.  
+       **Acceptance criteria:**
+    - Written decision in `docs/UX-PRINCIPLES.md` (remove | keep minimal | merge into footer).
+    - If remove: section deleted; narrative updated; tests pass.
+    - If keep: confirm visual weight ≤ hero in browser.
 
-- Remove Connect section vs keep quiet footer echo
-- Triple email entry points — intentional redundancy?
-- Random theme every load vs first-visit-only
+- [ ] **UX-008** · **P2** · **S** · **Decision: Email entry-point redundancy**  
+       **Files:** `index.html`, `docs/UX-PRINCIPLES.md`  
+       **Problem:** Three identical `mailto:` links (hero CTA, social nav, Connect). Principles allow hero + quiet Connect only.  
+       **Acceptance criteria:**
+    - Document intentional count (1, 2, or 3) and rationale.
+    - Separate implementation ID applies policy after decision.
+    - Hero remains sole **primary** CTA by visual weight.
 
-_No Phase 8 items filed yet._
+- [ ] **THEME-002** · **P2** · **S** · **Decision: Random theme policy**  
+       **Files:** `js/theme-bootstrap.js`, `js/theme.js`, `README.md`, `docs/UX-PRINCIPLES.md`  
+       **Problem:** Random theme on every full load; switcher is session-only. Retro: vs first-visit-only.  
+       **Acceptance criteria:**
+    - Product choice in README + UX principles.
+    - If first-visit-only: bootstrap reads/writes session key; reload preserves choice; tests updated.
+    - If every-load: close question explicitly; no persistence doc drift.
+
+### Accessibility
+
+- [ ] **A11Y-010** · **P2** · **S** · Complete `lang="sv"` coverage  
+       **Files:** `index.html`  
+       **Problem:** About copy and timeline still have unmarked Swedish (`gymnasieingenjör`, institution names).  
+       **Acceptance criteria:**
+    - Swedish phrases in About use `lang="sv"` per UX-004 strategy.
+    - Timeline Swedish institutions marked consistently (or documented proper-noun exception).
+    - Page default `lang="en"` unchanged.
+
+- [ ] **A11Y-011** · **P2** · **M** · Contrast verification beyond disabled axe rule  
+       **Files:** `tests/e2e/smoke.spec.js`, `css/themes/*.css`, `css/DESIGN-SYSTEM.md`  
+       **Problem:** E2E axe disables `color-contrast` globally; non-sketch themes lack automated AA guard.  
+       **Acceptance criteria:**
+    - Per-theme axe for dark/light/forest/ocean with color-contrast enabled, or documented manual checklist.
+    - Sketch excluded or scoped with rationale.
+    - CI green; no false positives from ambient layers.
+
+### Security & robustness
+
+- [ ] **ENG-009** · **P1** · **S** · Sanitize GitHub `avatar_url` before `img.src`  
+       **Files:** `js/github.js`, `tests/github-dashboard.integration.test.js`  
+       **Problem:** `avatar.src = user.avatar_url` trusts API JSON; malicious URL could bypass expectations.  
+       **Acceptance criteria:**
+    - Only `https:` avatar URLs applied; else omit or static placeholder.
+    - Test rejects `javascript:` and non-HTTPS URLs.
+    - Happy-path dashboard render unchanged.
+
+- [ ] **ENG-010** · **P2** · **S** · Document third-party API dependency  
+       **Files:** `README.md`, `js/github.js`  
+       **Problem:** Contributions from `github-contributions-api.jogruber.de`; failure modes undocumented.  
+       **Acceptance criteria:**
+    - README lists both API origins, cache TTL, Retry behavior.
+    - Note GitHub unauthenticated rate limits and proxy availability risk.
+
+### Engineering & tests
+
+- [ ] **ENG-011** · **P2** · **M** · E2E contribution grid keyboard  
+       **Files:** `tests/e2e/smoke.spec.js`  
+       **Problem:** Grid keyboard unit-tested only; scroll/focus regressions need browser coverage.  
+       **Acceptance criteria:**
+    - Playwright: Tab to gridcell, Arrow moves focus, `scrollY` stays 0.
+    - No `.focus()` on load.
+    - Runs in `npm run test:all`.
+
+- [ ] **ENG-012** · **P3** · **S** · theme-bootstrap ↔ theme-pick alignment guard  
+       **Files:** `js/theme-bootstrap.js`, `js/theme-pick.js`, `tests/`  
+       **Problem:** Bootstrap IIFE duplicates pool logic inline; drift risk after THEME-001.  
+       **Acceptance criteria:**
+    - Test asserts bootstrap filter rules match `pickRandomThemeId`, or bootstrap shares one source.
+
+### Content & SEO
+
+- [ ] **CONTENT-006** · **P3** · **S** · `robots.txt` + `sitemap.xml` for custom domain  
+       **Files:** `robots.txt`, `sitemap.xml` (new), `index.html` (optional canonical)  
+       **Problem:** No robots/sitemap; no `<link rel="canonical">` for `https://axel.eyssen.se`.  
+       **Acceptance criteria:**
+    - `robots.txt` allows crawl; `sitemap.xml` lists `/` with lastmod.
+    - Canonical or og:url strategy documented if added.
+
+### Docs & hygiene
+
+- [ ] **DOC-003** · **P2** · **S** · Refresh SIMPLIFICATION-AUDIT.md  
+       **Files:** `SIMPLIFICATION-AUDIT.md`  
+       **Problem:** Still claims `localStorage`, `innerHTML` switcher, inline head script vs shipped bootstrap.  
+       **Acceptance criteria:**
+    - Reflects HTML-first model, session switcher, template GitHub, SIM-002 won't fix.
+    - Remove deleted API references.
+
+- [ ] **SIM-005** · **P3** · **S** · Remove orphaned Connect/profile-card CSS  
+       **Files:** `css/components.css`, `css/sketch.css`, theme CSS  
+       **Problem:** `.profile-card`, `.connect-cta` rules remain; Connect is text links only.  
+       **Acceptance criteria:**
+    - Unused selectors removed; no visual regression.
+    - Grep confirms no stale HTML/JS references.
 
 ---
 
@@ -484,12 +575,18 @@ Shipped features and quick wins—keep for context; do not re-open unless regres
 | [css/sketch.css](css/sketch.css)                             | Sketch-only decorative styles                          |
 | [css/border-shape.css](css/border-shape.css)                 | `border-shape` progressive enhancement                 |
 | [css/themes/](css/themes/)                                   | Per-theme color palettes                               |
+| [css/theme-ambient.css](css/theme-ambient.css)               | Animated ambient layers per theme                        |
 | [css/DESIGN-SYSTEM.md](css/DESIGN-SYSTEM.md)                 | Token & theme documentation                            |
 | [site.webmanifest](site.webmanifest)                         | PWA metadata                                           |
 | [README.md](README.md)                                       | Local dev, deploy, structure                           |
 | [.github/workflows/pages.yml](.github/workflows/pages.yml)   | GitHub Pages deploy                                    |
 | [js/html.js](js/html.js)                                     | Shared `escapeHtml` for safe templating                |
-| [tests/](tests/)                                             | Node built-in unit tests for pure functions            |
+| [tests/](tests/)                                             | Node unit/smoke + GitHub integration tests             |
+| [tests/fixtures/github-template-ids.js](tests/fixtures/github-template-ids.js) | Canonical GitHub template ids              |
+| [tests/github-dashboard.integration.test.js](tests/github-dashboard.integration.test.js) | Mock-fetch GitHub load tests |
+| [tests/github-templates.test.js](tests/github-templates.test.js) | Template id contract (HTML ↔ JS)           |
+| [tests/e2e/](tests/e2e/)                                     | Playwright smoke + axe                                 |
+| [docs/retros/](docs/retros/)                                 | Slice retrospectives                                     |
 | [package.json](package.json)                                 | Test script (`npm test`)                               |
 | [.github/workflows/test.yml](.github/workflows/test.yml)     | CI test workflow on push/PR                            |
 
@@ -499,7 +596,8 @@ Shipped features and quick wins—keep for context; do not re-open unless regres
 
 | Date       | Change                                                                                        |
 | ---------- | --------------------------------------------------------------------------------------------- |
-| 2026-06-28 | ENG-007: mock-fetch integration tests for loadGitHubDashboard (46 tests pass)                 |
+| 2026-06-28 | Phase 8 discovery: 12 new backlog items from holistic review                                  |
+| 2026-06-28 | Phase 7 close-out: ENG-007 integration tests, template contract, retro follow-through         |
 | 2026-06-23 | Phase 7: theme boot unification, Playwright+axe CI, workflow docs, retro on disk              |
 | 2026-06-28 | Phase 6 complete: GitHub templates, self-hosted fonts, smoke tests (34 tests)                 |
 | 2026-06-28 | Phase 6 continued: Connect IA, sketch focus, cache, dead-code cleanup (21 tests)              |
